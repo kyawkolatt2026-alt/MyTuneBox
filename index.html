@@ -1213,6 +1213,26 @@ h2 small{
     padding:0 12px;
 }
 
+.forgot{
+    align-self:flex-end;
+
+    margin-top:-2px;
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--accent);
+
+    font-size:10px;
+
+    padding:0;
+}
+
+.forgot:hover{
+    text-decoration:underline;
+}
+
 .auth-submit{
     height:42px;
 
@@ -1227,6 +1247,94 @@ h2 small{
     color:#0e1912;
 
     font-weight:700;
+}
+
+.auth-submit:disabled{
+    opacity:.6;
+
+    cursor:not-allowed;
+}
+
+.auth-divider{
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin:3px 0;
+
+    color:#65786d;
+
+    font-size:9px;
+
+    letter-spacing:.08em;
+}
+
+.auth-divider::before,
+.auth-divider::after{
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:var(--line);
+}
+
+.google-btn{
+    width:100%;
+
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:9px;
+
+    border:1px solid rgba(190,225,198,.16);
+
+    border-radius:8px;
+
+    background:#fff;
+
+    color:#202124;
+
+    font-size:11px;
+
+    font-weight:600;
+}
+
+.google-btn:hover{
+    background:#f1f3f4;
+}
+
+.google-btn:disabled{
+    opacity:.6;
+
+    cursor:not-allowed;
+}
+
+.google-icon{
+    display:grid;
+
+    place-items:center;
+
+    width:19px;
+    height:19px;
+
+    border-radius:50%;
+
+    font-family:Arial,sans-serif;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    color:#4285f4;
 }
 
 .auth-switch{
@@ -1263,6 +1371,12 @@ h2 small{
 
 .auth-error.show{
     display:block;
+}
+
+.auth-error.success{
+    background:rgba(186,255,74,.08);
+
+    color:#caff8d;
 }
 
 /* =========================
@@ -1648,7 +1762,9 @@ body.theme-red{
 
     <div class="auth-box">
 
-        <div class="auth-logo">◉</div>
+        <div class="auth-logo">
+            ◉
+        </div>
 
         <h1>
             MyTune<strong>Box</strong>
@@ -1656,13 +1772,15 @@ body.theme-red{
 
         <p class="auth-sub">
             Your personal music room.<br>
-            Login ဝင်ပြီး ကိုယ့်သီချင်းတွေကို ဘယ် device မှာမဆို ပြန်အသုံးပြုနိုင်ပါတယ်။
+            Login ဝင်ပြီး ကိုယ့်သီချင်းတွေကို ဘယ် device မှာမဆို
+            ပြန်အသုံးပြုနိုင်ပါတယ်။
         </p>
 
         <form class="auth-form" id="authForm">
 
             <label>
                 Email
+
                 <input
                     id="authEmail"
                     type="email"
@@ -1673,6 +1791,7 @@ body.theme-red{
 
             <label>
                 Password
+
                 <input
                     id="authPassword"
                     type="password"
@@ -1680,12 +1799,45 @@ body.theme-red{
                     minlength="6"
                     placeholder="••••••••"
                 >
+
+                <button
+                    type="button"
+                    class="forgot"
+                    onclick="forgotPassword()"
+                >
+                    Forgot password?
+                </button>
+
             </label>
 
-            <div class="auth-error" id="authError"></div>
+            <div
+                class="auth-error"
+                id="authError"
+            ></div>
 
-            <button class="auth-submit" id="authSubmit">
+            <button
+                type="submit"
+                class="auth-submit"
+                id="authSubmit"
+            >
                 Login
+            </button>
+
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
+
+            <button
+                type="button"
+                class="google-btn"
+                id="googleLoginButton"
+                onclick="googleLogin()"
+            >
+                <span class="google-icon">
+                    G
+                </span>
+
+                Continue with Google
             </button>
 
         </form>
@@ -1696,8 +1848,13 @@ body.theme-red{
                 Account မရှိသေးဘူးလား?
             </span>
 
-            <button onclick="toggleAuthMode()">
-                <span id="authSwitchButton">Create account</span>
+            <button
+                type="button"
+                onclick="toggleAuthMode()"
+            >
+                <span id="authSwitchButton">
+                    Create account
+                </span>
             </button>
 
         </div>
@@ -1715,7 +1872,10 @@ body.theme-red{
 
     <div class="topbar-inner">
 
-        <a class="brand" href="#top">
+        <a
+            class="brand"
+            href="#top"
+        >
 
             <span class="brand-mark">
                 ◉
@@ -1731,9 +1891,15 @@ body.theme-red{
 
         </a>
 
-        <nav class="nav" id="nav">
+        <nav
+            class="nav"
+            id="nav"
+        >
 
-            <a class="active" href="#library">
+            <a
+                class="active"
+                href="#library"
+            >
                 Library
             </a>
 
@@ -1776,7 +1942,12 @@ body.theme-red{
 
             <button
                 class="menu"
-                onclick="document.getElementById('nav').classList.toggle('open')"
+                onclick="
+                    document
+                    .getElementById('nav')
+                    .classList
+                    .toggle('open')
+                "
             >
                 ☰
             </button>
@@ -1792,7 +1963,10 @@ body.theme-red{
      MAIN
 ========================= -->
 
-<main class="content" id="top">
+<main
+    class="content"
+    id="top"
+>
 
     <section class="hero">
 
@@ -1822,8 +1996,8 @@ body.theme-red{
 
             <span>
                 <b>New</b> —
-                Random Song ကိုနှိပ်ပြီး Library ထဲက သီချင်းတစ်ပုဒ်ကို
-                ကျပန်းရွေးဖွင့်နိုင်ပါပြီ။
+                Random Song ကိုနှိပ်ပြီး Library ထဲက
+                သီချင်းတစ်ပုဒ်ကို ကျပန်းရွေးဖွင့်နိုင်ပါပြီ။
             </span>
 
         </div>
@@ -1831,15 +2005,16 @@ body.theme-red{
     </section>
 
 
-    <!-- =========================
-         MAIN GRID
-    ========================= -->
+    <!-- MAIN GRID -->
 
     <section class="grid">
 
         <!-- LIBRARY -->
 
-        <aside class="card library" id="library">
+        <aside
+            class="card library"
+            id="library"
+        >
 
             <div class="title-row">
 
@@ -1851,6 +2026,7 @@ body.theme-red{
 
                     <h2>
                         Saved songs
+
                         <small id="songCount">
                             00
                         </small>
@@ -1903,7 +2079,10 @@ body.theme-red{
             </div>
 
 
-            <div class="songs" id="songs"></div>
+            <div
+                class="songs"
+                id="songs"
+            ></div>
 
 
             <button
@@ -1918,7 +2097,10 @@ body.theme-red{
 
         <!-- PLAYER -->
 
-        <section class="player" id="player">
+        <section
+            class="player"
+            id="player"
+        >
 
             <div class="section-head">
 
@@ -2024,7 +2206,8 @@ body.theme-red{
 
                 <div class="embed-note">
 
-                    Playback controls are provided by YouTube inside the video.
+                    Playback controls are provided by YouTube
+                    inside the video.
 
                 </div>
 
@@ -2035,15 +2218,16 @@ body.theme-red{
     </section>
 
 
-    <!-- =========================
-         BELOW
-    ========================= -->
+    <!-- BELOW -->
 
     <section class="below">
 
         <!-- QUEUE -->
 
-        <section class="card queue" id="queue">
+        <section
+            class="card queue"
+            id="queue"
+        >
 
             <div class="title-row">
 
@@ -2055,6 +2239,7 @@ body.theme-red{
 
                     <h2>
                         Queue
+
                         <small id="queueCount">
                             00
                         </small>
@@ -2152,7 +2337,10 @@ body.theme-red{
      ADD SONG MODAL
 ========================= -->
 
-<div class="modal" id="songModal">
+<div
+    class="modal"
+    id="songModal"
+>
 
     <section class="modal-box">
 
@@ -2169,8 +2357,8 @@ body.theme-red{
                 </h2>
 
                 <p>
-                    YouTube link ထည့်ပြီး
-                    title နဲ့ artist ကို အလိုအလျောက်ဖြည့်ပါမယ်။
+                    YouTube link ထည့်ပြီး title နဲ့ artist ကို
+                    အလိုအလျောက်ဖြည့်ပါမယ်။
                 </p>
 
             </div>
@@ -2565,20 +2753,29 @@ function toggleAuthMode(){
 
     isRegisterMode = !isRegisterMode;
 
-    document.getElementById("authSubmit").textContent =
-        isRegisterMode ? "Create account" : "Login";
+    document
+    .getElementById("authSubmit")
+    .textContent =
+        isRegisterMode
+        ? "Create account"
+        : "Login";
 
-    document.getElementById("authSwitchText").textContent =
+    document
+    .getElementById("authSwitchText")
+    .textContent =
         isRegisterMode
         ? "Account ရှိပြီးသားလား?"
         : "Account မရှိသေးဘူးလား?";
 
-    document.getElementById("authSwitchButton").textContent =
+    document
+    .getElementById("authSwitchButton")
+    .textContent =
         isRegisterMode
         ? "Login"
         : "Create account";
 
     hideAuthError();
+
 }
 
 
@@ -2589,18 +2786,22 @@ function toggleAuthMode(){
 function openAuth(){
 
     document
-        .getElementById("authScreen")
-        .classList.add("show");
+    .getElementById("authScreen")
+    .classList
+    .add("show");
 
 }
+
 
 function closeAuth(){
 
     document
-        .getElementById("authScreen")
-        .classList.remove("show");
+    .getElementById("authScreen")
+    .classList
+    .remove("show");
 
 }
+
 
 function showAuthError(message){
 
@@ -2609,15 +2810,253 @@ function showAuthError(message){
 
     box.textContent = message;
 
+    box.classList.remove("success");
+
     box.classList.add("show");
 
 }
 
+
+function showAuthMessage(
+    message,
+    success = false
+){
+
+    const box =
+        document.getElementById("authError");
+
+    box.textContent = message;
+
+    box.classList.toggle(
+        "success",
+        success
+    );
+
+    box.classList.add("show");
+
+}
+
+
 function hideAuthError(){
 
-    document
-        .getElementById("authError")
-        .classList.remove("show");
+    const box =
+        document.getElementById("authError");
+
+    box.classList.remove(
+        "show",
+        "success"
+    );
+
+}
+
+
+/* =====================================================
+   FORGOT PASSWORD
+===================================================== */
+
+async function forgotPassword(){
+
+    hideAuthError();
+
+    const email =
+        document
+        .getElementById("authEmail")
+        .value
+        .trim();
+
+    if(!email){
+
+        showAuthError(
+            "အရင် Email ထည့်ပေးပါ။"
+        );
+
+        document
+        .getElementById("authEmail")
+        .focus();
+
+        return;
+
+    }
+
+
+    try{
+
+        await auth.sendPasswordResetEmail(
+            email
+        );
+
+        showAuthMessage(
+            "Password reset email ပို့ပြီးပါပြီ။ Inbox / Spam folder ကိုစစ်ပါ။",
+            true
+        );
+
+    }catch(error){
+
+        console.error(
+            "Password Reset Error:",
+            error
+        );
+
+        let message =
+            "Password reset မလုပ်နိုင်ပါ။";
+
+
+        if(
+            error.code ===
+            "auth/invalid-email"
+        ){
+
+            message =
+                "Email မှန်ကန်စွာထည့်ပါ။";
+
+        }
+
+        else if(
+            error.code ===
+            "auth/user-not-found"
+        ){
+
+            message =
+                "ဒီ Email နဲ့ account မတွေ့ပါ။";
+
+        }
+
+        else if(
+            error.code ===
+            "auth/too-many-requests"
+        ){
+
+            message =
+                "Request များလွန်းပါတယ်။ ခဏစောင့်ပြီး ထပ်လုပ်ပါ။";
+
+        }
+
+        showAuthError(message);
+
+    }
+
+}
+
+
+/* =====================================================
+   GOOGLE LOGIN
+===================================================== */
+
+async function googleLogin(){
+
+    hideAuthError();
+
+    const button =
+        document.getElementById(
+            "googleLoginButton"
+        );
+
+    button.disabled = true;
+
+    button.innerHTML =
+        "Connecting to Google...";
+
+
+    try{
+
+        const provider =
+            new firebase.auth.GoogleAuthProvider();
+
+        provider.setCustomParameters({
+
+            prompt:"select_account"
+
+        });
+
+
+        await auth.signInWithPopup(
+            provider
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Google Login Error:",
+            error
+        );
+
+        let message =
+            "Google Login မအောင်မြင်ပါ။";
+
+
+        if(
+            error.code ===
+            "auth/popup-closed-by-user"
+        ){
+
+            message =
+                "Google Login window ပိတ်သွားပါတယ်။";
+
+        }
+
+        else if(
+            error.code ===
+            "auth/popup-blocked"
+        ){
+
+            message =
+                "Browser က Google Login popup ကို block လုပ်ထားပါတယ်။";
+
+        }
+
+        else if(
+            error.code ===
+            "auth/cancelled-popup-request"
+        ){
+
+            message =
+                "Google Login request ကို cancel လုပ်ထားပါတယ်။";
+
+        }
+
+        else if(
+            error.code ===
+            "auth/unauthorized-domain"
+        ){
+
+            message =
+                "ဒီ website domain ကို Firebase Authentication → Settings → Authorized domains ထဲထည့်ပေးပါ။";
+
+        }
+
+        else if(
+            error.code ===
+            "auth/operation-not-allowed"
+        ){
+
+            message =
+                "Firebase မှာ Google Provider ကို Enable လုပ်ထားတာ သေချာစစ်ပါ။";
+
+        }
+
+        else if(
+            error.code ===
+            "auth/account-exists-with-different-credential"
+        ){
+
+            message =
+                "ဒီ Email နဲ့ account ရှိပြီးသားဖြစ်ပေမယ့် အခြား Login method ကိုအသုံးပြုထားပါတယ်။";
+
+        }
+
+
+        showAuthError(message);
+
+    }
+
+
+    button.disabled = false;
+
+    button.innerHTML = `
+        <span class="google-icon">G</span>
+        Continue with Google
+    `;
 
 }
 
@@ -2628,124 +3067,252 @@ function hideAuthError(){
 
 document
 .getElementById("authForm")
-.addEventListener("submit", async function(e){
+.addEventListener(
+    "submit",
+    async function(e){
 
-    e.preventDefault();
+        e.preventDefault();
 
-    hideAuthError();
+        hideAuthError();
 
-    const email =
-        document.getElementById("authEmail").value.trim();
 
-    const password =
-        document.getElementById("authPassword").value;
+        const email =
+            document
+            .getElementById("authEmail")
+            .value
+            .trim();
 
-    const button =
-        document.getElementById("authSubmit");
 
-    button.disabled = true;
+        const password =
+            document
+            .getElementById("authPassword")
+            .value;
 
-    button.textContent = "Please wait...";
 
-    try{
+        const button =
+            document
+            .getElementById("authSubmit");
 
-        if(isRegisterMode){
 
-            await auth.createUserWithEmailAndPassword(
-                email,
-                password
+        button.disabled = true;
+
+        button.textContent =
+            "Please wait...";
+
+
+        try{
+
+            if(isRegisterMode){
+
+                await auth
+                .createUserWithEmailAndPassword(
+                    email,
+                    password
+                );
+
+            }else{
+
+                await auth
+                .signInWithEmailAndPassword(
+                    email,
+                    password
+                );
+
+            }
+
+
+        }catch(error){
+
+            console.error(
+                "Auth Error:",
+                error
             );
 
-        }else{
 
-            await auth.signInWithEmailAndPassword(
-                email,
-                password
-            );
+            let message =
+                error.message;
+
+
+            if(
+                error.code ===
+                "auth/invalid-credential"
+            ){
+
+                message =
+                    "Email သို့မဟုတ် Password မှားနေပါတယ်။";
+
+            }
+
+            if(
+                error.code ===
+                "auth/invalid-login-credentials"
+            ){
+
+                message =
+                    "Email သို့မဟုတ် Password မှားနေပါတယ်။";
+
+            }
+
+            if(
+                error.code ===
+                "auth/email-already-in-use"
+            ){
+
+                message =
+                    "ဒီ Email နဲ့ account ရှိပြီးသားပါ။";
+
+            }
+
+            if(
+                error.code ===
+                "auth/weak-password"
+            ){
+
+                message =
+                    "Password အနည်းဆုံး 6 လုံးရှိရပါမယ်။";
+
+            }
+
+            if(
+                error.code ===
+                "auth/invalid-email"
+            ){
+
+                message =
+                    "Email မှန်ကန်စွာထည့်ပါ။";
+
+            }
+
+            if(
+                error.code ===
+                "auth/user-disabled"
+            ){
+
+                message =
+                    "ဒီ account ကို ပိတ်ထားပါတယ်။";
+
+            }
+
+            if(
+                error.code ===
+                "auth/too-many-requests"
+            ){
+
+                message =
+                    "Login request များလွန်းပါတယ်။ ခဏစောင့်ပြီး ထပ်ကြိုးစားပါ။";
+
+            }
+
+
+            showAuthError(message);
 
         }
 
-    }catch(error){
 
-        let message = error.message;
+        button.disabled = false;
 
-        if(error.code === "auth/invalid-credential"){
-            message = "Email သို့မဟုတ် Password မှားနေပါတယ်။";
-        }
-
-        if(error.code === "auth/email-already-in-use"){
-            message = "ဒီ Email နဲ့ account ရှိပြီးသားပါ။";
-        }
-
-        if(error.code === "auth/weak-password"){
-            message = "Password အနည်းဆုံး 6 လုံးရှိရပါမယ်။";
-        }
-
-        if(error.code === "auth/invalid-email"){
-            message = "Email မှန်ကန်စွာထည့်ပါ။";
-        }
-
-        showAuthError(message);
+        button.textContent =
+            isRegisterMode
+            ? "Create account"
+            : "Login";
 
     }
-
-    button.disabled = false;
-
-    button.textContent =
-        isRegisterMode ? "Create account" : "Login";
-
-});
+);
 
 
 /* =====================================================
    AUTH STATE
 ===================================================== */
 
-auth.onAuthStateChanged(async user => {
+auth.onAuthStateChanged(
+    async user => {
 
-    currentUser = user;
+        currentUser = user;
 
-    if(user){
 
-        closeAuth();
+        if(user){
 
-        document
-        .getElementById("loginButton")
-        .style.display = "none";
+            closeAuth();
 
-        document
-        .getElementById("accountButton")
-        .style.display = "block";
 
-        document
-        .getElementById("userEmail")
-        .textContent = user.email;
+            document
+            .getElementById("loginButton")
+            .style.display = "none";
 
-        await loadUserData();
 
-    }else{
+            document
+            .getElementById("accountButton")
+            .style.display = "block";
 
-        document
-        .getElementById("loginButton")
-        .style.display = "block";
 
-        document
-        .getElementById("accountButton")
-        .style.display = "none";
+            document
+            .getElementById("userEmail")
+            .textContent =
+                user.email ||
+                user.displayName ||
+                "Google account";
 
-        songs = [];
 
-        favorites = [];
+            await loadUserData();
 
-        queue = [];
 
-        renderSongs();
+        }else{
 
-        openAuth();
+            document
+            .getElementById("loginButton")
+            .style.display = "block";
+
+
+            document
+            .getElementById("accountButton")
+            .style.display = "none";
+
+
+            document
+            .getElementById("userEmail")
+            .textContent =
+                "Not logged in";
+
+
+            songs = [];
+
+            favorites = [];
+
+            queue = [];
+
+            activeId = null;
+
+
+            document
+            .getElementById("videoFrame")
+            .src = "";
+
+
+            document
+            .getElementById("nowTitle")
+            .textContent =
+                "No song selected";
+
+
+            document
+            .getElementById("nowArtist")
+            .textContent =
+                "Select a song from your library";
+
+
+            document
+            .getElementById("cover")
+            .removeAttribute("src");
+
+
+            renderSongs();
+
+            openAuth();
+
+        }
 
     }
-
-});
+);
 
 
 /* =====================================================
@@ -2760,6 +3327,7 @@ function userSongsRef(){
         .collection("songs");
 
 }
+
 
 function userSettingsRef(){
 
@@ -2778,42 +3346,63 @@ function userSettingsRef(){
 
 async function loadUserData(){
 
-    if(!currentUser) return;
+    if(!currentUser)
+        return;
+
 
     try{
 
         const snapshot =
             await userSongsRef().get();
 
+
         songs =
-            snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
+            snapshot.docs.map(
+                doc => ({
+
+                    id:doc.id,
+
+                    ...doc.data()
+
+                })
+            );
+
 
         favorites =
             songs
-            .filter(s => s.favorite === true)
-            .map(s => s.id);
+            .filter(
+                song =>
+                    song.favorite === true
+            )
+            .map(
+                song => song.id
+            );
 
 
         const settings =
             await userSettingsRef().get();
+
 
         if(settings.exists){
 
             const data =
                 settings.data();
 
+
             if(data.theme){
 
-                applyTheme(data.theme);
+                applyTheme(
+                    data.theme
+                );
 
             }
 
+
             if(data.accent){
 
-                applyAccent(data.accent);
+                applyAccent(
+                    data.accent
+                );
 
             }
 
@@ -2822,7 +3411,8 @@ async function loadUserData(){
 
         if(songs.length){
 
-            activeId = songs[0].id;
+            activeId =
+                songs[0].id;
 
             selectSong(activeId);
 
@@ -2832,9 +3422,13 @@ async function loadUserData(){
 
         }
 
+
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Data Load Error:",
+            error
+        );
 
         alert(
             "Data loading error: " +
@@ -2855,19 +3449,29 @@ function getYoutubeId(value){
     try{
 
         const u =
-            new URL(value.trim());
+            new URL(
+                value.trim()
+            );
+
 
         if(
-            !u.hostname.includes("youtube.com") &&
-            !u.hostname.includes("youtu.be")
+            !u.hostname.includes(
+                "youtube.com"
+            ) &&
+            !u.hostname.includes(
+                "youtu.be"
+            )
         ){
 
             return "";
 
         }
 
+
         if(
-            u.hostname.includes("youtu.be")
+            u.hostname.includes(
+                "youtu.be"
+            )
         ){
 
             return u.pathname
@@ -2876,9 +3480,12 @@ function getYoutubeId(value){
 
         }
 
+
         return (
-            u.searchParams.get("v") || ""
+            u.searchParams.get("v") ||
+            ""
         );
+
 
     }catch{
 
@@ -2897,142 +3504,14 @@ function thumb(song){
 
     return `
         <span class="thumb">
+
             <img
                 src="https://img.youtube.com/vi/${song.youtubeId}/hqdefault.jpg"
                 alt=""
             >
+
         </span>
     `;
-
-}
-
-
-/* =====================================================
-   RENDER SONGS
-===================================================== */
-
-function renderSongs(){
-
-    const input =
-        document.getElementById("searchInput");
-
-    const q =
-        input
-        ? input.value.toLowerCase()
-        : "";
-
-    const list =
-        songs.filter(song => {
-
-            const match =
-                (
-                    song.title +
-                    " " +
-                    song.artist
-                )
-                .toLowerCase()
-                .includes(q);
-
-            const fav =
-                filter === "all" ||
-                favorites.includes(song.id);
-
-            return match && fav;
-
-        });
-
-
-    document
-    .getElementById("songCount")
-    .textContent =
-        String(songs.length).padStart(2,"0");
-
-
-    document
-    .getElementById("songs")
-    .innerHTML =
-
-        list.length
-
-        ?
-
-        list.map(song => `
-
-            <article
-                class="song ${
-                    song.id === activeId
-                    ? "active"
-                    : ""
-                }"
-            >
-
-                <button
-                    class="song-main"
-                    onclick="selectSong('${song.id}')"
-                >
-
-                    ${thumb(song)}
-
-                    <span>
-
-                        <b>
-                            ${escapeHtml(song.title)}
-                        </b>
-
-                        <small>
-                            ${escapeHtml(song.artist || "Unknown")}
-                        </small>
-
-                    </span>
-
-                </button>
-
-
-                <button
-                    class="icon-btn"
-                    onclick="toggleFavorite('${song.id}')"
-                >
-                    ${
-                        favorites.includes(song.id)
-                        ? "♥"
-                        : "♡"
-                    }
-                </button>
-
-
-                <button
-                    class="icon-btn"
-                    onclick="addQueue('${song.id}')"
-                >
-                    ＋
-                </button>
-
-
-                <button
-                    class="icon-btn delete-btn"
-                    onclick="deleteSong('${song.id}')"
-                >
-                    ×
-                </button>
-
-            </article>
-
-        `).join("")
-
-        :
-
-        `
-            <div class="empty">
-                ${
-                    songs.length
-                    ? "No songs found."
-                    : "Library ထဲမှာ သီချင်းမရှိသေးပါ။"
-                }
-            </div>
-        `;
-
-
-    renderQueue();
 
 }
 
@@ -3044,11 +3523,181 @@ function renderSongs(){
 function escapeHtml(value){
 
     return String(value || "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   RENDER SONGS
+===================================================== */
+
+function renderSongs(){
+
+    const input =
+        document.getElementById(
+            "searchInput"
+        );
+
+
+    const q =
+        input
+        ? input.value.toLowerCase()
+        : "";
+
+
+    const list =
+        songs.filter(
+            song => {
+
+                const match =
+                    (
+                        song.title +
+                        " " +
+                        song.artist
+                    )
+                    .toLowerCase()
+                    .includes(q);
+
+
+                const fav =
+                    filter === "all" ||
+                    favorites.includes(
+                        song.id
+                    );
+
+
+                return match && fav;
+
+            }
+        );
+
+
+    document
+    .getElementById("songCount")
+    .textContent =
+        String(
+            songs.length
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    document
+    .getElementById("songs")
+    .innerHTML =
+
+        list.length
+
+        ?
+
+        list.map(
+            song => `
+
+                <article
+                    class="song ${
+                        song.id === activeId
+                        ? "active"
+                        : ""
+                    }"
+                >
+
+                    <button
+                        class="song-main"
+                        onclick="selectSong('${song.id}')"
+                    >
+
+                        ${thumb(song)}
+
+                        <span>
+
+                            <b>
+                                ${escapeHtml(song.title)}
+                            </b>
+
+                            <small>
+                                ${escapeHtml(
+                                    song.artist ||
+                                    "Unknown"
+                                )}
+                            </small>
+
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="icon-btn"
+                        onclick="toggleFavorite('${song.id}')"
+                        title="Favorite"
+                    >
+                        ${
+                            favorites.includes(song.id)
+                            ? "♥"
+                            : "♡"
+                        }
+                    </button>
+
+
+                    <button
+                        class="icon-btn"
+                        onclick="addQueue('${song.id}')"
+                        title="Add to queue"
+                    >
+                        ＋
+                    </button>
+
+
+                    <button
+                        class="icon-btn delete-btn"
+                        onclick="deleteSong('${song.id}')"
+                        title="Delete"
+                    >
+                        ×
+                    </button>
+
+                </article>
+
+            `
+        ).join("")
+
+        :
+
+        `
+            <div class="empty">
+
+                ${
+                    songs.length
+                    ? "No songs found."
+                    : "Library ထဲမှာ သီချင်းမရှိသေးပါ။"
+                }
+
+            </div>
+        `;
+
+
+    renderQueue();
 
 }
 
@@ -3060,31 +3709,42 @@ function escapeHtml(value){
 function selectSong(id){
 
     const song =
-        songs.find(s => s.id === id);
+        songs.find(
+            s => s.id === id
+        );
 
-    if(!song) return;
+
+    if(!song)
+        return;
+
 
     activeId = id;
+
 
     document
     .getElementById("videoFrame")
     .src =
         `https://www.youtube-nocookie.com/embed/${song.youtubeId}?rel=0&modestbranding=1`;
 
+
     document
     .getElementById("nowTitle")
     .textContent =
         song.title;
 
+
     document
     .getElementById("nowArtist")
     .textContent =
-        song.artist || "Unknown artist";
+        song.artist ||
+        "Unknown artist";
+
 
     document
     .getElementById("cover")
     .src =
         `https://img.youtube.com/vi/${song.youtubeId}/hqdefault.jpg`;
+
 
     document
     .getElementById("currentHeart")
@@ -3092,6 +3752,7 @@ function selectSong(id){
         favorites.includes(id)
         ? "♥"
         : "♡";
+
 
     renderSongs();
 
@@ -3104,15 +3765,23 @@ function selectSong(id){
 
 async function toggleFavorite(id){
 
-    if(!currentUser) return;
+    if(!currentUser)
+        return;
+
 
     const song =
-        songs.find(s => s.id === id);
+        songs.find(
+            s => s.id === id
+        );
 
-    if(!song) return;
+
+    if(!song)
+        return;
+
 
     const newValue =
         !favorites.includes(id);
+
 
     try{
 
@@ -3123,11 +3792,16 @@ async function toggleFavorite(id){
             favorite:newValue,
 
             updatedAt:
-                firebase.firestore.FieldValue.serverTimestamp()
+                firebase.firestore
+                .FieldValue
+                .serverTimestamp()
 
         });
 
-        song.favorite = newValue;
+
+        song.favorite =
+            newValue;
+
 
         if(newValue){
 
@@ -3136,34 +3810,48 @@ async function toggleFavorite(id){
         }else{
 
             favorites =
-                favorites.filter(x => x !== id);
+                favorites.filter(
+                    x => x !== id
+                );
 
         }
 
+
         renderSongs();
+
 
         if(activeId === id){
 
             document
-            .getElementById("currentHeart")
+            .getElementById(
+                "currentHeart"
+            )
             .textContent =
-                newValue ? "♥" : "♡";
+                newValue
+                ? "♥"
+                : "♡";
 
         }
 
+
     }catch(error){
 
-        alert(error.message);
+        alert(
+            error.message
+        );
 
     }
 
 }
 
+
 function toggleCurrentFavorite(){
 
     if(activeId){
 
-        toggleFavorite(activeId);
+        toggleFavorite(
+            activeId
+        );
 
     }
 
@@ -3178,6 +3866,7 @@ function setFilter(value){
 
     filter = value;
 
+
     document
     .getElementById("allTab")
     .classList
@@ -3186,6 +3875,7 @@ function setFilter(value){
         value === "all"
     );
 
+
     document
     .getElementById("favTab")
     .classList
@@ -3193,6 +3883,7 @@ function setFilter(value){
         "active",
         value === "favorites"
     );
+
 
     renderSongs();
 
@@ -3205,8 +3896,16 @@ function setFilter(value){
 
 function addQueue(id){
 
-    if(!songs.find(s => s.id === id))
+    if(
+        !songs.find(
+            s => s.id === id
+        )
+    ){
+
         return;
+
+    }
+
 
     if(!queue.includes(id)){
 
@@ -3223,8 +3922,11 @@ function renderQueue(){
 
     const items =
         queue
-        .map(id =>
-            songs.find(s => s.id === id)
+        .map(
+            id =>
+                songs.find(
+                    s => s.id === id
+                )
         )
         .filter(Boolean);
 
@@ -3232,7 +3934,12 @@ function renderQueue(){
     document
     .getElementById("queueCount")
     .textContent =
-        String(items.length).padStart(2,"0");
+        String(
+            items.length
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     document
@@ -3243,43 +3950,55 @@ function renderQueue(){
 
         ?
 
-        items.map((song,index) => `
+        items.map(
+            (song,index) => `
 
-            <div
-                class="queue-row"
-                onclick="selectSong('${song.id}')"
-            >
-
-                <small>
-                    ${String(index+1).padStart(2,"0")}
-                </small>
-
-                ${thumb(song)}
-
-                <div>
-
-                    <b>
-                        ${escapeHtml(song.title)}
-                    </b>
+                <div
+                    class="queue-row"
+                    onclick="selectSong('${song.id}')"
+                >
 
                     <small>
-                        ${escapeHtml(song.artist)}
+                        ${String(
+                            index + 1
+                        ).padStart(
+                            2,
+                            "0"
+                        )}
                     </small>
+
+                    ${thumb(song)}
+
+                    <div>
+
+                        <b>
+                            ${escapeHtml(
+                                song.title
+                            )}
+                        </b>
+
+                        <small>
+                            ${escapeHtml(
+                                song.artist ||
+                                "Unknown"
+                            )}
+                        </small>
+
+                    </div>
+
+                    <button
+                        onclick="
+                            event.stopPropagation();
+                            removeQueue('${song.id}')
+                        "
+                    >
+                        ×
+                    </button>
 
                 </div>
 
-                <button
-                    onclick="
-                        event.stopPropagation();
-                        removeQueue('${song.id}')
-                    "
-                >
-                    ×
-                </button>
-
-            </div>
-
-        `).join("")
+            `
+        ).join("")
 
         :
 
@@ -3295,7 +4014,9 @@ function renderQueue(){
 function removeQueue(id){
 
     queue =
-        queue.filter(x => x !== id);
+        queue.filter(
+            x => x !== id
+        );
 
     renderQueue();
 
@@ -3313,7 +4034,9 @@ function clearQueue(){
 
 function shuffleQueue(){
 
-    if(queue.length < 2) return;
+    if(queue.length < 2)
+        return;
+
 
     for(
         let i = queue.length - 1;
@@ -3323,8 +4046,10 @@ function shuffleQueue(){
 
         const j =
             Math.floor(
-                Math.random() * (i + 1)
+                Math.random() *
+                (i + 1)
             );
+
 
         [
             queue[i],
@@ -3336,6 +4061,7 @@ function shuffleQueue(){
         ];
 
     }
+
 
     renderQueue();
 
@@ -3358,32 +4084,40 @@ function randomSong(){
 
     }
 
+
     let candidates =
         songs;
+
 
     if(songs.length > 1){
 
         candidates =
             songs.filter(
-                song => song.id !== activeId
+                song =>
+                    song.id !== activeId
             );
 
     }
 
+
     const random =
         candidates[
             Math.floor(
-                Math.random() * candidates.length
+                Math.random() *
+                candidates.length
             )
         ];
 
-    selectSong(random.id);
+
+    selectSong(
+        random.id
+    );
 
 }
 
 
 /* =====================================================
-   ADD SONG
+   ADD SONG MODAL
 ===================================================== */
 
 function openSongModal(){
@@ -3396,479 +4130,5 @@ function openSongModal(){
 
     }
 
-    document
-    .getElementById("songModal")
-    .classList
-    .add("open");
 
-    document
-    .getElementById("newTitle")
-    .focus();
-
-}
-
-
-function closeSongModal(){
-
-    document
-    .getElementById("songModal")
-    .classList
-    .remove("open");
-
-    document
-    .getElementById("newTitle")
-    .value = "";
-
-    document
-    .getElementById("newArtist")
-    .value = "";
-
-    document
-    .getElementById("newUrl")
-    .value = "";
-
-    document
-    .getElementById("titleNotice")
-    .textContent =
-        "✓ YouTube link ထည့်ပြီး ခဏစောင့်ပါ";
-
-}
-
-
-function queueTitleFetch(){
-
-    clearTimeout(titleFetchTimer);
-
-    const url =
-        document
-        .getElementById("newUrl")
-        .value
-        .trim();
-
-    const id =
-        getYoutubeId(url);
-
-    if(!/^[a-zA-Z0-9_-]{11}$/.test(id)){
-
-        return;
-
-    }
-
-    document
-    .getElementById("titleNotice")
-    .textContent =
-        "YouTube title ရယူနေပါတယ်...";
-
-    titleFetchTimer =
-        setTimeout(async () => {
-
-            try{
-
-                const response =
-                    await fetch(
-                        `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`
-                    );
-
-                if(!response.ok)
-                    throw new Error();
-
-                const data =
-                    await response.json();
-
-                document
-                .getElementById("newTitle")
-                .value =
-                    data.title || "";
-
-                if(
-                    !document
-                    .getElementById("newArtist")
-                    .value
-                ){
-
-                    document
-                    .getElementById("newArtist")
-                    .value =
-                        data.author_name || "";
-
-                }
-
-                document
-                .getElementById("titleNotice")
-                .textContent =
-                    "✓ Title နဲ့ artist အလိုအလျောက် ဖြည့်ပြီးပါပြီ";
-
-            }catch{
-
-                document
-                .getElementById("titleNotice")
-                .textContent =
-                    "Title ကို ကိုယ်တိုင်ဖြည့်နိုင်ပါတယ်။";
-
-            }
-
-        },500);
-
-}
-
-
-async function addSong(e){
-
-    e.preventDefault();
-
-    if(!currentUser){
-
-        openAuth();
-
-        return;
-
-    }
-
-    const title =
-        document
-        .getElementById("newTitle")
-        .value
-        .trim();
-
-    const artist =
-        document
-        .getElementById("newArtist")
-        .value
-        .trim() ||
-        "Unknown artist";
-
-    const url =
-        document
-        .getElementById("newUrl")
-        .value
-        .trim();
-
-    const youtubeId =
-        getYoutubeId(url);
-
-    if(
-        !/^[a-zA-Z0-9_-]{11}$/.test(youtubeId)
-    ){
-
-        alert(
-            "မှန်ကန်တဲ့ YouTube link ထည့်ပေးပါ။"
-        );
-
-        return;
-
-    }
-
-
-    const docRef =
-        userSongsRef().doc();
-
-    const song = {
-
-        title,
-
-        artist,
-
-        youtubeId,
-
-        favorite:false,
-
-        createdAt:
-            firebase.firestore.FieldValue.serverTimestamp(),
-
-        updatedAt:
-            firebase.firestore.FieldValue.serverTimestamp()
-
-    };
-
-
-    try{
-
-        await docRef.set(song);
-
-        songs.unshift({
-
-            id:docRef.id,
-
-            ...song
-
-        });
-
-        activeId = docRef.id;
-
-        closeSongModal();
-
-        selectSong(activeId);
-
-    }catch(error){
-
-        alert(
-            "Song save error: " +
-            error.message
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   DELETE SONG
-===================================================== */
-
-async function deleteSong(id){
-
-    if(!currentUser) return;
-
-    const song =
-        songs.find(s => s.id === id);
-
-    if(!song) return;
-
-    const ok =
-        confirm(
-            `"${song.title}" ကို ဖျက်မှာသေချာပါသလား?`
-        );
-
-    if(!ok) return;
-
-    try{
-
-        await userSongsRef()
-        .doc(id)
-        .delete();
-
-        songs =
-            songs.filter(s => s.id !== id);
-
-        favorites =
-            favorites.filter(x => x !== id);
-
-        queue =
-            queue.filter(x => x !== id);
-
-        if(activeId === id){
-
-            activeId =
-                songs.length
-                ? songs[0].id
-                : null;
-
-            if(activeId){
-
-                selectSong(activeId);
-
-            }else{
-
-                document
-                .getElementById("videoFrame")
-                .src = "";
-
-                document
-                .getElementById("nowTitle")
-                .textContent =
-                    "No song selected";
-
-                document
-                .getElementById("nowArtist")
-                .textContent =
-                    "Add a song to start listening";
-
-                document
-                .getElementById("cover")
-                .removeAttribute("src");
-
-            }
-
-        }
-
-        renderSongs();
-
-    }catch(error){
-
-        alert(error.message);
-
-    }
-
-}
-
-
-/* =====================================================
-   SETTINGS
-===================================================== */
-
-function openSettings(){
-
-    if(!currentUser){
-
-        openAuth();
-
-        return;
-
-    }
-
-    document
-    .getElementById("settingsOverlay")
-    .classList
-    .add("open");
-
-}
-
-
-function closeSettings(){
-
-    document
-    .getElementById("settingsOverlay")
-    .classList
-    .remove("open");
-
-}
-
-
-function closeSettingsOutside(event){
-
-    if(
-        event.target.id ===
-        "settingsOverlay"
-    ){
-
-        closeSettings();
-
-    }
-
-}
-
-
-/* =====================================================
-   THEME
-===================================================== */
-
-async function setTheme(theme){
-
-    applyTheme(theme);
-
-    if(!currentUser) return;
-
-    await userSettingsRef()
-    .set({
-
-        theme,
-
-        updatedAt:
-            firebase.firestore.FieldValue.serverTimestamp()
-
-    },{merge:true});
-
-}
-
-
-function applyTheme(theme){
-
-    document.body.classList.remove(
-        "theme-black",
-        "theme-purple",
-        "theme-blue",
-        "theme-red"
-    );
-
-    if(theme !== "forest"){
-
-        document.body
-        .classList
-        .add("theme-" + theme);
-
-    }
-
-    document
-    .querySelectorAll(".theme-btn")
-    .forEach(button => {
-
-        button.classList.toggle(
-            "active",
-            button.dataset.theme === theme
-        );
-
-    });
-
-}
-
-
-async function setAccent(color){
-
-    applyAccent(color);
-
-    if(!currentUser) return;
-
-    await userSettingsRef()
-    .set({
-
-        accent:color,
-
-        updatedAt:
-            firebase.firestore.FieldValue.serverTimestamp()
-
-    },{merge:true});
-
-}
-
-
-function applyAccent(color){
-
-    document
-    .documentElement
-    .style
-    .setProperty(
-        "--accent",
-        color
-    );
-
-}
-
-
-/* =====================================================
-   LOGOUT
-===================================================== */
-
-async function logout(){
-
-    const ok =
-        confirm(
-            "Account ကနေ Logout ထွက်မှာသေချာပါသလား?"
-        );
-
-    if(!ok) return;
-
-    await auth.signOut();
-
-    closeSettings();
-
-}
-
-
-/* =====================================================
-   CLOSE MODALS BY BACKGROUND
-===================================================== */
-
-document
-.getElementById("songModal")
-.addEventListener("click",function(e){
-
-    if(e.target === this){
-
-        closeSongModal();
-
-    }
-
-});
-
-
-/* =====================================================
-   DEFAULT THEME
-===================================================== */
-
-applyTheme("forest");
-
-
-</script>
-
-</body>
-</html>
+   
