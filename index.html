@@ -13,33 +13,24 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 </head>
 
 <body>
 
-    <!-- =========================
-         LOGIN / REGISTER SCREEN
-    ========================== -->
+    <!-- AUTH -->
 
     <div id="authScreen" class="auth-screen">
 
         <div class="auth-box">
 
-            <div class="logo">
-                🎵
-            </div>
+            <div class="logo">🎵</div>
 
             <h1>MyTuneBox</h1>
 
             <p class="subtitle">
                 Your personal music & video library
             </p>
-
-
-            <!-- LOGIN -->
 
             <div id="loginForm">
 
@@ -70,6 +61,7 @@
 
                 <p class="switch-text">
                     Don't have an account?
+
                     <button
                         id="showRegister"
                         class="link-btn"
@@ -80,8 +72,6 @@
 
             </div>
 
-
-            <!-- REGISTER -->
 
             <div
                 id="registerForm"
@@ -127,6 +117,7 @@
 
                 <p class="switch-text">
                     Already have an account?
+
                     <button
                         id="showLogin"
                         class="link-btn"
@@ -136,7 +127,6 @@
                 </p>
 
             </div>
-
 
             <div
                 id="authMessage"
@@ -148,9 +138,7 @@
     </div>
 
 
-    <!-- =========================
-         MAIN APPLICATION
-    ========================== -->
+    <!-- APP -->
 
     <div
         id="appScreen"
@@ -183,7 +171,7 @@
 
         <main class="main-content">
 
-            <div class="welcome-card">
+            <section class="welcome-card">
 
                 <div>
 
@@ -199,7 +187,7 @@
                     </h1>
 
                     <p>
-                        Your music and video library is ready.
+                        Build your personal YouTube library.
                     </p>
 
                 </div>
@@ -208,79 +196,148 @@
                     🎧
                 </div>
 
-            </div>
+            </section>
 
 
-            <section class="dashboard">
+            <!-- ADD VIDEO -->
 
-                <div class="dashboard-card">
+            <section class="add-video-card">
 
-                    <div class="card-icon">
-                        🎬
+                <div class="section-title">
+
+                    <div>
+
+                        <h2>
+                            Add YouTube Video
+                        </h2>
+
+                        <p>
+                            Paste a YouTube link below.
+                        </p>
+
                     </div>
 
-                    <h3>Videos</h3>
-
-                    <p id="videoCount">
-                        0
-                    </p>
+                    <div class="youtube-icon">
+                        ▶
+                    </div>
 
                 </div>
 
 
-                <div class="dashboard-card">
+                <div class="youtube-input-row">
 
-                    <div class="card-icon">
-                        ❤️
-                    </div>
+                    <input
+                        id="youtubeUrl"
+                        type="url"
+                        placeholder="https://www.youtube.com/watch?v=..."
+                    >
 
-                    <h3>Favorites</h3>
-
-                    <p>
-                        0
-                    </p>
+                    <button
+                        id="fetchYoutubeBtn"
+                        class="primary-btn add-btn"
+                    >
+                        Add Video
+                    </button>
 
                 </div>
 
 
-                <div class="dashboard-card">
+                <div
+                    id="videoMessage"
+                    class="video-message"
+                ></div>
 
-                    <div class="card-icon">
-                        📁
+
+                <!-- PREVIEW -->
+
+                <div
+                    id="videoPreview"
+                    class="video-preview hidden"
+                >
+
+                    <img
+                        id="previewThumbnail"
+                        src=""
+                        alt="Thumbnail"
+                    >
+
+                    <div class="preview-info">
+
+                        <h3 id="previewTitle">
+                            Video Title
+                        </h3>
+
+                        <p id="previewChannel">
+                            Channel
+                        </p>
+
+                        <button
+                            id="saveVideoBtn"
+                            class="primary-btn"
+                        >
+                            Save to My Library
+                        </button>
+
                     </div>
-
-                    <h3>Playlists</h3>
-
-                    <p>
-                        0
-                    </p>
 
                 </div>
 
             </section>
 
 
-            <section class="empty-section">
+            <!-- LIBRARY -->
 
-                <div class="empty-icon">
-                    🎵
+            <section class="library-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            My Library
+                        </h2>
+
+                        <p>
+                            Your saved YouTube videos
+                        </p>
+
+                    </div>
+
+                    <div
+                        id="videoCount"
+                        class="count-badge"
+                    >
+                        0 Videos
+                    </div>
+
                 </div>
 
-                <h2>
-                    Your library is empty
-                </h2>
 
-                <p>
-                    Add YouTube videos to start building
-                    your personal library.
-                </p>
+                <div
+                    id="videoGrid"
+                    class="video-grid"
+                ></div>
 
-                <button
-                    class="primary-btn"
-                    id="startBtn"
+
+                <div
+                    id="emptyLibrary"
+                    class="empty-section"
                 >
-                    Add Your First Video
-                </button>
+
+                    <div class="empty-icon">
+                        🎵
+                    </div>
+
+                    <h2>
+                        Your library is empty
+                    </h2>
+
+                    <p>
+                        Add a YouTube video above to start
+                        building your library.
+                    </p>
+
+                </div>
 
             </section>
 
@@ -289,11 +346,7 @@
     </div>
 
 
-    <!-- CONFIG FIRST -->
-
     <script src="config.js"></script>
-
-    <!-- APP -->
 
     <script src="app.js"></script>
 
