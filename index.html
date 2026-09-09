@@ -18,337 +18,367 @@
 
 <body>
 
-    <!-- AUTH -->
+<!-- =========================
+     AUTH SCREEN
+========================= -->
 
-    <div id="authScreen" class="auth-screen">
+<div id="authScreen" class="auth-screen">
 
-        <div class="auth-box">
+    <div class="auth-box">
 
-            <div class="logo">🎵</div>
+        <div class="logo">🎵</div>
 
-            <h1>MyTuneBox</h1>
+        <h1>MyTuneBox</h1>
 
-            <p class="subtitle">
-                Your personal music & video library
+        <p class="subtitle">
+            Your personal music & video library
+        </p>
+
+
+        <!-- LOGIN -->
+
+        <div id="loginForm">
+
+            <h2>Welcome Back</h2>
+
+            <p class="form-subtitle">
+                Login to continue
             </p>
 
-            <div id="loginForm">
-
-                <h2>Welcome Back</h2>
-
-                <p class="form-subtitle">
-                    Login to continue
-                </p>
-
-                <input
-                    id="loginEmail"
-                    type="email"
-                    placeholder="Email address"
-                >
-
-                <input
-                    id="loginPassword"
-                    type="password"
-                    placeholder="Password"
-                >
-
-                <button
-                    id="loginBtn"
-                    class="primary-btn"
-                >
-                    Login
-                </button>
-
-                <p class="switch-text">
-                    Don't have an account?
-
-                    <button
-                        id="showRegister"
-                        class="link-btn"
-                    >
-                        Register
-                    </button>
-                </p>
-
-            </div>
-
-
-            <div
-                id="registerForm"
-                class="hidden"
+            <input
+                id="loginEmail"
+                type="email"
+                placeholder="Email address"
             >
 
-                <h2>Create Account</h2>
+            <input
+                id="loginPassword"
+                type="password"
+                placeholder="Password"
+            >
 
-                <p class="form-subtitle">
-                    Create your MyTuneBox account
-                </p>
+            <button
+                id="loginBtn"
+                class="primary-btn"
+                type="button"
+            >
+                Login
+            </button>
 
-                <input
-                    id="registerName"
-                    type="text"
-                    placeholder="Display name"
-                >
-
-                <input
-                    id="registerEmail"
-                    type="email"
-                    placeholder="Email address"
-                >
-
-                <input
-                    id="registerPassword"
-                    type="password"
-                    placeholder="Password"
-                >
-
-                <input
-                    id="registerPassword2"
-                    type="password"
-                    placeholder="Confirm password"
-                >
+            <p class="switch-text">
+                Don't have an account?
 
                 <button
-                    id="registerBtn"
-                    class="primary-btn"
+                    id="showRegister"
+                    class="link-btn"
+                    type="button"
                 >
-                    Create Account
+                    Register
                 </button>
-
-                <p class="switch-text">
-                    Already have an account?
-
-                    <button
-                        id="showLogin"
-                        class="link-btn"
-                    >
-                        Login
-                    </button>
-                </p>
-
-            </div>
-
-            <div
-                id="authMessage"
-                class="auth-message"
-            ></div>
+            </p>
 
         </div>
 
-    </div>
 
+        <!-- REGISTER -->
 
-    <!-- APP -->
+        <div
+            id="registerForm"
+            class="hidden"
+        >
 
-    <div
-        id="appScreen"
-        class="app-screen hidden"
-    >
+            <h2>Create Account</h2>
 
-        <header class="topbar">
+            <p class="form-subtitle">
+                Create your MyTuneBox account
+            </p>
 
-            <div class="brand">
-                🎵 MyTuneBox
-            </div>
+            <input
+                id="registerName"
+                type="text"
+                placeholder="Display name"
+            >
 
-            <div class="user-area">
+            <input
+                id="registerEmail"
+                type="email"
+                placeholder="Email address"
+            >
 
-                <span id="userName">
-                    User
-                </span>
+            <input
+                id="registerPassword"
+                type="password"
+                placeholder="Password"
+            >
+
+            <input
+                id="registerPassword2"
+                type="password"
+                placeholder="Confirm password"
+            >
+
+            <button
+                id="registerBtn"
+                class="primary-btn"
+                type="button"
+            >
+                Create Account
+            </button>
+
+            <p class="switch-text">
+                Already have an account?
 
                 <button
-                    id="logoutBtn"
-                    class="logout-btn"
+                    id="showLogin"
+                    class="link-btn"
+                    type="button"
                 >
-                    Logout
+                    Login
+                </button>
+            </p>
+
+        </div>
+
+
+        <div
+            id="authMessage"
+            class="auth-message"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MAIN APP
+========================= -->
+
+<div
+    id="appScreen"
+    class="app-screen hidden"
+>
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div class="brand">
+            🎵 MyTuneBox
+        </div>
+
+        <div class="user-area">
+
+            <span id="userName">
+                User
+            </span>
+
+            <button
+                id="logoutBtn"
+                class="logout-btn"
+                type="button"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="main-content">
+
+
+        <!-- WELCOME -->
+
+        <section class="welcome-card">
+
+            <div>
+
+                <span class="small-label">
+                    MYTUNEBOX
+                </span>
+
+                <h1>
+                    Welcome back,
+                    <span id="welcomeName">
+                        User
+                    </span>
+                </h1>
+
+                <p>
+                    Your personal YouTube music library.
+                </p>
+
+            </div>
+
+            <div class="music-icon">
+                🎧
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADD YOUTUBE
+        ========================= -->
+
+        <section class="add-video-card">
+
+            <div class="section-title">
+
+                <div>
+
+                    <h2>
+                        Add a YouTube Video
+                    </h2>
+
+                    <p>
+                        Paste your YouTube link
+                    </p>
+
+                </div>
+
+                <div class="youtube-icon">
+                    ▶
+                </div>
+
+            </div>
+
+
+            <div class="youtube-add-box">
+
+                <input
+                    id="youtubeUrl"
+                    type="url"
+                    autocomplete="off"
+                    placeholder="Paste YouTube link..."
+                >
+
+                <button
+                    id="fetchYoutubeBtn"
+                    class="primary-btn add-btn"
+                    type="button"
+                >
+                    + Add
                 </button>
 
             </div>
 
-        </header>
+
+            <div
+                id="videoMessage"
+                class="video-message"
+            ></div>
 
 
-        <main class="main-content">
+            <!-- PREVIEW -->
 
-            <section class="welcome-card">
+            <div
+                id="videoPreview"
+                class="video-preview hidden"
+            >
 
-                <div>
+                <img
+                    id="previewThumbnail"
+                    src=""
+                    alt="YouTube thumbnail"
+                >
 
-                    <span class="small-label">
-                        MYTUNEBOX
-                    </span>
+                <div class="preview-info">
 
-                    <h1>
-                        Welcome back,
-                        <span id="welcomeName">
-                            User
-                        </span>
-                    </h1>
+                    <h3 id="previewTitle">
+                        Video Title
+                    </h3>
 
-                    <p>
-                        Build your personal YouTube library.
+                    <p id="previewChannel">
+                        Channel
                     </p>
 
-                </div>
-
-                <div class="music-icon">
-                    🎧
-                </div>
-
-            </section>
-
-
-            <!-- ADD VIDEO -->
-
-            <section class="add-video-card">
-
-                <div class="section-title">
-
-                    <div>
-
-                        <h2>
-                            Add YouTube Video
-                        </h2>
-
-                        <p>
-                            Paste a YouTube link below.
-                        </p>
-
-                    </div>
-
-                    <div class="youtube-icon">
-                        ▶
-                    </div>
-
-                </div>
-
-
-                <div class="youtube-input-row">
-
-                    <input
-                        id="youtubeUrl"
-                        type="url"
-                        placeholder="https://www.youtube.com/watch?v=..."
-                    >
-
                     <button
-                        id="fetchYoutubeBtn"
-                        class="primary-btn add-btn"
+                        id="saveVideoBtn"
+                        class="primary-btn"
+                        type="button"
                     >
-                        Add Video
+                        Save to My Library
                     </button>
 
                 </div>
 
+            </div>
 
-                <div
-                    id="videoMessage"
-                    class="video-message"
-                ></div>
+        </section>
 
 
-                <!-- PREVIEW -->
+        <!-- =========================
+             LIBRARY
+        ========================= -->
 
-                <div
-                    id="videoPreview"
-                    class="video-preview hidden"
-                >
+        <section class="library-section">
 
-                    <img
-                        id="previewThumbnail"
-                        src=""
-                        alt="Thumbnail"
-                    >
+            <div class="section-header">
 
-                    <div class="preview-info">
-
-                        <h3 id="previewTitle">
-                            Video Title
-                        </h3>
-
-                        <p id="previewChannel">
-                            Channel
-                        </p>
-
-                        <button
-                            id="saveVideoBtn"
-                            class="primary-btn"
-                        >
-                            Save to My Library
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- LIBRARY -->
-
-            <section class="library-section">
-
-                <div class="section-header">
-
-                    <div>
-
-                        <h2>
-                            My Library
-                        </h2>
-
-                        <p>
-                            Your saved YouTube videos
-                        </p>
-
-                    </div>
-
-                    <div
-                        id="videoCount"
-                        class="count-badge"
-                    >
-                        0 Videos
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="videoGrid"
-                    class="video-grid"
-                ></div>
-
-
-                <div
-                    id="emptyLibrary"
-                    class="empty-section"
-                >
-
-                    <div class="empty-icon">
-                        🎵
-                    </div>
+                <div>
 
                     <h2>
-                        Your library is empty
+                        My Library
                     </h2>
 
                     <p>
-                        Add a YouTube video above to start
-                        building your library.
+                        Your saved YouTube videos
                     </p>
 
                 </div>
 
-            </section>
+                <div
+                    id="videoCount"
+                    class="count-badge"
+                >
+                    0 Videos
+                </div>
 
-        </main>
-
-    </div>
+            </div>
 
 
-    <script src="config.js"></script>
+            <div
+                id="videoGrid"
+                class="video-grid"
+            ></div>
 
-    <script src="app.js"></script>
+
+            <div
+                id="emptyLibrary"
+                class="empty-section"
+            >
+
+                <div class="empty-icon">
+                    🎵
+                </div>
+
+                <h2>
+                    Your library is empty
+                </h2>
+
+                <p>
+                    Paste a YouTube link above to add your first video.
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script src="config.js"></script>
+<script src="app.js"></script>
 
 </body>
 
