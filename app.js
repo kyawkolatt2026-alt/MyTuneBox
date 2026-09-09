@@ -1,69 +1,40 @@
 let currentUser = null;
-
 let pendingVideo = null;
-
 
 /* =========================
    ELEMENTS
 ========================= */
 
-const authScreen =
-    document.getElementById("authScreen");
+const authScreen = document.getElementById("authScreen");
+const appScreen = document.getElementById("appScreen");
 
-const appScreen =
-    document.getElementById("appScreen");
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
 
-const loginForm =
-    document.getElementById("loginForm");
+const authMessage = document.getElementById("authMessage");
+const videoMessage = document.getElementById("videoMessage");
 
-const registerForm =
-    document.getElementById("registerForm");
-
-const authMessage =
-    document.getElementById("authMessage");
-
-const videoMessage =
-    document.getElementById("videoMessage");
-
-const videoPreview =
-    document.getElementById("videoPreview");
-
-const videoGrid =
-    document.getElementById("videoGrid");
-
-const emptyLibrary =
-    document.getElementById("emptyLibrary");
+const videoPreview = document.getElementById("videoPreview");
+const videoGrid = document.getElementById("videoGrid");
+const emptyLibrary = document.getElementById("emptyLibrary");
 
 
 /* =========================
    MESSAGE
 ========================= */
 
-function showAuthMessage(
-    message,
-    success = false
-) {
+function showAuthMessage(message, success = false) {
+    if (!authMessage) return;
 
     authMessage.textContent = message;
-
-    authMessage.style.color =
-        success
-            ? "#86efac"
-            : "#fca5a5";
+    authMessage.style.color = success ? "#86efac" : "#fca5a5";
 }
 
-
-function showVideoMessage(
-    message,
-    success = false
-) {
+function showVideoMessage(message, success = false) {
+    if (!videoMessage) return;
 
     videoMessage.textContent = message;
-
-    videoMessage.style.color =
-        success
-            ? "#86efac"
-            : "#fca5a5";
+    videoMessage.style.color = success ? "#86efac" : "#fca5a5";
 }
 
 
@@ -71,216 +42,192 @@ function showVideoMessage(
    LOGIN / REGISTER SWITCH
 ========================= */
 
-document
-    .getElementById("showRegister")
-    .onclick = () => {
+const showRegisterBtn = document.getElementById("showRegister");
+const showLoginBtn = document.getElementById("showLogin");
 
-        loginForm.classList.add("hidden");
-
-        registerForm.classList.remove("hidden");
-
+if (showRegisterBtn) {
+    showRegisterBtn.onclick = () => {
+        loginForm?.classList.add("hidden");
+        registerForm?.classList.remove("hidden");
         showAuthMessage("");
     };
+}
 
-
-document
-    .getElementById("showLogin")
-    .onclick = () => {
-
-        registerForm.classList.add("hidden");
-
-        loginForm.classList.remove("hidden");
-
+if (showLoginBtn) {
+    showLoginBtn.onclick = () => {
+        registerForm?.classList.add("hidden");
+        loginForm?.classList.remove("hidden");
         showAuthMessage("");
     };
+}
 
 
 /* =========================
    REGISTER
 ========================= */
 
-document
-    .getElementById("registerBtn")
-    .onclick = async () => {
+const registerBtn = document.getElementById("registerBtn");
 
-        const name =
-            document
-                .getElementById("registerName")
-                .value
-                .trim();
+if (registerBtn) {
+    registerBtn.onclick = async () => {
 
-        const email =
-            document
-                .getElementById("registerEmail")
-                .value
-                .trim();
+        try {
 
-        const password =
-            document
-                .getElementById("registerPassword")
-                .value;
+            const name =
+                document.getElementById("registerName")?.value.trim();
 
-        const password2 =
-            document
-                .getElementById("registerPassword2")
-                .value;
+            const email =
+                document.getElementById("registerEmail")?.value.trim();
+
+            const password =
+                document.getElementById("registerPassword")?.value;
+
+            const password2 =
+                document.getElementById("registerPassword2")?.value;
 
 
-        if (!name || !email || !password) {
+            if (!name || !email || !password || !password2) {
+                showAuthMessage("Please fill in all fields.");
+                return;
+            }
+
+
+            if (password.length < 6) {
+                showAuthMessage(
+                    "Password must be at least 6 characters."
+                );
+                return;
+            }
+
+
+            if (password !== password2) {
+                showAuthMessage("Passwords do not match.");
+                return;
+            }
+
 
             showAuthMessage(
-                "Please fill in all fields."
+                "Creating account...",
+                true
             );
 
-            return;
-        }
 
-
-        if (password.length < 6) {
-
-            showAuthMessage(
-                "Password must be at least 6 characters."
-            );
-
-            return;
-        }
-
-
-        if (password !== password2) {
-
-            showAuthMessage(
-                "Passwords do not match."
-            );
-
-            return;
-        }
-
-
-        showAuthMessage(
-            "Creating account...",
-            true
-        );
-
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth.signUp({
-
-                email,
-
-                password,
-
-                options: {
-                    data: {
-                        display_name: name
+            const { data, error } =
+                await supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            display_name: name
+                        }
                     }
-                }
-
-            });
+                });
 
 
-        if (error) {
+            if (error) {
+                showAuthMessage(error.message);
+                return;
+            }
+
 
             showAuthMessage(
-                error.message
+                "Account created successfully.",
+                true
             );
 
-            return;
+
+            const loginEmail =
+                document.getElementById("loginEmail");
+
+            if (loginEmail) {
+                loginEmail.value = email;
+            }
+
+
+            loginForm?.classList.remove("hidden");
+            registerForm?.classList.add("hidden");
+
+        } catch (error) {
+
+            console.error(error);
+
+            showAuthMessage(
+                error?.message || "Registration failed."
+            );
         }
-
-
-        showAuthMessage(
-            "Account created successfully.",
-            true
-        );
-
-
-        document
-            .getElementById("loginEmail")
-            .value = email;
-
-
-        loginForm.classList.remove("hidden");
-
-        registerForm.classList.add("hidden");
     };
+}
 
 
 /* =========================
    LOGIN
 ========================= */
 
-document
-    .getElementById("loginBtn")
-    .onclick = async () => {
+const loginBtn = document.getElementById("loginBtn");
 
-        const email =
-            document
-                .getElementById("loginEmail")
-                .value
-                .trim();
+if (loginBtn) {
+    loginBtn.onclick = async () => {
 
-        const password =
-            document
-                .getElementById("loginPassword")
-                .value;
+        try {
+
+            const email =
+                document.getElementById("loginEmail")?.value.trim();
+
+            const password =
+                document.getElementById("loginPassword")?.value;
 
 
-        if (!email || !password) {
+            if (!email || !password) {
+                showAuthMessage(
+                    "Please enter email and password."
+                );
+                return;
+            }
+
 
             showAuthMessage(
-                "Please enter email and password."
+                "Logging in...",
+                true
             );
 
-            return;
-        }
 
-
-        showAuthMessage(
-            "Logging in...",
-            true
-        );
-
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth
-                .signInWithPassword({
-
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
                     email,
-
                     password
-
                 });
 
 
-        if (error) {
+            if (error) {
+                showAuthMessage(error.message);
+                return;
+            }
+
+
+            currentUser = data.user;
+
+            await showApp();
+
+        } catch (error) {
+
+            console.error(error);
 
             showAuthMessage(
-                error.message
+                error?.message || "Login failed."
             );
-
-            return;
         }
-
-
-        currentUser = data.user;
-
-        await showApp();
     };
+}
 
 
 /* =========================
    LOGOUT
 ========================= */
 
-document
-    .getElementById("logoutBtn")
-    .onclick = async () => {
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+    logoutBtn.onclick = async () => {
 
         await supabaseClient.auth.signOut();
 
@@ -288,6 +235,7 @@ document
 
         showAuth();
     };
+}
 
 
 /* =========================
@@ -296,9 +244,8 @@ document
 
 function showAuth() {
 
-    appScreen.classList.add("hidden");
-
-    authScreen.classList.remove("hidden");
+    appScreen?.classList.add("hidden");
+    authScreen?.classList.remove("hidden");
 }
 
 
@@ -308,31 +255,30 @@ function showAuth() {
 
 async function showApp() {
 
-    authScreen.classList.add("hidden");
-
-    appScreen.classList.remove("hidden");
+    authScreen?.classList.add("hidden");
+    appScreen?.classList.remove("hidden");
 
 
     const name =
-        currentUser
-            ?.user_metadata
-            ?.display_name
-        ||
-        currentUser
-            ?.email
-            ?.split("@")[0]
-        ||
+        currentUser?.user_metadata?.display_name ||
+        currentUser?.email?.split("@")[0] ||
         "User";
 
 
-    document
-        .getElementById("userName")
-        .textContent = name;
+    const userName =
+        document.getElementById("userName");
+
+    const welcomeName =
+        document.getElementById("welcomeName");
 
 
-    document
-        .getElementById("welcomeName")
-        .textContent = name;
+    if (userName) {
+        userName.textContent = name;
+    }
+
+    if (welcomeName) {
+        welcomeName.textContent = name;
+    }
 
 
     await loadVideos();
@@ -347,8 +293,7 @@ function getYoutubeId(url) {
 
     try {
 
-        const parsed =
-            new URL(url);
+        const parsed = new URL(url);
 
         const host =
             parsed.hostname
@@ -361,6 +306,7 @@ function getYoutubeId(url) {
             return parsed.pathname
                 .replace("/", "")
                 .split("/")[0];
+
         }
 
 
@@ -369,37 +315,30 @@ function getYoutubeId(url) {
             host === "m.youtube.com"
         ) {
 
-            if (
-                parsed.pathname ===
-                "/watch"
-            ) {
-
-                return parsed.searchParams
-                    .get("v");
+            if (parsed.pathname === "/watch") {
+                return parsed.searchParams.get("v");
             }
 
 
-            if (
-                parsed.pathname
-                    .startsWith("/shorts/")
-            ) {
+            if (parsed.pathname.startsWith("/shorts/")) {
 
                 return parsed.pathname
                     .split("/")[2];
+
             }
 
 
-            if (
-                parsed.pathname
-                    .startsWith("/embed/")
-            ) {
+            if (parsed.pathname.startsWith("/embed/")) {
 
                 return parsed.pathname
                     .split("/")[2];
+
             }
         }
 
     } catch (error) {
+
+        console.error(error);
 
         return null;
     }
@@ -413,9 +352,7 @@ function getYoutubeId(url) {
    YOUTUBE API
 ========================= */
 
-async function fetchYoutubeVideo(
-    youtubeId
-) {
+async function fetchYoutubeVideo(youtubeId) {
 
     const url =
         "https://www.googleapis.com/youtube/v3/videos" +
@@ -426,18 +363,12 @@ async function fetchYoutubeVideo(
         encodeURIComponent(YOUTUBE_API_KEY);
 
 
-    const response =
-        await fetch(url);
+    const response = await fetch(url);
+
+    const data = await response.json();
 
 
-    const data =
-        await response.json();
-
-
-    if (
-        !response.ok ||
-        data.error
-    ) {
+    if (!response.ok || data.error) {
 
         throw new Error(
             data?.error?.message ||
@@ -446,10 +377,7 @@ async function fetchYoutubeVideo(
     }
 
 
-    if (
-        !data.items ||
-        data.items.length === 0
-    ) {
+    if (!data.items || data.items.length === 0) {
 
         throw new Error(
             "YouTube video not found."
@@ -457,30 +385,22 @@ async function fetchYoutubeVideo(
     }
 
 
-    const snippet =
-        data.items[0].snippet;
+    const snippet = data.items[0].snippet;
 
 
     return {
-
         youtubeId,
 
-        title:
-            snippet.title,
+        title: snippet.title,
 
-        channelName:
-            snippet.channelTitle,
+        channelName: snippet.channelTitle,
 
-        description:
-            snippet.description,
+        description: snippet.description,
 
         thumbnail:
-            snippet.thumbnails?.high?.url
-            ||
-            snippet.thumbnails?.medium?.url
-            ||
+            snippet.thumbnails?.high?.url ||
+            snippet.thumbnails?.medium?.url ||
             snippet.thumbnails?.default?.url
-
     };
 }
 
@@ -489,222 +409,255 @@ async function fetchYoutubeVideo(
    FETCH BUTTON
 ========================= */
 
-document
-    .getElementById("fetchYoutubeBtn")
-    .onclick = async () => {
-
-        const input =
-            document
-                .getElementById("youtubeUrl");
-
-        const youtubeUrl =
-            input.value.trim();
+const fetchYoutubeBtn =
+    document.getElementById("fetchYoutubeBtn");
 
 
-        if (!youtubeUrl) {
+if (fetchYoutubeBtn) {
 
-            showVideoMessage(
-                "Please paste a YouTube URL."
-            );
-
-            return;
-        }
-
-
-        const youtubeId =
-            getYoutubeId(youtubeUrl);
-
-
-        if (!youtubeId) {
-
-            showVideoMessage(
-                "Invalid YouTube URL."
-            );
-
-            return;
-        }
-
-
-        showVideoMessage(
-            "Getting video information...",
-            true
-        );
-
-
-        videoPreview.classList.add(
-            "hidden"
-        );
-
+    fetchYoutubeBtn.onclick = async () => {
 
         try {
 
-            const video =
-                await fetchYoutubeVideo(
-                    youtubeId
+            const input =
+                document.getElementById("youtubeUrl");
+
+
+            if (!input) {
+
+                showVideoMessage(
+                    "YouTube URL input not found."
                 );
+
+                return;
+            }
+
+
+            const youtubeUrl =
+                input.value.trim();
+
+
+            if (!youtubeUrl) {
+
+                showVideoMessage(
+                    "Please paste a YouTube URL."
+                );
+
+                return;
+            }
+
+
+            const youtubeId =
+                getYoutubeId(youtubeUrl);
+
+
+            if (!youtubeId) {
+
+                showVideoMessage(
+                    "Invalid YouTube URL."
+                );
+
+                return;
+            }
+
+
+            showVideoMessage(
+                "Getting video information...",
+                true
+            );
+
+
+            videoPreview?.classList.add("hidden");
+
+
+            const video =
+                await fetchYoutubeVideo(youtubeId);
 
 
             pendingVideo = {
-
                 ...video,
-
                 youtubeUrl
-
             };
 
 
-            document
-                .getElementById(
-                    "previewThumbnail"
-                )
-                .src =
+            const previewThumbnail =
+                document.getElementById("previewThumbnail");
+
+            const previewTitle =
+                document.getElementById("previewTitle");
+
+            const previewChannel =
+                document.getElementById("previewChannel");
+
+
+            if (previewThumbnail) {
+                previewThumbnail.src =
                     video.thumbnail;
+            }
 
 
-            document
-                .getElementById(
-                    "previewTitle"
-                )
-                .textContent =
+            if (previewTitle) {
+                previewTitle.textContent =
                     video.title;
+            }
 
 
-            document
-                .getElementById(
-                    "previewChannel"
-                )
-                .textContent =
+            if (previewChannel) {
+                previewChannel.textContent =
                     video.channelName;
+            }
 
 
-            videoPreview.classList.remove(
+            videoPreview?.classList.remove(
                 "hidden"
             );
 
 
             showVideoMessage(
-                "Video found!",
+                "Video found! You can save it now.",
                 true
             );
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "YouTube Fetch Error:",
+                error
+            );
 
             showVideoMessage(
-                error.message
+                error?.message ||
+                "Could not get YouTube video information."
             );
         }
     };
+}
 
 
 /* =========================
    SAVE VIDEO
 ========================= */
 
-document
-    .getElementById("saveVideoBtn")
-    .onclick = async () => {
-
-        if (!currentUser) {
-
-            showVideoMessage(
-                "Please login first."
-            );
-
-            return;
-        }
+const saveVideoBtn =
+    document.getElementById("saveVideoBtn");
 
 
-        if (!pendingVideo) {
+if (saveVideoBtn) {
 
-            return;
-        }
+    saveVideoBtn.onclick = async () => {
 
+        try {
 
-        showVideoMessage(
-            "Saving video...",
-            true
-        );
-
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("videos")
-                .insert({
-
-                    user_id:
-                        currentUser.id,
-
-                    youtube_id:
-                        pendingVideo.youtubeId,
-
-                    youtube_url:
-                        pendingVideo.youtubeUrl,
-
-                    title:
-                        pendingVideo.title,
-
-                    channel_name:
-                        pendingVideo.channelName,
-
-                    thumbnail_url:
-                        pendingVideo.thumbnail,
-
-                    description:
-                        pendingVideo.description
-
-                });
-
-
-        if (error) {
-
-            if (
-                error.code === "23505"
-            ) {
+            if (!currentUser) {
 
                 showVideoMessage(
-                    "This video is already in your library."
+                    "Please login first."
                 );
 
-            } else {
-
-                console.error(error);
-
-                showVideoMessage(
-                    error.message
-                );
+                return;
             }
 
-            return;
+
+            if (!pendingVideo) {
+
+                showVideoMessage(
+                    "Please fetch a YouTube video first."
+                );
+
+                return;
+            }
+
+
+            showVideoMessage(
+                "Saving video...",
+                true
+            );
+
+
+            const { error } =
+                await supabaseClient
+                    .from("videos")
+                    .insert({
+                        user_id: currentUser.id,
+
+                        youtube_id:
+                            pendingVideo.youtubeId,
+
+                        youtube_url:
+                            pendingVideo.youtubeUrl,
+
+                        title:
+                            pendingVideo.title,
+
+                        channel_name:
+                            pendingVideo.channelName,
+
+                        thumbnail_url:
+                            pendingVideo.thumbnail,
+
+                        description:
+                            pendingVideo.description
+                    });
+
+
+            if (error) {
+
+                console.error(
+                    "Save Video Error:",
+                    error
+                );
+
+
+                if (error.code === "23505") {
+
+                    showVideoMessage(
+                        "This video is already in your library."
+                    );
+
+                } else {
+
+                    showVideoMessage(
+                        error.message
+                    );
+                }
+
+                return;
+            }
+
+
+            showVideoMessage(
+                "Video saved to your library!",
+                true
+            );
+
+
+            const youtubeUrlInput =
+                document.getElementById("youtubeUrl");
+
+
+            if (youtubeUrlInput) {
+                youtubeUrlInput.value = "";
+            }
+
+
+            videoPreview?.classList.add("hidden");
+
+            pendingVideo = null;
+
+
+            await loadVideos();
+
+        } catch (error) {
+
+            console.error(error);
+
+            showVideoMessage(
+                error?.message ||
+                "Could not save video."
+            );
         }
-
-
-        showVideoMessage(
-            "Video saved to your library!",
-            true
-        );
-
-
-        document
-            .getElementById(
-                "youtubeUrl"
-            )
-            .value = "";
-
-
-        videoPreview.classList.add(
-            "hidden"
-        );
-
-
-        pendingVideo = null;
-
-
-        await loadVideos();
     };
+}
 
 
 /* =========================
@@ -716,28 +669,26 @@ async function loadVideos() {
     if (!currentUser) return;
 
 
-    const {
-        data,
-        error
-    } =
+    const { data, error } =
         await supabaseClient
             .from("videos")
             .select("*")
-            .eq(
-                "user_id",
-                currentUser.id
-            )
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+            .eq("user_id", currentUser.id)
+            .order("created_at", {
+                ascending: false
+            });
 
 
     if (error) {
 
-        console.error(error);
+        console.error(
+            "Load Videos Error:",
+            error
+        );
+
+        showVideoMessage(
+            error.message
+        );
 
         return;
     }
@@ -753,18 +704,25 @@ async function loadVideos() {
 
 function renderVideos(videos) {
 
+    if (!videoGrid) return;
+
+
     videoGrid.innerHTML = "";
 
 
-    document
-        .getElementById("videoCount")
-        .textContent =
+    const videoCount =
+        document.getElementById("videoCount");
+
+
+    if (videoCount) {
+        videoCount.textContent =
             `${videos.length} Videos`;
+    }
 
 
     if (videos.length === 0) {
 
-        emptyLibrary.classList.remove(
+        emptyLibrary?.classList.remove(
             "hidden"
         );
 
@@ -772,7 +730,7 @@ function renderVideos(videos) {
     }
 
 
-    emptyLibrary.classList.add(
+    emptyLibrary?.classList.add(
         "hidden"
     );
 
@@ -781,6 +739,7 @@ function renderVideos(videos) {
 
         const card =
             document.createElement("div");
+
 
         card.className =
             "video-card";
@@ -799,7 +758,7 @@ function renderVideos(videos) {
 
                     <button
                         class="play-button"
-                        data-id="${video.youtube_id}"
+                        data-id="${escapeHtml(video.youtube_id)}"
                     >
                         ▶
                     </button>
@@ -826,14 +785,14 @@ function renderVideos(videos) {
 
                     <button
                         class="watch-btn"
-                        data-id="${video.youtube_id}"
+                        data-id="${escapeHtml(video.youtube_id)}"
                     >
                         ▶ Watch
                     </button>
 
                     <button
                         class="delete-btn"
-                        data-video="${video.id}"
+                        data-video="${escapeHtml(video.id)}"
                     >
                         Delete
                     </button>
@@ -841,7 +800,6 @@ function renderVideos(videos) {
                 </div>
 
             </div>
-
         `;
 
 
@@ -901,6 +859,9 @@ function renderVideos(videos) {
 
 function openYoutube(id) {
 
+    if (!id) return;
+
+
     const url =
         `https://www.youtube.com/watch?v=${id}`;
 
@@ -916,9 +877,7 @@ function openYoutube(id) {
    DELETE
 ========================= */
 
-async function deleteVideo(
-    videoId
-) {
+async function deleteVideo(videoId) {
 
     const confirmed =
         confirm(
@@ -929,20 +888,12 @@ async function deleteVideo(
     if (!confirmed) return;
 
 
-    const {
-        error
-    } =
+    const { error } =
         await supabaseClient
             .from("videos")
             .delete()
-            .eq(
-                "id",
-                videoId
-            )
-            .eq(
-                "user_id",
-                currentUser.id
-            );
+            .eq("id", videoId)
+            .eq("user_id", currentUser.id);
 
 
     if (error) {
@@ -976,11 +927,15 @@ function escapeHtml(value) {
    SESSION
 ========================= */
 
-supabaseClient.auth
-    .getSession()
-    .then(async ({ data }) => {
+async function initializeApp() {
 
-        if (data.session) {
+    try {
+
+        const { data } =
+            await supabaseClient.auth.getSession();
+
+
+        if (data?.session) {
 
             currentUser =
                 data.session.user;
@@ -992,29 +947,36 @@ supabaseClient.auth
             showAuth();
         }
 
-    });
+    } catch (error) {
+
+        console.error(
+            "Session Error:",
+            error
+        );
+
+        showAuth();
+    }
+}
 
 
-supabaseClient.auth
-    .onAuthStateChange(
-        async (
-            event,
-            session
-        ) => {
+supabaseClient.auth.onAuthStateChange(
+    async (event, session) => {
 
-            if (session) {
+        if (session) {
 
-                currentUser =
-                    session.user;
+            currentUser =
+                session.user;
 
-                await showApp();
+            await showApp();
 
-            } else {
+        } else {
 
-                currentUser = null;
+            currentUser = null;
 
-                showAuth();
-            }
-
+            showAuth();
         }
-    );
+    }
+);
+
+
+initializeApp();
