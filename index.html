@@ -20,7 +20,6 @@
     rel="stylesheet"
 >
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -35,23 +34,16 @@
 :root{
 
     --bg:#07100e;
-
     --card:#0d1915;
-
     --card2:#101f19;
-
     --text:#f4f7f1;
-
     --muted:#84968b;
-
     --line:rgba(190,225,198,.13);
 
     --accent:#baff4a;
-
     --accent2:#8dff70;
 
     --danger:#ff7185;
-
 }
 
 
@@ -97,7 +89,6 @@ select{
 
 button{
     cursor:pointer;
-
     transition:.18s ease;
 }
 
@@ -107,13 +98,11 @@ button:active{
 
 button:disabled{
     opacity:.55;
-
     cursor:not-allowed;
 }
 
 a{
     color:inherit;
-
     text-decoration:none;
 }
 
@@ -317,6 +306,10 @@ p{
 
     display:none;
 
+    align-items:center;
+
+    gap:7px;
+
     border:1px solid var(--line);
 
     background:transparent;
@@ -325,9 +318,22 @@ p{
 
     border-radius:8px;
 
-    padding:8px 10px;
+    padding:6px 9px;
 
     font-size:11px;
+}
+
+.account-avatar{
+
+    width:25px;
+
+    height:25px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    background:#1b3026;
 }
 
 .menu{
@@ -1631,7 +1637,7 @@ h2 small{
 
 .settings-panel{
 
-    width:min(400px,100%);
+    width:min(420px,100%);
 
     height:100%;
 
@@ -1666,6 +1672,203 @@ h2 small{
 
     font-size:23px;
 }
+
+
+/* =====================================================
+   PROFILE CARD
+===================================================== */
+
+.profile-card{
+
+    margin-top:15px;
+
+    padding:15px;
+
+    border:1px solid rgba(186,255,74,.16);
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(186,255,74,.055),
+            rgba(255,255,255,.015)
+        );
+}
+
+.profile-top{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.profile-avatar{
+
+    width:58px;
+
+    height:58px;
+
+    flex:none;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:2px solid rgba(186,255,74,.3);
+
+    background:#1b3026;
+}
+
+.profile-info{
+
+    min-width:0;
+
+    flex:1;
+}
+
+.profile-info b{
+
+    display:block;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    font-size:13px;
+}
+
+.profile-info small{
+
+    display:block;
+
+    margin-top:4px;
+
+    color:#71877a;
+
+    font-size:9px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+.profile-edit{
+
+    margin-top:14px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:9px;
+}
+
+.profile-edit label{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:5px;
+
+    color:#9eafa5;
+
+    font-size:9px;
+}
+
+.profile-edit input{
+
+    width:100%;
+
+    height:38px;
+
+    border:1px solid var(--line);
+
+    border-radius:7px;
+
+    outline:0;
+
+    background:#07110d;
+
+    color:white;
+
+    padding:0 10px;
+
+    font-size:10px;
+}
+
+.profile-edit input:focus{
+
+    border-color:rgba(186,255,74,.4);
+}
+
+.profile-actions{
+
+    display:flex;
+
+    gap:7px;
+
+    margin-top:4px;
+}
+
+.profile-save{
+
+    flex:1;
+
+    height:36px;
+
+    border:0;
+
+    border-radius:7px;
+
+    background:var(--accent);
+
+    color:#102016;
+
+    font-size:10px;
+
+    font-weight:700;
+}
+
+.profile-cancel{
+
+    height:36px;
+
+    padding:0 12px;
+
+    border:1px solid var(--line);
+
+    border-radius:7px;
+
+    background:transparent;
+
+    color:#9bad9f;
+
+    font-size:10px;
+}
+
+.profile-message{
+
+    min-height:13px;
+
+    color:#91a995;
+
+    font-size:9px;
+
+    line-height:1.5;
+}
+
+
+/* =====================================================
+   SETTINGS SECTIONS
+===================================================== */
 
 .setting-section{
     margin-top:25px;
@@ -1783,35 +1986,6 @@ h2 small{
 
     box-shadow:
         0 0 0 2px rgba(255,255,255,.15);
-}
-
-.user-card{
-
-    margin-top:15px;
-
-    padding:13px;
-
-    border:1px solid var(--line);
-
-    border-radius:9px;
-
-    background:rgba(255,255,255,.02);
-}
-
-.user-card b{
-
-    display:block;
-
-    font-size:11px;
-
-    word-break:break-all;
-}
-
-.user-card small{
-
-    color:#72877b;
-
-    font-size:9px;
 }
 
 .logout{
@@ -2029,10 +2203,6 @@ body.theme-red{
 
 }
 
-
-/* =====================================================
-   VERY SMALL SCREEN
-===================================================== */
 
 @media(max-width:420px){
 
@@ -2269,7 +2439,17 @@ body.theme-red{
                 id="accountButton"
                 onclick="openSettings()"
             >
-                Account
+
+                <img
+                    class="account-avatar"
+                    id="accountAvatar"
+                    alt=""
+                >
+
+                <span id="accountName">
+                    Account
+                </span>
+
             </button>
 
 
@@ -2311,404 +2491,396 @@ body.theme-red{
 >
 
 
-    <!-- HERO -->
+<section class="hero">
 
-    <section class="hero">
+    <div>
 
-        <div>
+        <div class="eyebrow">
 
-            <div class="eyebrow">
+            <span></span>
 
-                <span></span>
-
-                YOUR PERSONAL MUSIC ROOM
-
-            </div>
-
-
-            <h1>
-
-                Play your songs.<br>
-
-                <strong>Your way.</strong>
-
-            </h1>
-
-
-            <p>
-
-                YouTube link တွေကို ကိုယ့်ရဲ့ music room ထဲသိမ်းထားပြီး
-                queue, playlist, favorites နဲ့ ကိုယ်တိုင်စီမံပါ။
-                Account တစ်ခုနဲ့ device အားလုံးမှာ ပြန်သုံးနိုင်ပါတယ်။
-
-            </p>
+            YOUR PERSONAL MUSIC ROOM
 
         </div>
 
 
-        <div class="tip">
+        <h1>
 
-            ✦
+            Play your songs.<br>
+
+            <strong>Your way.</strong>
+
+        </h1>
+
+
+        <p>
+
+            YouTube link တွေကို ကိုယ့်ရဲ့ music room ထဲသိမ်းထားပြီး
+            queue, playlist, favorites နဲ့ ကိုယ်တိုင်စီမံပါ။
+            Account တစ်ခုနဲ့ device အားလုံးမှာ ပြန်သုံးနိုင်ပါတယ်။
+
+        </p>
+
+    </div>
+
+
+    <div class="tip">
+
+        ✦
+
+        <span>
+
+            <b>New</b> —
+
+            Random Song ကိုနှိပ်ပြီး Library ထဲက
+            သီချင်းတစ်ပုဒ်ကို ကျပန်းရွေးဖွင့်နိုင်ပါပြီ။
+
+        </span>
+
+    </div>
+
+</section>
+
+
+<section class="grid">
+
+
+<!-- LIBRARY -->
+
+<aside
+    class="card library"
+    id="library"
+>
+
+    <div class="title-row">
+
+        <div>
+
+            <div class="kicker">
+                ▥ YOUR LIBRARY
+            </div>
+
+            <h2>
+
+                Saved songs
+
+                <small id="songCount">
+                    00
+                </small>
+
+            </h2>
+
+        </div>
+
+
+        <button
+            class="add-icon"
+            onclick="openSongModal()"
+        >
+            +
+        </button>
+
+    </div>
+
+
+    <div class="search">
+
+        <span>
+            ⌕
+        </span>
+
+        <input
+            id="searchInput"
+            oninput="renderSongs()"
+            placeholder="Search your songs..."
+        >
+
+    </div>
+
+
+    <div class="tabs">
+
+        <button
+            class="active"
+            id="allTab"
+            onclick="setFilter('all')"
+        >
+            All songs
+        </button>
+
+
+        <button
+            id="favTab"
+            onclick="setFilter('favorites')"
+        >
+            ♡ Favorites
+        </button>
+
+    </div>
+
+
+    <div
+        class="songs"
+        id="songs"
+    ></div>
+
+
+    <button
+        class="add-link"
+        onclick="openSongModal()"
+    >
+        ＋ Add a song from YouTube
+    </button>
+
+</aside>
+
+
+<!-- PLAYER -->
+
+<section
+    class="player"
+    id="player"
+>
+
+    <div class="section-head">
+
+        <div>
+
+            <div class="kicker">
+                ◉ NOW PLAYING
+            </div>
+
+            <h2>
+
+                Music player
+
+                <span class="live">
+
+                    <i></i>
+
+                    LIVE
+
+                </span>
+
+            </h2>
+
+        </div>
+
+
+        <button
+            class="icon-btn"
+            onclick="openSettings()"
+        >
+            ⚙
+        </button>
+
+    </div>
+
+
+    <div class="card player-card">
+
+
+        <div class="player-bar">
 
             <span>
+                ● PLAYING IN ROOM
+            </span>
 
-                <b>New</b> —
-
-                Random Song ကိုနှိပ်ပြီး Library ထဲက
-                သီချင်းတစ်ပုဒ်ကို ကျပန်းရွေးဖွင့်နိုင်ပါပြီ။
-
+            <span>
+                PERSONAL SESSION
             </span>
 
         </div>
 
-    </section>
+
+        <div class="video">
+
+            <iframe
+                id="videoFrame"
+                title="YouTube player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+            ></iframe>
 
 
-    <!-- MAIN GRID -->
+            <span class="source">
+                ▶ YouTube source
+            </span>
 
-    <section class="grid">
-
-
-        <!-- LIBRARY -->
-
-        <aside
-            class="card library"
-            id="library"
-        >
-
-            <div class="title-row">
-
-                <div>
-
-                    <div class="kicker">
-                        ▥ YOUR LIBRARY
-                    </div>
-
-                    <h2>
-
-                        Saved songs
-
-                        <small id="songCount">
-                            00
-                        </small>
-
-                    </h2>
-
-                </div>
+        </div>
 
 
-                <button
-                    class="add-icon"
-                    onclick="openSongModal()"
-                >
-                    +
-                </button>
+        <div class="track">
 
-            </div>
+            <span class="thumb">
 
-
-            <div class="search">
-
-                <span>
-                    ⌕
-                </span>
-
-                <input
-                    id="searchInput"
-                    oninput="renderSongs()"
-                    placeholder="Search your songs..."
+                <img
+                    id="cover"
+                    alt=""
                 >
 
-            </div>
+            </span>
 
 
-            <div class="tabs">
+            <div class="track-info">
 
-                <button
-                    class="active"
-                    id="allTab"
-                    onclick="setFilter('all')"
-                >
-                    All songs
-                </button>
+                <label>
+                    NOW PLAYING
+                </label>
 
+                <h3 id="nowTitle">
+                    No song selected
+                </h3>
 
-                <button
-                    id="favTab"
-                    onclick="setFilter('favorites')"
-                >
-                    ♡ Favorites
-                </button>
-
-            </div>
-
-
-            <div
-                class="songs"
-                id="songs"
-            ></div>
-
-
-            <button
-                class="add-link"
-                onclick="openSongModal()"
-            >
-                ＋ Add a song from YouTube
-            </button>
-
-        </aside>
-
-
-        <!-- PLAYER -->
-
-        <section
-            class="player"
-            id="player"
-        >
-
-            <div class="section-head">
-
-                <div>
-
-                    <div class="kicker">
-                        ◉ NOW PLAYING
-                    </div>
-
-                    <h2>
-
-                        Music player
-
-                        <span class="live">
-
-                            <i></i>
-
-                            LIVE
-
-                        </span>
-
-                    </h2>
-
-                </div>
-
-
-                <button
-                    class="icon-btn"
-                    onclick="openSettings()"
-                >
-                    ⚙
-                </button>
-
-            </div>
-
-
-            <div class="card player-card">
-
-
-                <div class="player-bar">
-
-                    <span>
-                        ● PLAYING IN ROOM
-                    </span>
-
-                    <span>
-                        PERSONAL SESSION
-                    </span>
-
-                </div>
-
-
-                <div class="video">
-
-                    <iframe
-                        id="videoFrame"
-                        title="YouTube player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                    ></iframe>
-
-
-                    <span class="source">
-                        ▶ YouTube source
-                    </span>
-
-                </div>
-
-
-                <div class="track">
-
-                    <span class="thumb">
-
-                        <img
-                            id="cover"
-                            alt=""
-                        >
-
-                    </span>
-
-
-                    <div class="track-info">
-
-                        <label>
-                            NOW PLAYING
-                        </label>
-
-                        <h3 id="nowTitle">
-                            No song selected
-                        </h3>
-
-                        <p id="nowArtist">
-                            Select a song from your library
-                        </p>
-
-                    </div>
-
-
-                    <button
-                        class="heart"
-                        id="currentHeart"
-                        onclick="toggleCurrentFavorite()"
-                    >
-                        ♡
-                    </button>
-
-                </div>
-
-
-                <div class="embed-note">
-
-                    Playback controls are provided by YouTube
-                    inside the video.
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </section>
-
-
-    <!-- BELOW -->
-
-    <section class="below">
-
-
-        <!-- QUEUE -->
-
-        <section
-            class="card queue"
-            id="queue"
-        >
-
-            <div class="title-row">
-
-                <div>
-
-                    <div class="kicker">
-                        ☷ UP NEXT
-                    </div>
-
-                    <h2>
-
-                        Queue
-
-                        <small id="queueCount">
-                            00
-                        </small>
-
-                    </h2>
-
-                </div>
-
-
-                <div>
-
-                    <button
-                        class="icon-btn"
-                        onclick="shuffleQueue()"
-                        title="Shuffle queue"
-                    >
-                        🔀
-                    </button>
-
-
-                    <button
-                        class="icon-btn"
-                        onclick="randomSong()"
-                        title="Random song"
-                    >
-                        🎲
-                    </button>
-
-
-                    <button
-                        class="icon-btn"
-                        onclick="clearQueue()"
-                    >
-                        Clear
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="queue-list"
-                id="queueList"
-            ></div>
-
-        </section>
-
-
-        <!-- QUICK PLAYLIST -->
-
-        <section
-            class="card playlist"
-            id="playlists"
-        >
-
-            <div class="playlist-art">
-
-                ▣
-
-                <small>
-                    03
-                </small>
-
-            </div>
-
-
-            <div>
-
-                <div class="kicker">
-                    QUICK PLAYLIST
-                </div>
-
-                <h2>
-                    Friday night set
-                </h2>
-
-                <p>
-
-                    မင်းအကြိုက်ဆုံးသီချင်းတွေကို
-                    တစ်နေရာတည်းမှာ စုထားပါ
-
+                <p id="nowArtist">
+                    Select a song from your library
                 </p>
 
             </div>
 
 
             <button
-                class="save"
-                onclick="randomSong()"
+                class="heart"
+                id="currentHeart"
+                onclick="toggleCurrentFavorite()"
             >
-                🎲 Random Play
+                ♡
             </button>
 
-        </section>
+        </div>
 
-    </section>
+
+        <div class="embed-note">
+
+            Playback controls are provided by YouTube
+            inside the video.
+
+        </div>
+
+    </div>
+
+</section>
+
+</section>
+
+
+<!-- BELOW -->
+
+<section class="below">
+
+
+<section
+    class="card queue"
+    id="queue"
+>
+
+    <div class="title-row">
+
+        <div>
+
+            <div class="kicker">
+                ☷ UP NEXT
+            </div>
+
+            <h2>
+
+                Queue
+
+                <small id="queueCount">
+                    00
+                </small>
+
+            </h2>
+
+        </div>
+
+
+        <div>
+
+            <button
+                class="icon-btn"
+                onclick="shuffleQueue()"
+                title="Shuffle queue"
+            >
+                🔀
+            </button>
+
+
+            <button
+                class="icon-btn"
+                onclick="randomSong()"
+                title="Random song"
+            >
+                🎲
+            </button>
+
+
+            <button
+                class="icon-btn"
+                onclick="clearQueue()"
+            >
+                Clear
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="queue-list"
+        id="queueList"
+    ></div>
+
+</section>
+
+
+<section
+    class="card playlist"
+    id="playlists"
+>
+
+    <div class="playlist-art">
+
+        ▣
+
+        <small>
+            03
+        </small>
+
+    </div>
+
+
+    <div>
+
+        <div class="kicker">
+            QUICK PLAYLIST
+        </div>
+
+        <h2>
+            Friday night set
+        </h2>
+
+        <p>
+
+            မင်းအကြိုက်ဆုံးသီချင်းတွေကို
+            တစ်နေရာတည်းမှာ စုထားပါ
+
+        </p>
+
+    </div>
+
+
+    <button
+        class="save"
+        onclick="randomSong()"
+    >
+        🎲 Random Play
+    </button>
+
+</section>
+
+</section>
 
 </main>
 
@@ -2722,115 +2894,114 @@ body.theme-red{
     id="songModal"
 >
 
-    <section class="modal-box">
+<section class="modal-box">
 
-        <div class="modal-head">
+    <div class="modal-head">
 
-            <div>
+        <div>
 
-                <div class="kicker">
-                    ▶ ADD FROM YOUTUBE
-                </div>
-
-                <h2>
-                    Save a new song
-                </h2>
-
-                <p>
-
-                    YouTube link ထည့်ပြီး
-                    title နဲ့ artist ကို အလိုအလျောက်ဖြည့်ပါမယ်။
-
-                </p>
-
+            <div class="kicker">
+                ▶ ADD FROM YOUTUBE
             </div>
 
+            <h2>
+                Save a new song
+            </h2>
 
-            <button
-                onclick="closeSongModal()"
-            >
-                ×
-            </button>
+            <p>
+
+                YouTube link ထည့်ပြီး
+                title နဲ့ artist ကို အလိုအလျောက်ဖြည့်ပါမယ်။
+
+            </p>
 
         </div>
 
 
-        <form
-            class="form"
-            onsubmit="addSong(event)"
+        <button
+            onclick="closeSongModal()"
         >
+            ×
+        </button>
+
+    </div>
 
 
-            <label>
+    <form
+        class="form"
+        onsubmit="addSong(event)"
+    >
 
-                Song title
+        <label>
 
-                <input
-                    id="newTitle"
-                    required
-                    placeholder="e.g. Perfect"
-                >
+            Song title
 
-            </label>
-
-
-            <label>
-
-                Artist
-
-                <input
-                    id="newArtist"
-                    placeholder="e.g. Ed Sheeran"
-                >
-
-            </label>
-
-
-            <label>
-
-                YouTube link
-
-                <input
-                    id="newUrl"
-                    required
-                    oninput="queueTitleFetch()"
-                    placeholder="https://youtu.be/..."
-                >
-
-            </label>
-
-
-            <div
-                class="notice"
-                id="titleNotice"
+            <input
+                id="newTitle"
+                required
+                placeholder="e.g. Perfect"
             >
-                ✓ YouTube link ထည့်ပြီး ခဏစောင့်ပါ
-            </div>
+
+        </label>
 
 
-            <div class="form-foot">
+        <label>
 
-                <button
-                    type="button"
-                    class="cancel"
-                    onclick="closeSongModal()"
-                >
-                    Cancel
-                </button>
+            Artist
+
+            <input
+                id="newArtist"
+                placeholder="e.g. Ed Sheeran"
+            >
+
+        </label>
 
 
-                <button
-                    type="submit"
-                    class="submit"
-                >
-                    ＋ Save song
-                </button>
+        <label>
 
-            </div>
+            YouTube link
 
-        </form>
+            <input
+                id="newUrl"
+                required
+                oninput="queueTitleFetch()"
+                placeholder="https://youtu.be/..."
+            >
 
-    </section>
+        </label>
+
+
+        <div
+            class="notice"
+            id="titleNotice"
+        >
+            ✓ YouTube link ထည့်ပြီး ခဏစောင့်ပါ
+        </div>
+
+
+        <div class="form-foot">
+
+            <button
+                type="button"
+                class="cancel"
+                onclick="closeSongModal()"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                type="submit"
+                class="submit"
+            >
+                ＋ Save song
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
 
 </div>
 
@@ -2845,241 +3016,317 @@ body.theme-red{
     onclick="closeSettingsOutside(event)"
 >
 
-    <aside class="settings-panel">
+<aside class="settings-panel">
 
 
-        <div class="settings-head">
+<div class="settings-head">
 
-            <div>
+    <div>
 
-                <div class="kicker">
-                    ⚙ SETTINGS
-                </div>
+        <div class="kicker">
+            ⚙ SETTINGS
+        </div>
 
-                <h2>
-                    MyTuneBox
-                </h2>
+        <h2>
+            MyTuneBox
+        </h2>
 
-            </div>
+    </div>
 
 
-            <button onclick="closeSettings()">
-                ×
+    <button onclick="closeSettings()">
+        ×
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     PROFILE
+===================================================== -->
+
+<div class="profile-card">
+
+    <div class="profile-top">
+
+        <img
+            class="profile-avatar"
+            id="profileAvatar"
+            alt="Profile"
+        >
+
+
+        <div class="profile-info">
+
+            <b id="profileName">
+                User
+            </b>
+
+            <small id="profileEmail">
+                Not logged in
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="profile-edit">
+
+        <label>
+
+            Display Name
+
+            <input
+                id="profileNameInput"
+                maxlength="40"
+                placeholder="Your name"
+            >
+
+        </label>
+
+
+        <label>
+
+            Avatar URL
+
+            <input
+                id="profileAvatarInput"
+                type="url"
+                placeholder="https://example.com/avatar.jpg"
+            >
+
+        </label>
+
+
+        <div
+            class="profile-message"
+            id="profileMessage"
+        ></div>
+
+
+        <div class="profile-actions">
+
+            <button
+                class="profile-save"
+                id="profileSaveButton"
+                onclick="saveProfile()"
+            >
+                💾 Save Profile
+            </button>
+
+
+            <button
+                class="profile-cancel"
+                onclick="resetProfileForm()"
+            >
+                Reset
             </button>
 
         </div>
 
+    </div>
 
-        <div class="user-card">
+</div>
 
-            <b id="userEmail">
-                Not logged in
+
+<!-- APPEARANCE -->
+
+<div class="setting-section">
+
+    <div class="setting-title">
+        APPEARANCE
+    </div>
+
+
+    <div class="setting-item">
+
+        <div>
+
+            <b>
+                Theme
             </b>
 
             <small>
-                Firebase account
+                Music room အရောင်ပုံစံရွေးပါ
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="theme-grid">
+
+
+        <button
+            class="theme-btn active"
+            data-theme="forest"
+            onclick="setTheme('forest')"
+        >
+            🌲 Forest
+        </button>
+
+
+        <button
+            class="theme-btn"
+            data-theme="black"
+            onclick="setTheme('black')"
+        >
+            🖤 Pure Black
+        </button>
+
+
+        <button
+            class="theme-btn"
+            data-theme="purple"
+            onclick="setTheme('purple')"
+        >
+            💜 Purple
+        </button>
+
+
+        <button
+            class="theme-btn"
+            data-theme="blue"
+            onclick="setTheme('blue')"
+        >
+            💙 Ocean
+        </button>
+
+
+        <button
+            class="theme-btn"
+            data-theme="red"
+            onclick="setTheme('red')"
+        >
+            ❤️ Red
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ACCENT -->
+
+<div class="setting-section">
+
+    <div class="setting-title">
+        CUSTOM ACCENT
+    </div>
+
+
+    <div class="color-row">
+
+        <button
+            class="color-btn"
+            style="background:#baff4a"
+            onclick="setAccent('#baff4a')"
+        ></button>
+
+
+        <button
+            class="color-btn"
+            style="background:#64d8ff"
+            onclick="setAccent('#64d8ff')"
+        ></button>
+
+
+        <button
+            class="color-btn"
+            style="background:#c084ff"
+            onclick="setAccent('#c084ff')"
+        ></button>
+
+
+        <button
+            class="color-btn"
+            style="background:#ff7b87"
+            onclick="setAccent('#ff7b87')"
+        ></button>
+
+
+        <button
+            class="color-btn"
+            style="background:#ffd166"
+            onclick="setAccent('#ffd166')"
+        ></button>
+
+    </div>
+
+</div>
+
+
+<!-- MUSIC -->
+
+<div class="setting-section">
+
+    <div class="setting-title">
+        MUSIC
+    </div>
+
+
+    <div class="setting-item">
+
+        <div>
+
+            <b>
+                Random Song
+            </b>
+
+            <small>
+                Library ထဲက ကျပန်းသီချင်းဖွင့်မယ်
             </small>
 
         </div>
 
 
-        <!-- APPEARANCE -->
+        <button
+            class="save"
+            onclick="randomSong()"
+        >
+            🎲 Play
+        </button>
 
-        <div class="setting-section">
-
-            <div class="setting-title">
-                APPEARANCE
-            </div>
-
-
-            <div class="setting-item">
-
-                <div>
-
-                    <b>
-                        Theme
-                    </b>
-
-                    <small>
-                        Music room အရောင်ပုံစံရွေးပါ
-                    </small>
-
-                </div>
-
-            </div>
+    </div>
 
 
-            <div class="theme-grid">
+    <div class="setting-item">
 
+        <div>
 
-                <button
-                    class="theme-btn active"
-                    data-theme="forest"
-                    onclick="setTheme('forest')"
-                >
-                    🌲 Forest
-                </button>
+            <b>
+                Shuffle Queue
+            </b>
 
-
-                <button
-                    class="theme-btn"
-                    data-theme="black"
-                    onclick="setTheme('black')"
-                >
-                    🖤 Pure Black
-                </button>
-
-
-                <button
-                    class="theme-btn"
-                    data-theme="purple"
-                    onclick="setTheme('purple')"
-                >
-                    💜 Purple
-                </button>
-
-
-                <button
-                    class="theme-btn"
-                    data-theme="blue"
-                    onclick="setTheme('blue')"
-                >
-                    💙 Ocean
-                </button>
-
-
-                <button
-                    class="theme-btn"
-                    data-theme="red"
-                    onclick="setTheme('red')"
-                >
-                    ❤️ Red
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- ACCENT -->
-
-        <div class="setting-section">
-
-            <div class="setting-title">
-                CUSTOM ACCENT
-            </div>
-
-
-            <div class="color-row">
-
-                <button
-                    class="color-btn"
-                    style="background:#baff4a"
-                    onclick="setAccent('#baff4a')"
-                ></button>
-
-
-                <button
-                    class="color-btn"
-                    style="background:#64d8ff"
-                    onclick="setAccent('#64d8ff')"
-                ></button>
-
-
-                <button
-                    class="color-btn"
-                    style="background:#c084ff"
-                    onclick="setAccent('#c084ff')"
-                ></button>
-
-
-                <button
-                    class="color-btn"
-                    style="background:#ff7b87"
-                    onclick="setAccent('#ff7b87')"
-                ></button>
-
-
-                <button
-                    class="color-btn"
-                    style="background:#ffd166"
-                    onclick="setAccent('#ffd166')"
-                ></button>
-
-            </div>
-
-        </div>
-
-
-        <!-- MUSIC -->
-
-        <div class="setting-section">
-
-            <div class="setting-title">
-                MUSIC
-            </div>
-
-
-            <div class="setting-item">
-
-                <div>
-
-                    <b>
-                        Random Song
-                    </b>
-
-                    <small>
-                        Library ထဲက ကျပန်းသီချင်းဖွင့်မယ်
-                    </small>
-
-                </div>
-
-
-                <button
-                    class="save"
-                    onclick="randomSong()"
-                >
-                    🎲 Play
-                </button>
-
-            </div>
-
-
-            <div class="setting-item">
-
-                <div>
-
-                    <b>
-                        Shuffle Queue
-                    </b>
-
-                    <small>
-                        Queue ကို random order ပြောင်းမယ်
-                    </small>
-
-                </div>
-
-
-                <button
-                    class="save"
-                    onclick="shuffleQueue()"
-                >
-                    🔀
-                </button>
-
-            </div>
+            <small>
+                Queue ကို random order ပြောင်းမယ်
+            </small>
 
         </div>
 
 
         <button
-            class="logout"
-            onclick="logout()"
+            class="save"
+            onclick="shuffleQueue()"
         >
-            🚪 Logout
+            🔀
         </button>
 
-    </aside>
+    </div>
+
+</div>
+
+
+<button
+    class="logout"
+    onclick="logout()"
+>
+    🚪 Logout
+</button>
+
+</aside>
 
 </div>
 
@@ -3114,12 +3361,16 @@ const firebaseConfig = {
 
 
 /* =====================================================
-   INITIALIZE FIREBASE
+   FIREBASE INIT
 ===================================================== */
 
-firebase.initializeApp(
-    firebaseConfig
-);
+if(!firebase.apps.length){
+
+    firebase.initializeApp(
+        firebaseConfig
+    );
+
+}
 
 const auth =
     firebase.auth();
@@ -3147,6 +3398,38 @@ let filter = "all";
 let isRegisterMode = false;
 
 let titleFetchTimer = null;
+
+
+/* =====================================================
+   PROFILE DEFAULT
+===================================================== */
+
+const DEFAULT_AVATAR =
+    "data:image/svg+xml;charset=UTF-8," +
+    encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="120"
+             height="120"
+             viewBox="0 0 120 120">
+
+            <rect width="120" height="120"
+                  rx="60"
+                  fill="#1b3026"/>
+
+            <circle
+                cx="60"
+                cy="45"
+                r="22"
+                fill="#baff4a"/>
+
+            <path
+                d="M22 108
+                   C25 78 43 66 60 66
+                   C77 66 95 78 98 108Z"
+                fill="#baff4a"/>
+
+        </svg>
+    `);
 
 
 /* =====================================================
@@ -3222,36 +3505,20 @@ function toggleAuthMode(){
 
 function openAuth(){
 
-    const screen =
-        document.getElementById(
-            "authScreen"
-        );
-
-    if(screen){
-
-        screen.classList.add(
-            "show"
-        );
-
-    }
+    document
+    .getElementById("authScreen")
+    .classList
+    .add("show");
 
 }
 
 
 function closeAuth(){
 
-    const screen =
-        document.getElementById(
-            "authScreen"
-        );
-
-    if(screen){
-
-        screen.classList.remove(
-            "show"
-        );
-
-    }
+    document
+    .getElementById("authScreen")
+    .classList
+    .remove("show");
 
 }
 
@@ -3266,8 +3533,6 @@ function showAuthError(message){
         document.getElementById(
             "authError"
         );
-
-    if(!box) return;
 
     box.textContent =
         message;
@@ -3290,16 +3555,11 @@ function showAuthSuccess(message){
             "authError"
         );
 
-    if(!box) return;
-
     box.textContent =
         message;
 
     box.classList.add(
-        "success"
-    );
-
-    box.classList.add(
+        "success",
         "show"
     );
 
@@ -3313,8 +3573,6 @@ function hideAuthError(){
             "authError"
         );
 
-    if(!box) return;
-
     box.textContent = "";
 
     box.classList.remove(
@@ -3326,7 +3584,7 @@ function hideAuthError(){
 
 
 /* =====================================================
-   FIREBASE AUTH ERROR
+   AUTH ERROR
 ===================================================== */
 
 function getAuthErrorMessage(error){
@@ -3340,87 +3598,52 @@ function getAuthErrorMessage(error){
     switch(error.code){
 
         case "auth/invalid-email":
-
             return "Email မှန်ကန်စွာထည့်ပေးပါ။";
 
-
         case "auth/user-not-found":
-
             return "ဒီ Email နဲ့ account မတွေ့ပါ။";
 
-
         case "auth/wrong-password":
-
             return "Password မှားနေပါတယ်။";
 
-
         case "auth/invalid-credential":
-
-            return "Email သို့မဟုတ် Password မှားနေပါတယ်။";
-
-
         case "auth/invalid-login-credentials":
-
             return "Email သို့မဟုတ် Password မှားနေပါတယ်။";
-
 
         case "auth/email-already-in-use":
-
             return "ဒီ Email နဲ့ account ရှိပြီးသားပါ။";
 
-
         case "auth/weak-password":
-
             return "Password အနည်းဆုံး 6 လုံးရှိရပါမယ်။";
 
-
         case "auth/user-disabled":
-
             return "ဒီ account ကို ပိတ်ထားပါတယ်။";
 
-
         case "auth/too-many-requests":
-
             return "Login request များလွန်းပါတယ်။ ခဏစောင့်ပြီး ထပ်ကြိုးစားပါ။";
 
-
         case "auth/network-request-failed":
-
             return "Internet connection ကို စစ်ပြီး ထပ်ကြိုးစားပါ။";
 
-
         case "auth/operation-not-allowed":
-
             return "Firebase Authentication မှာ ဒီ Login method ကို Enable လုပ်ထားခြင်းမရှိပါ။";
 
-
         case "auth/popup-closed-by-user":
-
             return "Google Login window ပိတ်သွားပါတယ်။";
 
-
         case "auth/popup-blocked":
-
             return "Browser က Google Login popup ကို block လုပ်ထားပါတယ်။";
 
-
         case "auth/cancelled-popup-request":
-
             return "Google Login request ကို cancel လုပ်ထားပါတယ်။";
 
-
         case "auth/unauthorized-domain":
-
-            return "ဒီ website domain ကို Firebase Authentication → Settings → Authorized domains ထဲမှာ ထည့်ပေးပါ။";
-
+            return "ဒီ website domain ကို Firebase Authorized domains ထဲမှာ ထည့်ပေးပါ။";
 
         case "auth/account-exists-with-different-credential":
-
             return "ဒီ Email နဲ့ account ရှိပြီးသားဖြစ်ပေမယ့် အခြား Login method ကို အသုံးပြုထားပါတယ်။";
 
-
         default:
-
             return error.message ||
                 "Login မအောင်မြင်ပါ။";
 
@@ -3430,7 +3653,7 @@ function getAuthErrorMessage(error){
 
 
 /* =====================================================
-   EMAIL LOGIN / REGISTER
+   EMAIL LOGIN
 ===================================================== */
 
 document
@@ -3441,32 +3664,25 @@ document
 
         e.preventDefault();
 
-
         hideAuthError();
 
 
         const email =
             document
-            .getElementById(
-                "authEmail"
-            )
+            .getElementById("authEmail")
             .value
             .trim();
 
 
         const password =
             document
-            .getElementById(
-                "authPassword"
-            )
+            .getElementById("authPassword")
             .value;
 
 
         const button =
             document
-            .getElementById(
-                "authSubmit"
-            );
+            .getElementById("authSubmit");
 
 
         if(!email){
@@ -3564,9 +3780,7 @@ async function forgotPassword(){
 
     const email =
         document
-        .getElementById(
-            "authEmail"
-        )
+        .getElementById("authEmail")
         .value
         .trim();
 
@@ -3578,9 +3792,7 @@ async function forgotPassword(){
         );
 
         document
-        .getElementById(
-            "authEmail"
-        )
+        .getElementById("authEmail")
         .focus();
 
         return;
@@ -3684,6 +3896,538 @@ async function googleLogin(){
 
 
 /* =====================================================
+   USER PROFILE REFERENCES
+===================================================== */
+
+function userProfileRef(){
+
+    if(!currentUser){
+
+        throw new Error(
+            "User is not logged in."
+        );
+
+    }
+
+
+    return db
+        .collection("users")
+        .doc(
+            currentUser.uid
+        );
+
+}
+
+
+/* =====================================================
+   PROFILE DEFAULT NAME
+===================================================== */
+
+function getDefaultProfileName(user){
+
+    if(
+        user.displayName &&
+        user.displayName.trim()
+    ){
+
+        return user.displayName.trim();
+
+    }
+
+
+    if(user.email){
+
+        return user.email
+            .split("@")[0];
+
+    }
+
+
+    return "MyTuneBox User";
+
+}
+
+
+/* =====================================================
+   PROFILE IMAGE
+===================================================== */
+
+function getProfileAvatar(user, profileData){
+
+    if(
+        profileData &&
+        profileData.avatar &&
+        profileData.avatar.trim()
+    ){
+
+        return profileData.avatar.trim();
+
+    }
+
+
+    if(
+        user &&
+        user.photoURL
+    ){
+
+        return user.photoURL;
+
+    }
+
+
+    return DEFAULT_AVATAR;
+
+}
+
+
+/* =====================================================
+   LOAD PROFILE
+===================================================== */
+
+async function loadUserProfile(){
+
+    if(!currentUser)
+        return;
+
+
+    try{
+
+        const doc =
+            await userProfileRef()
+            .get();
+
+
+        let data =
+            doc.exists
+            ? doc.data()
+            : {};
+
+
+        let name =
+            data.displayName ||
+            getDefaultProfileName(
+                currentUser
+            );
+
+
+        let avatar =
+            getProfileAvatar(
+                currentUser,
+                data
+            );
+
+
+        updateProfileUI(
+            name,
+            avatar
+        );
+
+
+        if(!doc.exists){
+
+            await userProfileRef()
+            .set({
+
+                displayName:name,
+
+                avatar:
+                    currentUser.photoURL ||
+                    "",
+
+                email:
+                    currentUser.email ||
+                    "",
+
+                createdAt:
+                    firebase
+                    .firestore
+                    .FieldValue
+                    .serverTimestamp(),
+
+                updatedAt:
+                    firebase
+                    .firestore
+                    .FieldValue
+                    .serverTimestamp()
+
+            },{
+                merge:true
+            });
+
+        }
+
+
+    }catch(error){
+
+        console.error(
+            "Profile loading error:",
+            error
+        );
+
+
+        const fallback =
+            getDefaultProfileName(
+                currentUser
+            );
+
+
+        updateProfileUI(
+            fallback,
+            getProfileAvatar(
+                currentUser,
+                {}
+            )
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   UPDATE PROFILE UI
+===================================================== */
+
+function updateProfileUI(
+    name,
+    avatar
+){
+
+    const safeName =
+        name ||
+        "MyTuneBox User";
+
+
+    const safeAvatar =
+        avatar ||
+        DEFAULT_AVATAR;
+
+
+    const profileName =
+        document.getElementById(
+            "profileName"
+        );
+
+    const profileEmail =
+        document.getElementById(
+            "profileEmail"
+        );
+
+    const profileAvatar =
+        document.getElementById(
+            "profileAvatar"
+        );
+
+    const accountAvatar =
+        document.getElementById(
+            "accountAvatar"
+        );
+
+    const accountName =
+        document.getElementById(
+            "accountName"
+        );
+
+
+    if(profileName){
+
+        profileName.textContent =
+            safeName;
+
+    }
+
+
+    if(profileEmail){
+
+        profileEmail.textContent =
+            currentUser?.email ||
+            "Google account";
+
+    }
+
+
+    if(profileAvatar){
+
+        profileAvatar.src =
+            safeAvatar;
+
+        profileAvatar.onerror =
+            function(){
+
+                this.onerror = null;
+
+                this.src =
+                    DEFAULT_AVATAR;
+
+            };
+
+    }
+
+
+    if(accountAvatar){
+
+        accountAvatar.src =
+            safeAvatar;
+
+        accountAvatar.onerror =
+            function(){
+
+                this.onerror = null;
+
+                this.src =
+                    DEFAULT_AVATAR;
+
+            };
+
+    }
+
+
+    if(accountName){
+
+        accountName.textContent =
+            safeName;
+
+    }
+
+}
+
+
+/* =====================================================
+   RESET PROFILE FORM
+===================================================== */
+
+async function resetProfileForm(){
+
+    if(!currentUser)
+        return;
+
+
+    try{
+
+        const doc =
+            await userProfileRef()
+            .get();
+
+
+        const data =
+            doc.exists
+            ? doc.data()
+            : {};
+
+
+        const name =
+            data.displayName ||
+            getDefaultProfileName(
+                currentUser
+            );
+
+
+        const avatar =
+            getProfileAvatar(
+                currentUser,
+                data
+            );
+
+
+        document
+        .getElementById(
+            "profileNameInput"
+        )
+        .value =
+            name;
+
+
+        document
+        .getElementById(
+            "profileAvatarInput"
+        )
+        .value =
+            (
+                data.avatar ||
+                ""
+            );
+
+
+        updateProfileUI(
+            name,
+            avatar
+        );
+
+
+        document
+        .getElementById(
+            "profileMessage"
+        )
+        .textContent =
+            "";
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SAVE PROFILE
+===================================================== */
+
+async function saveProfile(){
+
+    if(!currentUser){
+
+        openAuth();
+
+        return;
+
+    }
+
+
+    const nameInput =
+        document.getElementById(
+            "profileNameInput"
+        );
+
+
+    const avatarInput =
+        document.getElementById(
+            "profileAvatarInput"
+        );
+
+
+    const button =
+        document.getElementById(
+            "profileSaveButton"
+        );
+
+
+    const message =
+        document.getElementById(
+            "profileMessage"
+        );
+
+
+    const name =
+        nameInput
+        .value
+        .trim();
+
+
+    const avatar =
+        avatarInput
+        .value
+        .trim();
+
+
+    if(!name){
+
+        message.textContent =
+            "Display Name ထည့်ပေးပါ။";
+
+        return;
+
+    }
+
+
+    if(name.length > 40){
+
+        message.textContent =
+            "Name က 40 characters ထက် မကျော်ရပါ။";
+
+        return;
+
+    }
+
+
+    if(
+        avatar &&
+        !/^https?:\/\/.+/i.test(
+            avatar
+        )
+    ){
+
+        message.textContent =
+            "Avatar URL မှန်ကန်စွာထည့်ပါ။";
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Saving...";
+
+    message.textContent =
+        "";
+
+
+    try{
+
+        await userProfileRef()
+        .set({
+
+            displayName:name,
+
+            avatar:avatar,
+
+            email:
+                currentUser.email ||
+                "",
+
+            updatedAt:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp()
+
+        },{
+            merge:true
+        });
+
+
+        updateProfileUI(
+            name,
+            avatar ||
+            currentUser.photoURL ||
+            DEFAULT_AVATAR
+        );
+
+
+        message.textContent =
+            "✓ Profile သိမ်းပြီးပါပြီ။";
+
+
+    }catch(error){
+
+        console.error(
+            "Profile save error:",
+            error
+        );
+
+
+        message.textContent =
+            "Profile save မအောင်မြင်ပါ။ " +
+            error.message;
+
+    }finally{
+
+        button.disabled = false;
+
+        button.textContent =
+            "💾 Save Profile";
+
+    }
+
+}
+
+
+/* =====================================================
    AUTH STATE
 ===================================================== */
 
@@ -3712,18 +4456,12 @@ auth.onAuthStateChanged(
                 "accountButton"
             )
             .style.display =
-                "block";
+                "flex";
 
 
-            document
-            .getElementById(
-                "userEmail"
-            )
-            .textContent =
-                user.email ||
-                user.displayName ||
-                "Google account";
+            await loadUserProfile();
 
+            await resetProfileForm();
 
             await loadUserData();
 
@@ -3748,10 +4486,42 @@ auth.onAuthStateChanged(
 
             document
             .getElementById(
-                "userEmail"
+                "profileName"
+            )
+            .textContent =
+                "User";
+
+
+            document
+            .getElementById(
+                "profileEmail"
             )
             .textContent =
                 "Not logged in";
+
+
+            document
+            .getElementById(
+                "profileAvatar"
+            )
+            .src =
+                DEFAULT_AVATAR;
+
+
+            document
+            .getElementById(
+                "accountAvatar"
+            )
+            .src =
+                DEFAULT_AVATAR;
+
+
+            document
+            .getElementById(
+                "accountName"
+            )
+            .textContent =
+                "Account";
 
 
             songs = [];
@@ -3806,7 +4576,7 @@ auth.onAuthStateChanged(
 
 
 /* =====================================================
-   FIRESTORE PATH
+   FIRESTORE SONG PATH
 ===================================================== */
 
 function userSongsRef(){
@@ -3946,7 +4716,6 @@ async function loadUserData(){
             "Data loading error:",
             error
         );
-
 
         alert(
             "Data loading error:\n" +
@@ -4151,6 +4920,16 @@ function renderSongs(){
             2,
             "0"
         );
+
+
+    document
+    .getElementById(
+        "favTab"
+    )
+    .textContent =
+        `♡ Favorites ${
+            favorites.length
+        }`;
 
 
     document
@@ -5212,6 +5991,9 @@ function openSettings(){
     .classList
     .add("open");
 
+
+    resetProfileForm();
+
 }
 
 
@@ -5496,22 +6278,21 @@ document.addEventListener(
 
 
 /* =====================================================
-   DEFAULT THEME
+   DEFAULT
 ===================================================== */
 
 applyTheme(
     "forest"
 );
 
-
-/* =====================================================
-   INITIAL RENDER
-===================================================== */
+applyAccent(
+    "#baff4a"
+);
 
 renderSongs();
 
-</script>
 
+</script>
 
 </body>
 
