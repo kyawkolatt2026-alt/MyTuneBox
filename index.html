@@ -1,3359 +1,3874 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>MyTuneBox — Music Room</title>
+<title>MyTuneBox — Music Room</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg: #07100e;
-      --card: #0d1915;
-      --text: #f4f7f1;
-      --muted: #84968b;
-      --line: rgba(190, 225, 198, 0.13);
-      --lime: #baff4a;
-      --pink: #ff8d9c;
-      --danger: #ff7185;
-    }
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
-    * {
-      box-sizing: border-box;
-    }
+<style>
 
-    html {
-      scroll-behavior: smooth;
-    }
+:root{
+    --bg:#07100e;
+    --card:#0d1915;
+    --card2:#101f19;
+    --text:#f4f7f1;
+    --muted:#84968b;
+    --line:rgba(190,225,198,.13);
+    --accent:#baff4a;
+    --accent2:#8dff70;
+    --danger:#ff7185;
+}
 
-    body {
-      margin: 0;
-      background:
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:
         radial-gradient(
-          circle at -5% 18%,
-          rgba(75, 143, 128, 0.18),
-          transparent 30%
+            circle at -5% 18%,
+            rgba(75,143,128,.18),
+            transparent 30%
         ),
-        #07100e;
-      color: var(--text);
-      font-family: "Noto Sans Myanmar", "DM Sans", sans-serif;
-    }
+        var(--bg);
 
-    body.modal-open {
-      overflow: hidden;
-    }
+    color:var(--text);
+    font-family:
+        "Noto Sans Myanmar",
+        "DM Sans",
+        sans-serif;
+}
 
-    button,
-    input {
-      font: inherit;
-    }
+button,
+input{
+    font:inherit;
+}
 
-    button {
-      cursor: pointer;
-      transition: 0.16s ease;
-    }
+button{
+    cursor:pointer;
+    transition:.18s ease;
+}
 
-    button:active {
-      transform: scale(0.97);
-    }
+button:active{
+    transform:scale(.97);
+}
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+a{
+    color:inherit;
+    text-decoration:none;
+}
 
-    .topbar {
-      height: 74px;
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      border-bottom: 1px solid var(--line);
-      background: rgba(7, 16, 14, 0.84);
-      backdrop-filter: blur(18px);
-    }
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar{
+    height:74px;
+    position:sticky;
+    top:0;
+    z-index:50;
+
+    border-bottom:1px solid var(--line);
+
+    background:rgba(7,16,14,.84);
+    backdrop-filter:blur(18px);
+}
+
+.topbar-inner,
+.content{
+    width:min(1440px,calc(100% - 64px));
+    margin:auto;
+}
+
+.topbar-inner{
+    height:100%;
+    display:flex;
+    align-items:center;
+    gap:30px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    font:600 17px "Space Grotesk";
+    min-width:200px;
+}
+
+.brand-mark{
+    display:grid;
+    place-items:center;
+
+    width:34px;
+    height:34px;
+
+    border:1px solid rgba(186,255,74,.5);
+    border-radius:10px;
+
+    color:var(--accent);
+}
+
+.brand em{
+    font:8px "DM Sans";
+    font-style:normal;
+
+    letter-spacing:.13em;
+
+    color:#a4ca7e;
+
+    border:1px solid rgba(186,255,74,.3);
+
+    padding:3px 5px;
+
+    border-radius:4px;
+}
+
+.nav{
+    display:flex;
+    gap:28px;
+
+    margin-right:auto;
+
+    height:100%;
+
+    align-items:center;
+}
+
+.nav a{
+    position:relative;
+
+    color:#81928a;
+
+    font-size:12px;
+}
+
+.nav a:hover,
+.nav a.active{
+    color:#f2f9ef;
+}
+
+.nav a.active:after{
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    bottom:-29px;
+
+    height:2px;
+
+    background:var(--accent);
+
+    box-shadow:0 0 14px rgba(186,255,74,.7);
+}
+
+.actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.status{
+    color:#8a9d92;
+    font-size:11px;
+}
+
+.status i{
+    display:inline-block;
+
+    width:6px;
+    height:6px;
+
+    margin-right:7px;
+
+    border-radius:50%;
+
+    background:var(--accent);
+
+    box-shadow:0 0 11px var(--accent);
+}
+
+.login{
+    border:0;
+    border-radius:8px;
+
+    padding:9px 13px;
+
+    background:var(--accent);
+
+    color:#101a14;
+
+    font-size:11px;
+    font-weight:700;
+}
+
+.account-btn{
+    display:none;
+
+    border:1px solid var(--line);
+
+    background:transparent;
+
+    color:white;
+
+    border-radius:8px;
+
+    padding:8px 10px;
+
+    font-size:11px;
+}
+
+.menu{
+    display:none;
+
+    border:0;
+
+    background:transparent;
+
+    color:#cbd8ce;
+
+    font-size:20px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    padding:50px 0 70px;
+}
+
+.hero{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:end;
+
+    gap:40px;
+
+    margin-bottom:38px;
+}
+
+.eyebrow,
+.kicker{
+    display:flex;
+    align-items:center;
+
+    gap:8px;
+
+    color:#8ea796;
+
+    font-size:9px;
+
+    letter-spacing:.16em;
+
+    font-weight:700;
+}
+
+.eyebrow{
+    margin-bottom:14px;
+
+    color:#a2bd8e;
+}
+
+.eyebrow span{
+    width:25px;
+    height:1px;
+
+    background:var(--accent);
+}
+
+h1,
+h2,
+h3,
+p{
+    margin:0;
+}
+
+h1{
+    font:500 clamp(39px,5vw,62px)/.98 "Space Grotesk";
+
+    letter-spacing:-.06em;
+}
+
+h1 strong{
+    color:var(--accent);
+    font-weight:500;
+}
+
+.hero p{
+    max-width:635px;
+
+    margin-top:18px;
+
+    color:#8c9f95;
+
+    font-size:13px;
+
+    line-height:1.7;
+}
+
+.tip{
+    max-width:300px;
+
+    display:flex;
+
+    gap:9px;
+
+    padding:10px 0 10px 16px;
+
+    border-left:1px solid rgba(186,255,74,.42);
+
+    color:#8ea79a;
+
+    font-size:11px;
+
+    line-height:1.55;
+}
+
+.tip b{
+    color:#e5f6d3;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.grid{
+    display:grid;
+
+    grid-template-columns:350px minmax(0,1fr);
+
+    gap:22px;
+
+    align-items:start;
+}
+
+.card{
+    border:1px solid var(--line);
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18,35,28,.88),
+            rgba(8,17,14,.94)
+        );
+
+    box-shadow:0 18px 55px rgba(0,0,0,.17);
+}
+
+/* =========================
+   LIBRARY
+========================= */
+
+.library{
+    padding:22px 17px;
+
+    min-height:625px;
+}
+
+.title-row,
+.section-head{
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:space-between;
+}
+
+.kicker{
+    color:#829b8b;
+}
+
+h2{
+    margin-top:8px;
+
+    font:500 24px "Space Grotesk";
+
+    letter-spacing:-.04em;
+}
+
+h2 small{
+    font:14px "DM Sans";
+
+    color:#75897d;
+
+    margin-left:5px;
+}
+
+.add-icon{
+    width:34px;
+    height:34px;
+
+    border:1px solid rgba(186,255,74,.2);
+
+    border-radius:8px;
+
+    background:rgba(186,255,74,.08);
+
+    color:var(--accent);
+
+    font-size:20px;
+}
+
+.search{
+    display:flex;
+
+    gap:9px;
+
+    align-items:center;
+
+    height:38px;
+
+    margin-top:24px;
+
+    padding:0 11px;
+
+    border:1px solid rgba(190,225,198,.16);
+
+    border-radius:8px;
+}
+
+.search input{
+    width:100%;
+    height:100%;
+
+    border:0;
+    outline:0;
+
+    background:transparent;
+
+    color:white;
+
+    font-size:11px;
+}
+
+.search input::placeholder{
+    color:#63766c;
+}
+
+.tabs{
+    display:flex;
+
+    gap:6px;
+
+    margin:14px 0;
+}
+
+.tabs button{
+    border:0;
+
+    border-radius:6px;
+
+    padding:6px 9px;
+
+    background:transparent;
+
+    color:#75887e;
+
+    font-size:10px;
+}
+
+.tabs button.active{
+    color:#d5e8d4;
+
+    background:#1a3328;
+}
+
+.songs{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+}
+
+.song{
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+
+    padding:6px;
+
+    border:1px solid transparent;
+
+    border-radius:9px;
+}
+
+.song.active{
+    background:rgba(186,255,74,.07);
+
+    border-color:rgba(186,255,74,.17);
+}
+
+.song-main{
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    min-width:0;
+
+    flex:1;
+
+    padding:2px;
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--text);
+
+    text-align:left;
+}
+
+.thumb{
+    display:inline-block;
+
+    position:relative;
+
+    flex:none;
+
+    width:43px;
+    height:43px;
+
+    overflow:hidden;
+
+    border-radius:7px;
+
+    background:#1c3028;
+}
+
+.thumb img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+.song-main span:last-child{
+    display:flex;
+
+    min-width:0;
+
+    flex-direction:column;
+
+    gap:4px;
+}
+
+.song-main b{
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    font-size:11px;
+}
+
+.song-main small{
+    color:#778b80;
+
+    font-size:10px;
+}
+
+.icon-btn{
+    border:0;
+
+    background:transparent;
+
+    color:#738b7d;
+
+    padding:7px;
+}
+
+.icon-btn:hover{
+    color:var(--accent);
+}
+
+.delete-btn:hover{
+    color:var(--danger);
+}
+
+.add-link{
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    margin:18px 7px 0;
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--accent);
+
+    font-size:11px;
+}
+
+/* =========================
+   PLAYER
+========================= */
+
+.player{
+    min-width:0;
+}
+
+.section-head{
+    align-items:end;
+
+    padding:0 3px 17px;
+}
+
+.section-head h2{
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.live{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    color:#ff9dab;
+
+    font:8px "DM Sans";
+
+    letter-spacing:.13em;
+
+    border:1px solid rgba(255,113,133,.27);
+
+    border-radius:999px;
+
+    padding:4px 7px;
+}
+
+.live i{
+    width:5px;
+    height:5px;
+
+    border-radius:50%;
+
+    background:#fb7185;
+}
+
+.player-card{
+    overflow:hidden;
+}
+
+.player-bar{
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:12px 19px;
+
+    border-bottom:1px solid var(--line);
+
+    color:#8aa496;
+
+    font-size:9px;
+
+    letter-spacing:.14em;
+}
+
+.video{
+    position:relative;
+
+    min-height:380px;
+
+    background:#040807;
+}
+
+.video iframe{
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    border:0;
+}
+
+.source{
+    position:absolute;
+
+    top:12px;
+    left:13px;
+
+    padding:6px 8px;
+
+    border-radius:5px;
+
+    background:rgba(4,12,9,.72);
+
+    color:#d8e9da;
+
+    font-size:9px;
+}
+
+.track{
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    padding:18px 20px 11px;
+}
+
+.track .thumb{
+    width:46px;
+    height:46px;
+}
+
+.track-info{
+    min-width:0;
+    flex:1;
+}
+
+.track-info label{
+    color:#778e80;
+
+    font-size:8px;
+
+    letter-spacing:.15em;
+}
+
+.track-info h3{
+    margin-top:5px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    font:500 18px "Space Grotesk";
+}
+
+.track-info p{
+    margin-top:4px;
+
+    color:#82958b;
+
+    font-size:10px;
+}
+
+.heart{
+    border:0;
+
+    background:transparent;
+
+    color:#789487;
+
+    font-size:21px;
+}
+
+.embed-note{
+    padding:12px 20px 15px;
+
+    border-top:1px solid var(--line);
+
+    color:#71877a;
+
+    font-size:10px;
+}
+
+/* =========================
+   BELOW
+========================= */
+
+.below{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:16px;
+
+    margin-top:22px;
+}
+
+.queue,
+.playlist{
+    padding:21px 18px;
+}
+
+.queue-list{
+    margin-top:15px;
+}
+
+.queue-row{
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    padding:7px 5px;
+
+    border-radius:8px;
+}
+
+.queue-row:hover{
+    background:rgba(255,255,255,.03);
+}
+
+.queue-row .thumb{
+    width:36px;
+    height:36px;
+}
+
+.queue-row div{
+    min-width:0;
+    flex:1;
+}
+
+.queue-row b,
+.queue-row small{
+    display:block;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+.queue-row b{
+    font-size:11px;
+}
+
+.queue-row small{
+    color:#778b80;
+
+    font-size:10px;
+}
+
+.queue-row button{
+    border:0;
+
+    background:transparent;
+
+    color:#718a7c;
+}
+
+.playlist{
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+.playlist-art{
+    display:grid;
+
+    place-items:center;
+
+    width:70px;
+    height:70px;
+
+    border-radius:10px;
+
+    color:var(--accent);
+
+    background:#203b2d;
+
+    font:24px "Space Grotesk";
+}
+
+.playlist-art small{
+    font-size:9px;
+}
+
+.playlist p{
+    margin-top:5px;
+
+    color:#7c9184;
+
+    font-size:10px;
+}
+
+.save{
+    margin-left:auto;
+
+    white-space:nowrap;
+
+    border:1px solid rgba(186,255,74,.25);
+
+    border-radius:7px;
+
+    padding:9px 11px;
+
+    background:transparent;
+
+    color:#caff8d;
+
+    font-size:10px;
+}
+
+/* =========================
+   MODALS
+========================= */
+
+.modal{
+    position:fixed;
+
+    inset:0;
+
+    z-index:100;
+
+    display:none;
+
+    place-items:center;
+
+    padding:20px;
+
+    background:rgba(1,7,5,.78);
+
+    backdrop-filter:blur(7px);
+}
+
+.modal.open{
+    display:grid;
+}
+
+.modal-box{
+    width:min(500px,100%);
+
+    max-height:90vh;
+
+    overflow:auto;
+
+    padding:24px;
+
+    border:1px solid rgba(186,255,74,.23);
+
+    border-radius:15px;
+
+    background:#0e1b15;
+}
+
+.modal-head{
+    display:flex;
+
+    justify-content:space-between;
+}
+
+.modal-head button{
+    border:0;
+
+    background:transparent;
+
+    color:#92a49a;
+
+    font-size:22px;
+}
+
+.modal-box h2{
+    margin-top:9px;
+}
+
+.modal-box p{
+    margin-top:6px;
+
+    color:#8b9d92;
+
+    font-size:11px;
+}
+
+.form{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+    margin-top:22px;
+}
+
+.form label{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+
+    color:#bdcabe;
+
+    font-size:10px;
+}
+
+.form input,
+.form select{
+    height:40px;
+
+    border:1px solid rgba(190,225,198,.16);
+
+    border-radius:7px;
+
+    outline:0;
+
+    background:rgba(1,10,7,.4);
+
+    color:#eef8ef;
+
+    padding:0 10px;
+
+    font-size:11px;
+}
+
+.form-foot{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:8px;
+
+    margin-top:3px;
+}
+
+.form-foot button{
+    height:36px;
+
+    border:0;
+
+    border-radius:7px;
+
+    padding:0 13px;
+
+    font-size:11px;
+}
+
+.cancel{
+    background:transparent;
+
+    color:#99aa9f;
+}
+
+.submit{
+    background:var(--accent);
+
+    color:#122016;
+
+    font-weight:600;
+}
+
+.notice{
+    color:#91a995;
+
+    font-size:10px;
+}
+
+/* =========================
+   AUTH
+========================= */
+
+.auth-screen{
+    position:fixed;
+
+    inset:0;
+
+    z-index:1000;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(186,255,74,.09),
+            transparent 35%
+        ),
+        #050b08;
+}
+
+.auth-screen.show{
+    display:flex;
+}
+
+.auth-box{
+    width:min(420px,100%);
+
+    padding:30px;
+
+    border:1px solid var(--line);
+
+    border-radius:18px;
+
+    background:rgba(13,25,21,.95);
+
+    box-shadow:0 30px 100px rgba(0,0,0,.5);
+}
+
+.auth-logo{
+    width:50px;
+    height:50px;
+
+    display:grid;
+    place-items:center;
+
+    border:1px solid rgba(186,255,74,.4);
+
+    border-radius:14px;
+
+    color:var(--accent);
+
+    margin-bottom:20px;
+}
+
+.auth-box h1{
+    font-size:32px;
+
+    letter-spacing:-.05em;
+}
+
+.auth-box h1 strong{
+    color:var(--accent);
+}
+
+.auth-sub{
+    margin-top:9px;
+
+    color:#81958a;
+
+    font-size:11px;
+
+    line-height:1.6;
+}
+
+.auth-form{
+    margin-top:24px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:13px;
+}
+
+.auth-form label{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+
+    color:#b8c8be;
+
+    font-size:10px;
+}
+
+.auth-form input{
+    height:42px;
+
+    border:1px solid var(--line);
+
+    border-radius:8px;
+
+    outline:0;
+
+    background:#07110d;
+
+    color:white;
+
+    padding:0 12px;
+}
+
+.auth-submit{
+    height:42px;
+
+    margin-top:5px;
+
+    border:0;
+
+    border-radius:8px;
+
+    background:var(--accent);
+
+    color:#0e1912;
+
+    font-weight:700;
+}
+
+.auth-switch{
+    margin-top:17px;
+
+    text-align:center;
+
+    color:#7d9185;
+
+    font-size:10px;
+}
+
+.auth-switch button{
+    border:0;
+
+    background:transparent;
+
+    color:var(--accent);
+}
+
+.auth-error{
+    display:none;
+
+    padding:9px;
+
+    border-radius:7px;
+
+    background:rgba(255,113,133,.08);
+
+    color:#ff9dab;
+
+    font-size:10px;
+}
+
+.auth-error.show{
+    display:block;
+}
+
+/* =========================
+   SETTINGS
+========================= */
+
+.settings-overlay{
+    position:fixed;
+
+    inset:0;
+
+    z-index:200;
+
+    display:none;
+
+    justify-content:flex-end;
+
+    background:rgba(0,0,0,.55);
+
+    backdrop-filter:blur(4px);
+}
+
+.settings-overlay.open{
+    display:flex;
+}
+
+.settings-panel{
+    width:min(400px,100%);
+
+    height:100%;
+
+    overflow:auto;
+
+    padding:24px;
+
+    background:#0b1712;
+
+    border-left:1px solid var(--line);
+
+    box-shadow:-20px 0 60px rgba(0,0,0,.4);
+}
+
+.settings-head{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+}
+
+.settings-head button{
+    border:0;
+
+    background:transparent;
+
+    color:#8da196;
+
+    font-size:23px;
+}
+
+.setting-section{
+    margin-top:25px;
+}
+
+.setting-title{
+    color:#8ea398;
+
+    font-size:9px;
+
+    letter-spacing:.16em;
+
+    font-weight:700;
+}
+
+.setting-item{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:14px 0;
+
+    border-bottom:1px solid var(--line);
+}
+
+.setting-item div{
+    min-width:0;
+}
+
+.setting-item b{
+    display:block;
+
+    font-size:12px;
+}
+
+.setting-item small{
+    display:block;
+
+    margin-top:4px;
+
+    color:#71877a;
+
+    font-size:9px;
+}
+
+.theme-grid{
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:8px;
+
+    margin-top:12px;
+}
+
+.theme-btn{
+    padding:13px;
+
+    border:1px solid var(--line);
+
+    border-radius:9px;
+
+    background:#101d18;
+
+    color:white;
+
+    text-align:left;
+
+    font-size:10px;
+}
+
+.theme-btn.active{
+    border-color:var(--accent);
+
+    box-shadow:0 0 0 1px var(--accent);
+}
+
+.color-row{
+    display:flex;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+
+    margin-top:12px;
+}
+
+.color-btn{
+    width:30px;
+    height:30px;
+
+    border-radius:50%;
+
+    border:2px solid transparent;
+}
+
+.color-btn.active{
+    border-color:white;
+
+    box-shadow:0 0 0 2px rgba(255,255,255,.15);
+}
+
+.user-card{
+    margin-top:15px;
+
+    padding:13px;
+
+    border:1px solid var(--line);
+
+    border-radius:9px;
+
+    background:rgba(255,255,255,.02);
+}
+
+.user-card b{
+    display:block;
+
+    font-size:11px;
+
+    word-break:break-all;
+}
+
+.user-card small{
+    color:#72877b;
+
+    font-size:9px;
+}
+
+.logout{
+    width:100%;
+
+    margin-top:22px;
+
+    height:40px;
+
+    border:1px solid rgba(255,113,133,.3);
+
+    border-radius:8px;
+
+    background:rgba(255,113,133,.06);
+
+    color:#ff91a0;
+
+    font-size:11px;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    padding:25px 5px;
+
+    color:#71867a;
+
+    text-align:center;
+
+    font-size:10px;
+}
+
+/* =========================
+   THEMES
+========================= */
+
+body.theme-black{
+    --bg:#030405;
+    --card:#090a0b;
+    --card2:#101112;
+}
+
+body.theme-purple{
+    --bg:#0c0712;
+    --card:#160d20;
+    --card2:#21132d;
+    --accent:#c084ff;
+    --accent2:#e0a8ff;
+}
+
+body.theme-blue{
+    --bg:#061019;
+    --card:#0b1823;
+    --card2:#102434;
+    --accent:#64d8ff;
+    --accent2:#7ce7ff;
+}
+
+body.theme-red{
+    --bg:#120708;
+    --card:#1d0c0e;
+    --card2:#281113;
+    --accent:#ff7b87;
+    --accent2:#ff9ba4;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:980px){
 
     .topbar-inner,
-    .content {
-      width: min(1440px, calc(100% - 64px));
-      margin: auto;
+    .content{
+        width:min(calc(100% - 36px),760px);
     }
 
-    .topbar-inner {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      gap: 32px;
+    .grid{
+        grid-template-columns:1fr;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font: 600 17px "Space Grotesk";
-      min-width: 200px;
+    .player{
+        order:-1;
     }
 
-    .brand-mark {
-      display: grid;
-      place-items: center;
-      width: 34px;
-      height: 34px;
-      border: 1px solid rgba(186, 255, 74, 0.5);
-      border-radius: 10px;
-      color: var(--lime);
-      transform: rotate(-8deg);
+    .video{
+        min-height:58vw;
     }
 
-    .brand em {
-      font: 8px "DM Sans";
-      font-style: normal;
-      letter-spacing: 0.13em;
-      color: #a4ca7e;
-      border: 1px solid rgba(186, 255, 74, 0.3);
-      padding: 3px 5px;
-      border-radius: 4px;
-    }
-
-    .nav {
-      display: flex;
-      gap: 28px;
-      margin-right: auto;
-      height: 100%;
-      align-items: center;
-    }
-
-    .nav a {
-      position: relative;
-      color: #81928a;
-      font-size: 12px;
-    }
-
-    .nav a:hover,
-    .nav a.active {
-      color: #f2f9ef;
-    }
-
-    .nav a.active:after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -29px;
-      height: 2px;
-      background: var(--lime);
-      box-shadow: 0 0 14px rgba(186, 255, 74, 0.7);
-    }
-
-    .actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .status {
-      color: #8a9d92;
-      font-size: 11px;
-    }
-
-    .status i {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      margin-right: 7px;
-      border-radius: 50%;
-      background: var(--lime);
-      box-shadow: 0 0 11px var(--lime);
-    }
-
-    .user-email {
-      max-width: 150px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      color: #8da197;
-      font-size: 10px;
-    }
-
-    .login {
-      border: 0;
-      border-radius: 8px;
-      padding: 9px 13px;
-      background: var(--lime);
-      color: #101a14;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .logout {
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 8px;
-      padding: 8px 11px;
-      background: transparent;
-      color: #a4b5aa;
-      font-size: 10px;
-    }
-
-    .logout:hover {
-      border-color: rgba(186, 255, 74, 0.3);
-      color: var(--lime);
-    }
-
-    .menu {
-      display: none;
-      border: 0;
-      background: transparent;
-      color: #cbd8ce;
-      font-size: 20px;
-    }
-
-    .content {
-      padding: 50px 0 70px;
-    }
-
-    .hero {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 40px;
-      margin-bottom: 38px;
-    }
-
-    .eyebrow,
-    .kicker {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #8ea796;
-      font-size: 9px;
-      letter-spacing: 0.16em;
-      font-weight: 700;
-    }
-
-    .eyebrow {
-      margin-bottom: 14px;
-      color: #a2bd8e;
-    }
-
-    .eyebrow span {
-      width: 25px;
-      height: 1px;
-      background: var(--lime);
-    }
-
-    h1,
-    h2,
-    h3,
-    p {
-      margin: 0;
-    }
-
-    h1 {
-      font: 500 clamp(39px, 5vw, 62px) / 0.98 "Space Grotesk";
-      letter-spacing: -0.06em;
-    }
-
-    h1 strong {
-      color: var(--lime);
-      font-weight: 500;
-    }
-
-    .hero p {
-      max-width: 635px;
-      margin-top: 18px;
-      color: #8c9f95;
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
-    .tip {
-      max-width: 300px;
-      display: flex;
-      gap: 9px;
-      padding: 10px 0 10px 16px;
-      border-left: 1px solid rgba(186, 255, 74, 0.42);
-      color: #8ea79a;
-      font-size: 11px;
-      line-height: 1.55;
-    }
-
-    .tip b {
-      color: #e5f6d3;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 350px minmax(0, 1fr);
-      gap: 22px;
-      align-items: start;
-    }
-
-    .card {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: linear-gradient(
-        145deg,
-        rgba(18, 35, 28, 0.88),
-        rgba(8, 17, 14, 0.94)
-      );
-      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.17);
-    }
-
-    .library {
-      padding: 22px 17px;
-      min-height: 625px;
-    }
-
-    .title-row,
-    .section-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-    }
-
-    .kicker {
-      color: #829b8b;
-    }
-
-    .kicker span {
-      color: var(--lime);
-    }
-
-    h2 {
-      margin-top: 8px;
-      font: 500 24px "Space Grotesk";
-      letter-spacing: -0.04em;
-    }
-
-    h2 small {
-      font: 14px "DM Sans";
-      color: #75897d;
-      margin-left: 5px;
-    }
-
-    .add-icon {
-      width: 34px;
-      height: 34px;
-      border: 1px solid rgba(186, 255, 74, 0.2);
-      border-radius: 8px;
-      background: rgba(186, 255, 74, 0.08);
-      color: var(--lime);
-      font-size: 20px;
-    }
-
-    .add-icon:hover {
-      background: rgba(186, 255, 74, 0.16);
-    }
-
-    .search {
-      display: flex;
-      gap: 9px;
-      align-items: center;
-      height: 38px;
-      margin-top: 24px;
-      padding: 0 11px;
-      border: 1px solid rgba(190, 225, 198, 0.16);
-      border-radius: 8px;
-    }
-
-    .search input {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      outline: 0;
-      background: transparent;
-      color: white;
-      font-size: 11px;
-    }
-
-    .search input::placeholder {
-      color: #63766c;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 6px;
-      margin: 14px 0;
-    }
-
-    .tabs button {
-      border: 0;
-      border-radius: 6px;
-      padding: 6px 9px;
-      background: transparent;
-      color: #75887e;
-      font-size: 10px;
-    }
-
-    .tabs button.active {
-      color: #d5e8d4;
-      background: #1a3328;
-    }
-
-    .songs {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .song {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 6px;
-      border: 1px solid transparent;
-      border-radius: 9px;
-    }
-
-    .song.active {
-      background: rgba(186, 255, 74, 0.07);
-      border-color: rgba(186, 255, 74, 0.17);
-    }
-
-    .song-main {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-      flex: 1;
-      padding: 2px;
-      border: 0;
-      background: transparent;
-      color: var(--text);
-      text-align: left;
-    }
-
-    .thumb {
-      display: inline-block;
-      position: relative;
-      flex: none;
-      width: 43px;
-      height: 43px;
-      overflow: hidden;
-      border-radius: 7px;
-      background: #1c3028;
-    }
-
-    .thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .song-main span:last-child {
-      display: flex;
-      min-width: 0;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .song-main b {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 11px;
-    }
-
-    .song-main small {
-      color: #778b80;
-      font-size: 10px;
-    }
-
-    .icon-btn {
-      border: 0;
-      background: transparent;
-      color: #738b7d;
-      padding: 7px;
-    }
-
-    .icon-btn:hover {
-      color: var(--lime);
-    }
-
-    .delete-btn:hover {
-      color: var(--danger);
-    }
-
-    .add-link {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      margin: 18px 7px 0;
-      border: 0;
-      background: transparent;
-      color: var(--lime);
-      font-size: 11px;
-    }
-
-    .player {
-      min-width: 0;
-    }
-
-    .section-head {
-      align-items: end;
-      padding: 0 3px 17px;
-    }
-
-    .section-head h2 {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .live {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: #ff9dab;
-      font: 8px "DM Sans";
-      letter-spacing: 0.13em;
-      border: 1px solid rgba(255, 113, 133, 0.27);
-      border-radius: 999px;
-      padding: 4px 7px;
-    }
-
-    .live i {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #fb7185;
-    }
-
-    .player-card {
-      overflow: hidden;
-    }
-
-    .player-bar {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 19px;
-      border-bottom: 1px solid var(--line);
-      color: #8aa496;
-      font-size: 9px;
-      letter-spacing: 0.14em;
-    }
-
-    .video {
-      position: relative;
-      min-height: 380px;
-      background: #040807;
-    }
-
-    .video iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .source {
-      position: absolute;
-      top: 12px;
-      left: 13px;
-      padding: 6px 8px;
-      border-radius: 5px;
-      background: rgba(4, 12, 9, 0.72);
-      color: #d8e9da;
-      font-size: 9px;
-    }
-
-    .track {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 18px 20px 11px;
-    }
-
-    .track .thumb {
-      width: 46px;
-      height: 46px;
-    }
-
-    .track-info {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .track-info label {
-      color: #778e80;
-      font-size: 8px;
-      letter-spacing: 0.15em;
-    }
-
-    .track-info h3 {
-      margin-top: 5px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font: 500 18px "Space Grotesk";
-    }
+    .hero{
+        align-items:flex-start;
 
-    .track-info p {
-      margin-top: 4px;
-      color: #82958b;
-      font-size: 10px;
+        flex-direction:column;
     }
 
-    .embed-note {
-      padding: 12px 20px 15px;
-      border-top: 1px solid var(--line);
-      color: #71877a;
-      font-size: 10px;
+    .below{
+        grid-template-columns:1fr;
     }
+}
 
-    .heart {
-      border: 0;
-      background: transparent;
-      color: #789487;
-      font-size: 21px;
-    }
-
-    .below {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 22px;
-    }
-
-    .queue,
-    .playlist {
-      padding: 21px 18px;
-    }
-
-    .queue-list {
-      margin-top: 15px;
-    }
-
-    .queue-row {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 7px 5px;
-      border-radius: 7px;
-    }
-
-    .queue-row:hover {
-      background: rgba(255, 255, 255, 0.025);
-    }
-
-    .queue-row .thumb {
-      width: 36px;
-      height: 36px;
-    }
-
-    .queue-row div {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .queue-row b,
-    .queue-row small {
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .queue-row b {
-      font-size: 11px;
-    }
-
-    .queue-row small {
-      color: #778b80;
-      font-size: 10px;
-    }
-
-    .queue-row button {
-      border: 0;
-      background: transparent;
-      color: #718a7c;
-    }
+@media(max-width:640px){
 
-    .playlist {
-      display: flex;
-      align-items: center;
-      gap: 15px;
+    .topbar-inner,
+    .content{
+        width:calc(100% - 28px);
     }
 
-    .playlist-art {
-      display: grid;
-      place-items: center;
-      width: 70px;
-      height: 70px;
-      flex: none;
-      border-radius: 10px;
-      color: var(--lime);
-      background: #203b2d;
-      font: 24px "Space Grotesk";
+    .topbar{
+        height:64px;
     }
 
-    .playlist-art small {
-      font-size: 9px;
-      margin-left: 3px;
+    .brand{
+        min-width:0;
     }
 
-    .playlist p {
-      margin-top: 5px;
-      color: #7c9184;
-      font-size: 10px;
+    .status{
+        display:none;
     }
 
-    .save {
-      margin-left: auto;
-      white-space: nowrap;
-      border: 1px solid rgba(186, 255, 74, 0.25);
-      border-radius: 7px;
-      padding: 9px 11px;
-      background: transparent;
-      color: #caff8d;
-      font-size: 10px;
+    .menu{
+        display:block;
     }
 
-    .save:hover {
-      background: rgba(186, 255, 74, 0.1);
-    }
-
-    /* MODALS */
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      z-index: 20;
-      display: none;
-      place-items: center;
-      padding: 20px;
-      background: rgba(1, 7, 5, 0.78);
-      backdrop-filter: blur(7px);
-    }
-
-    .modal.open {
-      display: grid;
-    }
-
-    .modal-box {
-      width: min(500px, 100%);
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 24px;
-      border: 1px solid rgba(186, 255, 74, 0.23);
-      border-radius: 15px;
-      background: #0e1b15;
-    }
-
-    .modal-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-    }
-
-    .modal-head button {
-      border: 0;
-      background: transparent;
-      color: #92a49a;
-      font-size: 22px;
-    }
+    .nav{
+        position:absolute;
 
-    .modal-box h2 {
-      margin-top: 9px;
-    }
+        display:none;
 
-    .modal-box p {
-      margin-top: 6px;
-      color: #8b9d92;
-      font-size: 11px;
-    }
+        top:64px;
 
-    .form {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-top: 22px;
-    }
+        left:14px;
+        right:14px;
 
-    .form label {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      color: #bdcabe;
-      font-size: 10px;
-    }
+        height:auto;
 
-    .form input {
-      height: 40px;
-      border: 1px solid rgba(190, 225, 198, 0.16);
-      border-radius: 7px;
-      outline: 0;
-      background: rgba(1, 10, 7, 0.4);
-      color: #eef8ef;
-      padding: 0 10px;
-      font-size: 11px;
-    }
+        padding:14px;
 
-    .form input:focus {
-      border-color: rgba(186, 255, 74, 0.45);
-    }
+        flex-direction:column;
 
-    .form-foot {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 3px;
-    }
+        align-items:flex-start;
 
-    .form-foot button {
-      height: 36px;
-      border: 0;
-      border-radius: 7px;
-      padding: 0 13px;
-      font-size: 11px;
-    }
+        gap:15px;
 
-    .cancel {
-      background: transparent;
-      color: #99aa9f;
-    }
+        background:#102019;
 
-    .submit {
-      background: var(--lime);
-      color: #122016;
-      font-weight: 600;
-    }
+        border:1px solid var(--line);
 
-    .switch-auth {
-      margin-top: 16px;
-      text-align: center;
-      color: #71877a;
-      font-size: 10px;
+        border-radius:10px;
     }
 
-    .switch-auth button {
-      border: 0;
-      background: transparent;
-      color: var(--lime);
-      font-size: 10px;
+    .nav.open{
+        display:flex;
     }
 
-    .notice {
-      color: #91a995;
-      font-size: 10px;
-      line-height: 1.6;
+    .nav a.active:after{
+        display:none;
     }
 
-    .error {
-      display: none;
-      padding: 9px 10px;
-      border: 1px solid rgba(255, 113, 133, 0.2);
-      border-radius: 7px;
-      background: rgba(255, 113, 133, 0.06);
-      color: #ff9dab;
-      font-size: 10px;
-      line-height: 1.5;
+    .content{
+        padding-top:34px;
     }
 
-    .error.show {
-      display: block;
+    .video{
+        min-height:56vw;
     }
 
-    .auth-loading {
-      display: none;
-      margin-top: 10px;
-      text-align: center;
-      color: #8da197;
-      font-size: 10px;
-    }
+    .playlist{
+        align-items:flex-start;
 
-    .auth-loading.show {
-      display: block;
+        flex-wrap:wrap;
     }
 
-    .logged-out {
-      opacity: 0.6;
-      pointer-events: none;
+    .save{
+        margin-left:auto;
     }
 
-    @media (max-width: 980px) {
-      .topbar-inner,
-      .content {
-        width: min(calc(100% - 36px), 760px);
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .player {
-        order: -1;
-      }
-
-      .video {
-        min-height: 58vw;
-      }
-
-      .hero {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .below {
-        grid-template-columns: 1fr;
-      }
+    .settings-panel{
+        width:100%;
     }
+}
 
-    @media (max-width: 640px) {
-      .topbar-inner,
-      .content {
-        width: calc(100% - 28px);
-      }
-
-      .topbar {
-        height: 64px;
-      }
-
-      .brand {
-        min-width: 0;
-      }
-
-      .brand em {
-        display: none;
-      }
-
-      .status,
-      .user-email {
-        display: none;
-      }
-
-      .menu {
-        display: block;
-      }
-
-      .nav {
-        position: absolute;
-        display: none;
-        top: 64px;
-        left: 14px;
-        right: 14px;
-        height: auto;
-        padding: 14px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-        background: #102019;
-        border: 1px solid var(--line);
-        border-radius: 10px;
-      }
-
-      .nav.open {
-        display: flex;
-      }
-
-      .nav a.active:after {
-        display: none;
-      }
-
-      .content {
-        padding-top: 34px;
-      }
-
-      .video {
-        min-height: 56vw;
-      }
-
-      .playlist {
-        align-items: flex-start;
-        flex-wrap: wrap;
-      }
-
-      .save {
-        margin-left: auto;
-      }
-    }
-  </style>
+</style>
 </head>
 
 <body>
 
-  <!-- TOP BAR -->
+<!-- =========================
+     AUTH SCREEN
+========================= -->
 
-  <header class="topbar">
+<div class="auth-screen" id="authScreen">
+
+    <div class="auth-box">
+
+        <div class="auth-logo">◉</div>
+
+        <h1>
+            MyTune<strong>Box</strong>
+        </h1>
+
+        <p class="auth-sub">
+            Your personal music room.<br>
+            Login ဝင်ပြီး ကိုယ့်သီချင်းတွေကို ဘယ် device မှာမဆို ပြန်အသုံးပြုနိုင်ပါတယ်။
+        </p>
+
+        <form class="auth-form" id="authForm">
+
+            <label>
+                Email
+                <input
+                    id="authEmail"
+                    type="email"
+                    required
+                    placeholder="you@example.com"
+                >
+            </label>
+
+            <label>
+                Password
+                <input
+                    id="authPassword"
+                    type="password"
+                    required
+                    minlength="6"
+                    placeholder="••••••••"
+                >
+            </label>
+
+            <div class="auth-error" id="authError"></div>
+
+            <button class="auth-submit" id="authSubmit">
+                Login
+            </button>
+
+        </form>
+
+        <div class="auth-switch">
+
+            <span id="authSwitchText">
+                Account မရှိသေးဘူးလား?
+            </span>
+
+            <button onclick="toggleAuthMode()">
+                <span id="authSwitchButton">Create account</span>
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     TOP BAR
+========================= -->
+
+<header class="topbar">
+
     <div class="topbar-inner">
 
-      <a class="brand" href="#top">
-        <span class="brand-mark">◉</span>
-        <span>MyTuneBox</span>
-        <em>BETA</em>
-      </a>
+        <a class="brand" href="#top">
 
-      <nav class="nav" id="nav">
-        <a class="active" href="#library">Library</a>
-        <a href="#player">Player</a>
-        <a href="#queue">Queue</a>
-        <a href="#playlists">Playlists</a>
-      </nav>
+            <span class="brand-mark">
+                ◉
+            </span>
 
-      <div class="actions">
+            <span>
+                MyTuneBox
+            </span>
 
-        <span class="status">
-          <i></i>
-          <span id="roomStatus">Connecting...</span>
-        </span>
+            <em>
+                BETA
+            </em>
 
-        <span class="user-email" id="userEmail"></span>
+        </a>
 
-        <button class="login" id="authButton" onclick="openAuthModal()">
-          Log in
-        </button>
+        <nav class="nav" id="nav">
 
-        <button
-          class="logout"
-          id="logoutButton"
-          onclick="logoutUser()"
-          style="display:none"
-        >
-          Logout
-        </button>
+            <a class="active" href="#library">
+                Library
+            </a>
 
-        <button
-          class="menu"
-          onclick="document.getElementById('nav').classList.toggle('open')"
-        >
-          ☰
-        </button>
+            <a href="#player">
+                Player
+            </a>
 
-      </div>
+            <a href="#queue">
+                Queue
+            </a>
+
+            <a href="#playlists">
+                Playlists
+            </a>
+
+        </nav>
+
+        <div class="actions">
+
+            <span class="status">
+                <i></i>
+                Room online
+            </span>
+
+            <button
+                class="account-btn"
+                id="accountButton"
+                onclick="openSettings()"
+            >
+                Account
+            </button>
+
+            <button
+                class="login"
+                id="loginButton"
+                onclick="openAuth()"
+            >
+                Log in
+            </button>
+
+            <button
+                class="menu"
+                onclick="document.getElementById('nav').classList.toggle('open')"
+            >
+                ☰
+            </button>
+
+        </div>
+
     </div>
-  </header>
+
+</header>
 
 
-  <!-- MAIN -->
+<!-- =========================
+     MAIN
+========================= -->
 
-  <main class="content" id="top">
+<main class="content" id="top">
 
     <section class="hero">
 
-      <div>
+        <div>
 
-        <div class="eyebrow">
-          <span></span>
-          YOUR PERSONAL MUSIC ROOM
+            <div class="eyebrow">
+                <span></span>
+                YOUR PERSONAL MUSIC ROOM
+            </div>
+
+            <h1>
+                Play your songs.<br>
+                <strong>Your way.</strong>
+            </h1>
+
+            <p>
+                YouTube link တွေကို ကိုယ့်ရဲ့ music room ထဲသိမ်းထားပြီး
+                queue, playlist, favorites နဲ့ ကိုယ်တိုင်စီမံပါ။
+                Account တစ်ခုနဲ့ device အားလုံးမှာ ပြန်သုံးနိုင်ပါတယ်။
+            </p>
+
         </div>
 
-        <h1>
-          Play your songs.<br />
-          <strong>Your way.</strong>
-        </h1>
+        <div class="tip">
 
-        <p>
-          YouTube link တွေကို ကိုယ့်ရဲ့ music room ထဲသိမ်းထားပြီး
-          queue, favorites နဲ့ ကိုယ်တိုင်စီမံပါ။
-          Account နဲ့ Login ဝင်ထားရင် ဘယ်ဖုန်းကနေမဆို
-          ကိုယ့်သီချင်းတွေ ပြန်တွေ့နိုင်ပါတယ်။
-        </p>
+            ✦
 
-      </div>
+            <span>
+                <b>New</b> —
+                Random Song ကိုနှိပ်ပြီး Library ထဲက သီချင်းတစ်ပုဒ်ကို
+                ကျပန်းရွေးဖွင့်နိုင်ပါပြီ။
+            </span>
 
-      <div class="tip">
-        ✦
-        <span>
-          <b>Cloud Sync</b> —
-          Account တစ်ခုနဲ့ Login ဝင်ထားရင်
-          ကိုယ့် music library က device အားလုံးမှာ sync ဖြစ်နေပါမယ်။
-        </span>
-      </div>
+        </div>
 
     </section>
 
 
-    <!-- LIBRARY + PLAYER -->
+    <!-- =========================
+         MAIN GRID
+    ========================= -->
 
     <section class="grid">
 
-      <!-- LIBRARY -->
+        <!-- LIBRARY -->
 
-      <aside class="card library" id="library">
+        <aside class="card library" id="library">
 
-        <div class="title-row">
+            <div class="title-row">
 
-          <div>
+                <div>
 
-            <div class="kicker">
-              ▥ YOUR LIBRARY
+                    <div class="kicker">
+                        ▥ YOUR LIBRARY
+                    </div>
+
+                    <h2>
+                        Saved songs
+                        <small id="songCount">
+                            00
+                        </small>
+                    </h2>
+
+                </div>
+
+                <button
+                    class="add-icon"
+                    onclick="openSongModal()"
+                >
+                    +
+                </button>
+
             </div>
 
-            <h2>
-              Saved songs
-              <small id="songCount">00</small>
-            </h2>
 
-          </div>
+            <div class="search">
 
-          <button
-            class="add-icon"
-            onclick="openSongModal()"
-            title="Add song"
-          >
-            +
-          </button>
+                <span>
+                    ⌕
+                </span>
 
-        </div>
+                <input
+                    id="searchInput"
+                    oninput="renderSongs()"
+                    placeholder="Search your songs..."
+                >
+
+            </div>
 
 
-        <div class="search">
+            <div class="tabs">
 
-          <span>⌕</span>
+                <button
+                    class="active"
+                    id="allTab"
+                    onclick="setFilter('all')"
+                >
+                    All songs
+                </button>
 
-          <input
-            id="searchInput"
-            oninput="renderSongs()"
-            placeholder="Search your songs..."
-          />
+                <button
+                    id="favTab"
+                    onclick="setFilter('favorites')"
+                >
+                    ♡ Favorites
+                </button>
 
-        </div>
-
-
-        <div class="tabs">
-
-          <button
-            class="active"
-            id="allTab"
-            onclick="setFilter('all')"
-          >
-            All songs
-          </button>
-
-          <button
-            id="favTab"
-            onclick="setFilter('favorites')"
-          >
-            ♡ Favorites
-          </button>
-
-        </div>
+            </div>
 
 
-        <div class="songs" id="songs">
-          <p class="notice">
-            Login ဝင်ပြီးမှ ကိုယ့် Library ကို အသုံးပြုနိုင်ပါတယ်။
-          </p>
-        </div>
+            <div class="songs" id="songs"></div>
 
 
-        <button
-          class="add-link"
-          onclick="openSongModal()"
+            <button
+                class="add-link"
+                onclick="openSongModal()"
+            >
+                ＋ Add a song from YouTube
+            </button>
+
+        </aside>
+
+
+        <!-- PLAYER -->
+
+        <section class="player" id="player">
+
+            <div class="section-head">
+
+                <div>
+
+                    <div class="kicker">
+                        ◉ NOW PLAYING
+                    </div>
+
+                    <h2>
+
+                        Music player
+
+                        <span class="live">
+                            <i></i>
+                            LIVE
+                        </span>
+
+                    </h2>
+
+                </div>
+
+                <button
+                    class="icon-btn"
+                    onclick="openSettings()"
+                >
+                    ⚙
+                </button>
+
+            </div>
+
+
+            <div class="card player-card">
+
+                <div class="player-bar">
+
+                    <span>
+                        ● PLAYING IN ROOM
+                    </span>
+
+                    <span>
+                        PERSONAL SESSION
+                    </span>
+
+                </div>
+
+
+                <div class="video">
+
+                    <iframe
+                        id="videoFrame"
+                        title="YouTube player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                    ></iframe>
+
+                    <span class="source">
+                        ▶ YouTube source
+                    </span>
+
+                </div>
+
+
+                <div class="track">
+
+                    <span class="thumb">
+
+                        <img
+                            id="cover"
+                            alt=""
+                        >
+
+                    </span>
+
+
+                    <div class="track-info">
+
+                        <label>
+                            NOW PLAYING
+                        </label>
+
+                        <h3 id="nowTitle">
+                            No song selected
+                        </h3>
+
+                        <p id="nowArtist">
+                            Select a song from your library
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="heart"
+                        id="currentHeart"
+                        onclick="toggleCurrentFavorite()"
+                    >
+                        ♡
+                    </button>
+
+                </div>
+
+
+                <div class="embed-note">
+
+                    Playback controls are provided by YouTube inside the video.
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </section>
+
+
+    <!-- =========================
+         BELOW
+    ========================= -->
+
+    <section class="below">
+
+        <!-- QUEUE -->
+
+        <section class="card queue" id="queue">
+
+            <div class="title-row">
+
+                <div>
+
+                    <div class="kicker">
+                        ☷ UP NEXT
+                    </div>
+
+                    <h2>
+                        Queue
+                        <small id="queueCount">
+                            00
+                        </small>
+                    </h2>
+
+                </div>
+
+                <div>
+
+                    <button
+                        class="icon-btn"
+                        onclick="shuffleQueue()"
+                        title="Shuffle queue"
+                    >
+                        🔀
+                    </button>
+
+                    <button
+                        class="icon-btn"
+                        onclick="randomSong()"
+                        title="Random song"
+                    >
+                        🎲
+                    </button>
+
+                    <button
+                        class="icon-btn"
+                        onclick="clearQueue()"
+                    >
+                        Clear
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="queue-list"
+                id="queueList"
+            ></div>
+
+        </section>
+
+
+        <!-- PLAYLIST -->
+
+        <section
+            class="card playlist"
+            id="playlists"
         >
-          ＋ Add a song from YouTube
-        </button>
 
-      </aside>
+            <div class="playlist-art">
 
+                ▣
 
-      <!-- PLAYER -->
+                <small>
+                    03
+                </small>
 
-      <section class="player" id="player">
-
-        <div class="section-head">
-
-          <div>
-
-            <div class="kicker">
-              ◉ NOW PLAYING
             </div>
 
-            <h2>
-              Music player
+            <div>
 
-              <span class="live">
-                <i></i>
-                LIVE
-              </span>
-            </h2>
+                <div class="kicker">
+                    QUICK PLAYLIST
+                </div>
 
-          </div>
+                <h2>
+                    Friday night set
+                </h2>
 
-          <span>⚙</span>
-
-        </div>
-
-
-        <div class="card player-card">
-
-          <div class="player-bar">
-            <span>● PLAYING IN ROOM</span>
-            <span id="sessionText">GUEST</span>
-          </div>
-
-
-          <div class="video">
-
-            <iframe
-              id="videoFrame"
-              title="YouTube player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
-
-            <span class="source">
-              ▶ YouTube source
-            </span>
-
-          </div>
-
-
-          <div class="track">
-
-            <span class="thumb">
-              <img
-                id="cover"
-                alt=""
-              />
-            </span>
-
-            <div class="track-info">
-
-              <label>
-                NOW PLAYING
-              </label>
-
-              <h3 id="nowTitle">
-                No song selected
-              </h3>
-
-              <p id="nowArtist">
-                Select a song from your library
-              </p>
+                <p>
+                    မင်းအကြိုက်ဆုံးသီချင်းတွေကို
+                    တစ်နေရာတည်းမှာ စုထားပါ
+                </p>
 
             </div>
 
             <button
-              class="heart"
-              id="currentHeart"
-              onclick="toggleCurrentFavorite()"
+                class="save"
+                onclick="randomSong()"
             >
-              ♡
+                🎲 Random Play
             </button>
 
-          </div>
-
-
-          <div class="embed-note">
-            Playback controls are provided by YouTube inside the video.
-          </div>
-
-        </div>
-
-      </section>
+        </section>
 
     </section>
 
+</main>
 
-    <!-- QUEUE + PLAYLIST -->
 
-    <section class="below">
+<!-- =========================
+     ADD SONG MODAL
+========================= -->
 
-      <section class="card queue" id="queue">
+<div class="modal" id="songModal">
 
-        <div class="title-row">
+    <section class="modal-box">
 
-          <div>
+        <div class="modal-head">
 
-            <div class="kicker">
-              ☷ UP NEXT
+            <div>
+
+                <div class="kicker">
+                    ▶ ADD FROM YOUTUBE
+                </div>
+
+                <h2>
+                    Save a new song
+                </h2>
+
+                <p>
+                    YouTube link ထည့်ပြီး
+                    title နဲ့ artist ကို အလိုအလျောက်ဖြည့်ပါမယ်။
+                </p>
+
             </div>
 
-            <h2>
-              Queue
-              <small id="queueCount">00</small>
-            </h2>
-
-          </div>
-
-          <button
-            class="icon-btn"
-            onclick="clearQueue()"
-          >
-            Clear all
-          </button>
+            <button onclick="closeSongModal()">
+                ×
+            </button>
 
         </div>
 
 
-        <div
-          class="queue-list"
-          id="queueList"
+        <form
+            class="form"
+            onsubmit="addSong(event)"
         >
-          <p class="notice">
-            Queue is empty.
-          </p>
+
+            <label>
+
+                Song title
+
+                <input
+                    id="newTitle"
+                    required
+                    placeholder="e.g. Perfect"
+                >
+
+            </label>
+
+
+            <label>
+
+                Artist
+
+                <input
+                    id="newArtist"
+                    placeholder="e.g. Ed Sheeran"
+                >
+
+            </label>
+
+
+            <label>
+
+                YouTube link
+
+                <input
+                    id="newUrl"
+                    required
+                    oninput="queueTitleFetch()"
+                    placeholder="https://youtu.be/..."
+                >
+
+            </label>
+
+
+            <div
+                class="notice"
+                id="titleNotice"
+            >
+                ✓ YouTube link ထည့်ပြီး ခဏစောင့်ပါ
+            </div>
+
+
+            <div class="form-foot">
+
+                <button
+                    type="button"
+                    class="cancel"
+                    onclick="closeSongModal()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="submit"
+                >
+                    ＋ Save song
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</div>
+
+
+<!-- =========================
+     SETTINGS
+========================= -->
+
+<div
+    class="settings-overlay"
+    id="settingsOverlay"
+    onclick="closeSettingsOutside(event)"
+>
+
+    <aside class="settings-panel">
+
+        <div class="settings-head">
+
+            <div>
+
+                <div class="kicker">
+                    ⚙ SETTINGS
+                </div>
+
+                <h2>
+                    MyTuneBox
+                </h2>
+
+            </div>
+
+            <button onclick="closeSettings()">
+                ×
+            </button>
+
         </div>
 
-      </section>
 
+        <div class="user-card">
 
-      <section
-        class="card playlist"
-        id="playlists"
-      >
+            <b id="userEmail">
+                Not logged in
+            </b>
 
-        <div class="playlist-art">
-          ▣
-          <small id="playlistCount">00</small>
-        </div>
-
-        <div>
-
-          <div class="kicker">
-            QUICK PLAYLIST
-          </div>
-
-          <h2>
-            Friday night set
-          </h2>
-
-          <p>
-            မင်းအကြိုက်ဆုံးသီချင်းတွေကို
-            တစ်နေရာတည်းမှာ စုထားပါ
-          </p>
+            <small>
+                Firebase account
+            </small>
 
         </div>
+
+
+        <!-- THEME -->
+
+        <div class="setting-section">
+
+            <div class="setting-title">
+                APPEARANCE
+            </div>
+
+
+            <div class="setting-item">
+
+                <div>
+
+                    <b>
+                        Theme
+                    </b>
+
+                    <small>
+                        Music room အရောင်ပုံစံရွေးပါ
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="theme-grid">
+
+                <button
+                    class="theme-btn active"
+                    data-theme="forest"
+                    onclick="setTheme('forest')"
+                >
+                    🌲 Forest
+                </button>
+
+                <button
+                    class="theme-btn"
+                    data-theme="black"
+                    onclick="setTheme('black')"
+                >
+                    🖤 Pure Black
+                </button>
+
+                <button
+                    class="theme-btn"
+                    data-theme="purple"
+                    onclick="setTheme('purple')"
+                >
+                    💜 Purple
+                </button>
+
+                <button
+                    class="theme-btn"
+                    data-theme="blue"
+                    onclick="setTheme('blue')"
+                >
+                    💙 Ocean
+                </button>
+
+                <button
+                    class="theme-btn"
+                    data-theme="red"
+                    onclick="setTheme('red')"
+                >
+                    ❤️ Red
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCENT -->
+
+        <div class="setting-section">
+
+            <div class="setting-title">
+                CUSTOM ACCENT
+            </div>
+
+
+            <div class="color-row">
+
+                <button
+                    class="color-btn"
+                    style="background:#baff4a"
+                    onclick="setAccent('#baff4a')"
+                ></button>
+
+                <button
+                    class="color-btn"
+                    style="background:#64d8ff"
+                    onclick="setAccent('#64d8ff')"
+                ></button>
+
+                <button
+                    class="color-btn"
+                    style="background:#c084ff"
+                    onclick="setAccent('#c084ff')"
+                ></button>
+
+                <button
+                    class="color-btn"
+                    style="background:#ff7b87"
+                    onclick="setAccent('#ff7b87')"
+                ></button>
+
+                <button
+                    class="color-btn"
+                    style="background:#ffd166"
+                    onclick="setAccent('#ffd166')"
+                ></button>
+
+            </div>
+
+        </div>
+
+
+        <!-- PLAYER SETTINGS -->
+
+        <div class="setting-section">
+
+            <div class="setting-title">
+                MUSIC
+            </div>
+
+
+            <div class="setting-item">
+
+                <div>
+
+                    <b>
+                        Random Song
+                    </b>
+
+                    <small>
+                        Library ထဲက ကျပန်းသီချင်းဖွင့်မယ်
+                    </small>
+
+                </div>
+
+                <button
+                    class="save"
+                    onclick="randomSong()"
+                >
+                    🎲 Play
+                </button>
+
+            </div>
+
+
+            <div class="setting-item">
+
+                <div>
+
+                    <b>
+                        Shuffle Queue
+                    </b>
+
+                    <small>
+                        Queue ကို random order ပြောင်းမယ်
+                    </small>
+
+                </div>
+
+                <button
+                    class="save"
+                    onclick="shuffleQueue()"
+                >
+                    🔀
+                </button>
+
+            </div>
+
+        </div>
+
 
         <button
-          class="save"
-          onclick="savePlaylist()"
+            class="logout"
+            onclick="logout()"
         >
-          ＋ Save playlist
+            🚪 Logout
         </button>
 
-      </section>
+    </aside>
 
-    </section>
+</div>
 
-  </main>
 
+<script>
 
-  <!-- AUTH MODAL -->
+/* =====================================================
+   FIREBASE CONFIG
+===================================================== */
 
-  <div
-    class="modal"
-    id="authModal"
-  >
+const firebaseConfig = {
 
-    <section class="modal-box">
-
-      <div class="modal-head">
-
-        <div>
-
-          <div class="kicker">
-            🔐 MYTUNEBOX ACCOUNT
-          </div>
-
-          <h2 id="authTitle">
-            Login
-          </h2>
-
-          <p id="authDescription">
-            ကိုယ့် Music Library ကို ဘယ် device မှာမဆို
-            ပြန်အသုံးပြုနိုင်ဖို့ Login ဝင်ပါ။
-          </p>
-
-        </div>
-
-        <button onclick="closeAuthModal()">
-          ×
-        </button>
-
-      </div>
-
-
-      <form
-        class="form"
-        onsubmit="handleAuth(event)"
-      >
-
-        <label>
-          Email
-
-          <input
-            type="email"
-            id="authEmail"
-            required
-            autocomplete="email"
-            placeholder="you@example.com"
-          />
-        </label>
-
-
-        <label>
-          Password
-
-          <input
-            type="password"
-            id="authPassword"
-            required
-            minlength="6"
-            autocomplete="current-password"
-            placeholder="At least 6 characters"
-          />
-        </label>
-
-
-        <div
-          class="error"
-          id="authError"
-        ></div>
-
-
-        <div
-          class="auth-loading"
-          id="authLoading"
-        >
-          Please wait...
-        </div>
-
-
-        <div class="form-foot">
-
-          <button
-            type="button"
-            class="cancel"
-            onclick="closeAuthModal()"
-          >
-            Cancel
-          </button>
-
-          <button
-            type="submit"
-            class="submit"
-            id="authSubmit"
-          >
-            Login
-          </button>
-
-        </div>
-
-      </form>
-
-
-      <div class="switch-auth">
-
-        <span id="switchText">
-          Don't have an account?
-        </span>
-
-        <button
-          id="switchButton"
-          onclick="switchAuthMode()"
-        >
-          Create account
-        </button>
-
-      </div>
-
-    </section>
-
-  </div>
-
-
-  <!-- ADD SONG MODAL -->
-
-  <div
-    class="modal"
-    id="songModal"
-  >
-
-    <section class="modal-box">
-
-      <div class="modal-head">
-
-        <div>
-
-          <div class="kicker">
-            ▶ ADD FROM YOUTUBE
-          </div>
-
-          <h2>
-            Save a new song
-          </h2>
-
-          <p>
-            YouTube link ထည့်လိုက်တာနဲ့
-            title နဲ့ artist ကို အလိုအလျောက် ဖြည့်ပေးပါမယ်။
-          </p>
-
-        </div>
-
-        <button onclick="closeSongModal()">
-          ×
-        </button>
-
-      </div>
-
-
-      <form
-        class="form"
-        onsubmit="addSong(event)"
-      >
-
-        <label>
-
-          Song title
-
-          <span
-            class="notice"
-            id="titleStatus"
-          ></span>
-
-          <input
-            id="newTitle"
-            required
-            placeholder="e.g. Perfect"
-          />
-
-        </label>
-
-
-        <label>
-
-          Artist
-
-          <span class="notice">
-            auto-filled when available
-          </span>
-
-          <input
-            id="newArtist"
-            placeholder="e.g. Ed Sheeran"
-          />
-
-        </label>
-
-
-        <label>
-
-          YouTube link
-
-          <input
-            id="newUrl"
-            required
-            oninput="queueTitleFetch()"
-            placeholder="https://youtu.be/..."
-          />
-
-        </label>
-
-
-        <div
-          class="notice"
-          id="titleNotice"
-        >
-          ✓ YouTube link ထည့်ပြီး ခဏစောင့်ပါ —
-          title နဲ့ artist ကို ဖြည့်ပေးပါမယ်
-        </div>
-
-
-        <div class="error" id="songError"></div>
-
-
-        <div class="form-foot">
-
-          <button
-            type="button"
-            class="cancel"
-            onclick="closeSongModal()"
-          >
-            Cancel
-          </button>
-
-          <button
-            type="submit"
-            class="submit"
-            id="saveSongButton"
-          >
-            ＋ Save song
-          </button>
-
-        </div>
-
-      </form>
-
-    </section>
-
-  </div>
-
-
-  <!-- FIREBASE -->
-
-  <script type="module">
-
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-    import {
-      getAuth,
-      onAuthStateChanged,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      signOut,
-      updateProfile
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      getDocs,
-      deleteDoc,
-      doc,
-      setDoc,
-      getDoc,
-      query,
-      orderBy
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-
-    /* =========================
-       FIREBASE CONFIG
-    ========================= */
-
-    const firebaseConfig = {
-
-      apiKey:
+    apiKey:
         "AIzaSyAGhGEM3H0sU9ZgMp7tbk4mJqETWySwJmc",
 
-      authDomain:
+    authDomain:
         "mytunebox-af0e9.firebaseapp.com",
 
-      projectId:
+    projectId:
         "mytunebox-af0e9",
 
-      storageBucket:
+    storageBucket:
         "mytunebox-af0e9.firebasestorage.app",
 
-      messagingSenderId:
+    messagingSenderId:
         "854700289127",
 
-      appId:
+    appId:
         "1:854700289127:web:f61c0e4ddba2b1ed42f8c2"
+
+};
+
+
+/* =====================================================
+   INITIALIZE FIREBASE
+===================================================== */
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+
+const db = firebase.firestore();
+
+
+/* =====================================================
+   APP STATE
+===================================================== */
+
+let currentUser = null;
+
+let songs = [];
+
+let favorites = [];
+
+let queue = [];
+
+let activeId = null;
+
+let filter = "all";
+
+let isRegisterMode = false;
+
+let titleFetchTimer = null;
+
+
+/* =====================================================
+   AUTH MODE
+===================================================== */
+
+function toggleAuthMode(){
+
+    isRegisterMode = !isRegisterMode;
+
+    document.getElementById("authSubmit").textContent =
+        isRegisterMode ? "Create account" : "Login";
+
+    document.getElementById("authSwitchText").textContent =
+        isRegisterMode
+        ? "Account ရှိပြီးသားလား?"
+        : "Account မရှိသေးဘူးလား?";
+
+    document.getElementById("authSwitchButton").textContent =
+        isRegisterMode
+        ? "Login"
+        : "Create account";
+
+    hideAuthError();
+}
+
+
+/* =====================================================
+   AUTH SCREEN
+===================================================== */
+
+function openAuth(){
+
+    document
+        .getElementById("authScreen")
+        .classList.add("show");
+
+}
+
+function closeAuth(){
+
+    document
+        .getElementById("authScreen")
+        .classList.remove("show");
+
+}
+
+function showAuthError(message){
+
+    const box =
+        document.getElementById("authError");
+
+    box.textContent = message;
+
+    box.classList.add("show");
+
+}
+
+function hideAuthError(){
+
+    document
+        .getElementById("authError")
+        .classList.remove("show");
+
+}
+
+
+/* =====================================================
+   LOGIN / REGISTER
+===================================================== */
+
+document
+.getElementById("authForm")
+.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    hideAuthError();
+
+    const email =
+        document.getElementById("authEmail").value.trim();
+
+    const password =
+        document.getElementById("authPassword").value;
+
+    const button =
+        document.getElementById("authSubmit");
+
+    button.disabled = true;
+
+    button.textContent = "Please wait...";
+
+    try{
+
+        if(isRegisterMode){
+
+            await auth.createUserWithEmailAndPassword(
+                email,
+                password
+            );
+
+        }else{
+
+            await auth.signInWithEmailAndPassword(
+                email,
+                password
+            );
+
+        }
+
+    }catch(error){
+
+        let message = error.message;
+
+        if(error.code === "auth/invalid-credential"){
+            message = "Email သို့မဟုတ် Password မှားနေပါတယ်။";
+        }
+
+        if(error.code === "auth/email-already-in-use"){
+            message = "ဒီ Email နဲ့ account ရှိပြီးသားပါ။";
+        }
+
+        if(error.code === "auth/weak-password"){
+            message = "Password အနည်းဆုံး 6 လုံးရှိရပါမယ်။";
+        }
+
+        if(error.code === "auth/invalid-email"){
+            message = "Email မှန်ကန်စွာထည့်ပါ။";
+        }
+
+        showAuthError(message);
+
+    }
+
+    button.disabled = false;
+
+    button.textContent =
+        isRegisterMode ? "Create account" : "Login";
+
+});
+
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
+
+auth.onAuthStateChanged(async user => {
+
+    currentUser = user;
+
+    if(user){
+
+        closeAuth();
+
+        document
+        .getElementById("loginButton")
+        .style.display = "none";
+
+        document
+        .getElementById("accountButton")
+        .style.display = "block";
+
+        document
+        .getElementById("userEmail")
+        .textContent = user.email;
+
+        await loadUserData();
+
+    }else{
+
+        document
+        .getElementById("loginButton")
+        .style.display = "block";
+
+        document
+        .getElementById("accountButton")
+        .style.display = "none";
+
+        songs = [];
+
+        favorites = [];
+
+        queue = [];
+
+        renderSongs();
+
+        openAuth();
+
+    }
+
+});
+
+
+/* =====================================================
+   FIRESTORE PATH
+===================================================== */
+
+function userSongsRef(){
+
+    return db
+        .collection("users")
+        .doc(currentUser.uid)
+        .collection("songs");
+
+}
+
+function userSettingsRef(){
+
+    return db
+        .collection("users")
+        .doc(currentUser.uid)
+        .collection("settings")
+        .doc("main");
+
+}
+
+
+/* =====================================================
+   LOAD USER DATA
+===================================================== */
+
+async function loadUserData(){
+
+    if(!currentUser) return;
+
+    try{
+
+        const snapshot =
+            await userSongsRef().get();
+
+        songs =
+            snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+        favorites =
+            songs
+            .filter(s => s.favorite === true)
+            .map(s => s.id);
+
+
+        const settings =
+            await userSettingsRef().get();
+
+        if(settings.exists){
+
+            const data =
+                settings.data();
+
+            if(data.theme){
+
+                applyTheme(data.theme);
+
+            }
+
+            if(data.accent){
+
+                applyAccent(data.accent);
+
+            }
+
+        }
+
+
+        if(songs.length){
+
+            activeId = songs[0].id;
+
+            selectSong(activeId);
+
+        }else{
+
+            renderSongs();
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Data loading error: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   YOUTUBE ID
+===================================================== */
+
+function getYoutubeId(value){
+
+    try{
+
+        const u =
+            new URL(value.trim());
+
+        if(
+            !u.hostname.includes("youtube.com") &&
+            !u.hostname.includes("youtu.be")
+        ){
+
+            return "";
+
+        }
+
+        if(
+            u.hostname.includes("youtu.be")
+        ){
+
+            return u.pathname
+                .slice(1)
+                .split("/")[0];
+
+        }
+
+        return (
+            u.searchParams.get("v") || ""
+        );
+
+    }catch{
+
+        return "";
+
+    }
+
+}
+
+
+/* =====================================================
+   THUMBNAIL
+===================================================== */
+
+function thumb(song){
+
+    return `
+        <span class="thumb">
+            <img
+                src="https://img.youtube.com/vi/${song.youtubeId}/hqdefault.jpg"
+                alt=""
+            >
+        </span>
+    `;
+
+}
+
+
+/* =====================================================
+   RENDER SONGS
+===================================================== */
+
+function renderSongs(){
+
+    const input =
+        document.getElementById("searchInput");
+
+    const q =
+        input
+        ? input.value.toLowerCase()
+        : "";
+
+    const list =
+        songs.filter(song => {
+
+            const match =
+                (
+                    song.title +
+                    " " +
+                    song.artist
+                )
+                .toLowerCase()
+                .includes(q);
+
+            const fav =
+                filter === "all" ||
+                favorites.includes(song.id);
+
+            return match && fav;
+
+        });
+
+
+    document
+    .getElementById("songCount")
+    .textContent =
+        String(songs.length).padStart(2,"0");
+
+
+    document
+    .getElementById("songs")
+    .innerHTML =
+
+        list.length
+
+        ?
+
+        list.map(song => `
+
+            <article
+                class="song ${
+                    song.id === activeId
+                    ? "active"
+                    : ""
+                }"
+            >
+
+                <button
+                    class="song-main"
+                    onclick="selectSong('${song.id}')"
+                >
+
+                    ${thumb(song)}
+
+                    <span>
+
+                        <b>
+                            ${escapeHtml(song.title)}
+                        </b>
+
+                        <small>
+                            ${escapeHtml(song.artist || "Unknown")}
+                        </small>
+
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="icon-btn"
+                    onclick="toggleFavorite('${song.id}')"
+                >
+                    ${
+                        favorites.includes(song.id)
+                        ? "♥"
+                        : "♡"
+                    }
+                </button>
+
+
+                <button
+                    class="icon-btn"
+                    onclick="addQueue('${song.id}')"
+                >
+                    ＋
+                </button>
+
+
+                <button
+                    class="icon-btn delete-btn"
+                    onclick="deleteSong('${song.id}')"
+                >
+                    ×
+                </button>
+
+            </article>
+
+        `).join("")
+
+        :
+
+        `
+            <div class="empty">
+                ${
+                    songs.length
+                    ? "No songs found."
+                    : "Library ထဲမှာ သီချင်းမရှိသေးပါ။"
+                }
+            </div>
+        `;
+
+
+    renderQueue();
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(value || "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =====================================================
+   SELECT SONG
+===================================================== */
+
+function selectSong(id){
+
+    const song =
+        songs.find(s => s.id === id);
+
+    if(!song) return;
+
+    activeId = id;
+
+    document
+    .getElementById("videoFrame")
+    .src =
+        `https://www.youtube-nocookie.com/embed/${song.youtubeId}?rel=0&modestbranding=1`;
+
+    document
+    .getElementById("nowTitle")
+    .textContent =
+        song.title;
+
+    document
+    .getElementById("nowArtist")
+    .textContent =
+        song.artist || "Unknown artist";
+
+    document
+    .getElementById("cover")
+    .src =
+        `https://img.youtube.com/vi/${song.youtubeId}/hqdefault.jpg`;
+
+    document
+    .getElementById("currentHeart")
+    .textContent =
+        favorites.includes(id)
+        ? "♥"
+        : "♡";
+
+    renderSongs();
+
+}
+
+
+/* =====================================================
+   FAVORITE
+===================================================== */
+
+async function toggleFavorite(id){
+
+    if(!currentUser) return;
+
+    const song =
+        songs.find(s => s.id === id);
+
+    if(!song) return;
+
+    const newValue =
+        !favorites.includes(id);
+
+    try{
+
+        await userSongsRef()
+        .doc(id)
+        .update({
+
+            favorite:newValue,
+
+            updatedAt:
+                firebase.firestore.FieldValue.serverTimestamp()
+
+        });
+
+        song.favorite = newValue;
+
+        if(newValue){
+
+            favorites.push(id);
+
+        }else{
+
+            favorites =
+                favorites.filter(x => x !== id);
+
+        }
+
+        renderSongs();
+
+        if(activeId === id){
+
+            document
+            .getElementById("currentHeart")
+            .textContent =
+                newValue ? "♥" : "♡";
+
+        }
+
+    }catch(error){
+
+        alert(error.message);
+
+    }
+
+}
+
+function toggleCurrentFavorite(){
+
+    if(activeId){
+
+        toggleFavorite(activeId);
+
+    }
+
+}
+
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+function setFilter(value){
+
+    filter = value;
+
+    document
+    .getElementById("allTab")
+    .classList
+    .toggle(
+        "active",
+        value === "all"
+    );
+
+    document
+    .getElementById("favTab")
+    .classList
+    .toggle(
+        "active",
+        value === "favorites"
+    );
+
+    renderSongs();
+
+}
+
+
+/* =====================================================
+   QUEUE
+===================================================== */
+
+function addQueue(id){
+
+    if(!songs.find(s => s.id === id))
+        return;
+
+    if(!queue.includes(id)){
+
+        queue.push(id);
+
+        renderQueue();
+
+    }
+
+}
+
+
+function renderQueue(){
+
+    const items =
+        queue
+        .map(id =>
+            songs.find(s => s.id === id)
+        )
+        .filter(Boolean);
+
+
+    document
+    .getElementById("queueCount")
+    .textContent =
+        String(items.length).padStart(2,"0");
+
+
+    document
+    .getElementById("queueList")
+    .innerHTML =
+
+        items.length
+
+        ?
+
+        items.map((song,index) => `
+
+            <div
+                class="queue-row"
+                onclick="selectSong('${song.id}')"
+            >
+
+                <small>
+                    ${String(index+1).padStart(2,"0")}
+                </small>
+
+                ${thumb(song)}
+
+                <div>
+
+                    <b>
+                        ${escapeHtml(song.title)}
+                    </b>
+
+                    <small>
+                        ${escapeHtml(song.artist)}
+                    </small>
+
+                </div>
+
+                <button
+                    onclick="
+                        event.stopPropagation();
+                        removeQueue('${song.id}')
+                    "
+                >
+                    ×
+                </button>
+
+            </div>
+
+        `).join("")
+
+        :
+
+        `
+            <p class="notice">
+                Queue က အခုလွတ်နေပါတယ်
+            </p>
+        `;
+
+}
+
+
+function removeQueue(id){
+
+    queue =
+        queue.filter(x => x !== id);
+
+    renderQueue();
+
+}
+
+
+function clearQueue(){
+
+    queue = [];
+
+    renderQueue();
+
+}
+
+
+function shuffleQueue(){
+
+    if(queue.length < 2) return;
+
+    for(
+        let i = queue.length - 1;
+        i > 0;
+        i--
+    ){
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+        [
+            queue[i],
+            queue[j]
+        ] =
+        [
+            queue[j],
+            queue[i]
+        ];
+
+    }
+
+    renderQueue();
+
+}
+
+
+/* =====================================================
+   RANDOM SONG
+===================================================== */
+
+function randomSong(){
+
+    if(!songs.length){
+
+        alert(
+            "Library ထဲမှာ သီချင်းမရှိသေးပါ။"
+        );
+
+        return;
+
+    }
+
+    let candidates =
+        songs;
+
+    if(songs.length > 1){
+
+        candidates =
+            songs.filter(
+                song => song.id !== activeId
+            );
+
+    }
+
+    const random =
+        candidates[
+            Math.floor(
+                Math.random() * candidates.length
+            )
+        ];
+
+    selectSong(random.id);
+
+}
+
+
+/* =====================================================
+   ADD SONG
+===================================================== */
+
+function openSongModal(){
+
+    if(!currentUser){
+
+        openAuth();
+
+        return;
+
+    }
+
+    document
+    .getElementById("songModal")
+    .classList
+    .add("open");
+
+    document
+    .getElementById("newTitle")
+    .focus();
+
+}
+
+
+function closeSongModal(){
+
+    document
+    .getElementById("songModal")
+    .classList
+    .remove("open");
+
+    document
+    .getElementById("newTitle")
+    .value = "";
+
+    document
+    .getElementById("newArtist")
+    .value = "";
+
+    document
+    .getElementById("newUrl")
+    .value = "";
+
+    document
+    .getElementById("titleNotice")
+    .textContent =
+        "✓ YouTube link ထည့်ပြီး ခဏစောင့်ပါ";
+
+}
+
+
+function queueTitleFetch(){
+
+    clearTimeout(titleFetchTimer);
+
+    const url =
+        document
+        .getElementById("newUrl")
+        .value
+        .trim();
+
+    const id =
+        getYoutubeId(url);
+
+    if(!/^[a-zA-Z0-9_-]{11}$/.test(id)){
+
+        return;
+
+    }
+
+    document
+    .getElementById("titleNotice")
+    .textContent =
+        "YouTube title ရယူနေပါတယ်...";
+
+    titleFetchTimer =
+        setTimeout(async () => {
+
+            try{
+
+                const response =
+                    await fetch(
+                        `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`
+                    );
+
+                if(!response.ok)
+                    throw new Error();
+
+                const data =
+                    await response.json();
+
+                document
+                .getElementById("newTitle")
+                .value =
+                    data.title || "";
+
+                if(
+                    !document
+                    .getElementById("newArtist")
+                    .value
+                ){
+
+                    document
+                    .getElementById("newArtist")
+                    .value =
+                        data.author_name || "";
+
+                }
+
+                document
+                .getElementById("titleNotice")
+                .textContent =
+                    "✓ Title နဲ့ artist အလိုအလျောက် ဖြည့်ပြီးပါပြီ";
+
+            }catch{
+
+                document
+                .getElementById("titleNotice")
+                .textContent =
+                    "Title ကို ကိုယ်တိုင်ဖြည့်နိုင်ပါတယ်။";
+
+            }
+
+        },500);
+
+}
+
+
+async function addSong(e){
+
+    e.preventDefault();
+
+    if(!currentUser){
+
+        openAuth();
+
+        return;
+
+    }
+
+    const title =
+        document
+        .getElementById("newTitle")
+        .value
+        .trim();
+
+    const artist =
+        document
+        .getElementById("newArtist")
+        .value
+        .trim() ||
+        "Unknown artist";
+
+    const url =
+        document
+        .getElementById("newUrl")
+        .value
+        .trim();
+
+    const youtubeId =
+        getYoutubeId(url);
+
+    if(
+        !/^[a-zA-Z0-9_-]{11}$/.test(youtubeId)
+    ){
+
+        alert(
+            "မှန်ကန်တဲ့ YouTube link ထည့်ပေးပါ။"
+        );
+
+        return;
+
+    }
+
+
+    const docRef =
+        userSongsRef().doc();
+
+    const song = {
+
+        title,
+
+        artist,
+
+        youtubeId,
+
+        favorite:false,
+
+        createdAt:
+            firebase.firestore.FieldValue.serverTimestamp(),
+
+        updatedAt:
+            firebase.firestore.FieldValue.serverTimestamp()
 
     };
 
 
-    const app = initializeApp(firebaseConfig);
+    try{
 
-    const auth = getAuth(app);
+        await docRef.set(song);
 
-    const db = getFirestore(app);
+        songs.unshift({
 
+            id:docRef.id,
 
-    /* =========================
-       GLOBAL STATE
-    ========================= */
+            ...song
 
-    let currentUser = null;
+        });
 
-    let songs = [];
-
-    let favorites = [];
-
-    let queue = [];
-
-    let activeId = null;
-
-    let filter = "all";
-
-    let authMode = "login";
-
-    let titleFetchTimer = null;
-
-
-    /* =========================
-       HELPERS
-    ========================= */
-
-    const $ = id =>
-      document.getElementById(id);
-
-
-    function escapeHtml(value) {
-
-      return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-    }
-
-
-    function getSong(id) {
-
-      return songs.find(
-        song => song.id === id
-      );
-
-    }
-
-
-    function youtubeThumb(song) {
-
-      return `
-        <span class="thumb">
-          <img
-            src="https://img.youtube.com/vi/${encodeURIComponent(song.youtubeId)}/hqdefault.jpg"
-            alt=""
-            loading="lazy"
-          >
-        </span>
-      `;
-
-    }
-
-
-    function youtubeIdFromUrl(value) {
-
-      try {
-
-        const url = new URL(
-          value.trim()
-        );
-
-        const host =
-          url.hostname
-            .toLowerCase()
-            .replace("www.", "");
-
-
-        if (
-          host !== "youtube.com" &&
-          host !== "m.youtube.com" &&
-          host !== "youtu.be"
-        ) {
-          return "";
-        }
-
-
-        let id = "";
-
-
-        if (host === "youtu.be") {
-
-          id =
-            url.pathname
-              .split("/")
-              .filter(Boolean)[0] || "";
-
-        } else {
-
-          id =
-            url.searchParams.get("v") || "";
-
-          if (!id && url.pathname.startsWith("/shorts/")) {
-
-            id =
-              url.pathname
-                .split("/")[2] || "";
-
-          }
-
-          if (!id && url.pathname.startsWith("/embed/")) {
-
-            id =
-              url.pathname
-                .split("/")[2] || "";
-
-          }
-
-        }
-
-
-        return /^[a-zA-Z0-9_-]{11}$/.test(id)
-          ? id
-          : "";
-
-      } catch {
-
-        return "";
-
-      }
-
-    }
-
-
-    /* =========================
-       AUTH UI
-    ========================= */
-
-    function openAuthModal() {
-
-      if (currentUser) {
-
-        logoutUser();
-
-        return;
-
-      }
-
-      $("authModal").classList.add("open");
-
-      document.body.classList.add("modal-open");
-
-      $("authEmail").focus();
-
-    }
-
-
-    function closeAuthModal() {
-
-      $("authModal").classList.remove("open");
-
-      document.body.classList.remove("modal-open");
-
-      $("authError").classList.remove("show");
-
-      $("authError").textContent = "";
-
-      $("authLoading").classList.remove("show");
-
-    }
-
-
-    function switchAuthMode() {
-
-      authMode =
-        authMode === "login"
-          ? "register"
-          : "login";
-
-
-      $("authTitle").textContent =
-        authMode === "login"
-          ? "Login"
-          : "Create account";
-
-
-      $("authSubmit").textContent =
-        authMode === "login"
-          ? "Login"
-          : "Create account";
-
-
-      $("switchText").textContent =
-        authMode === "login"
-          ? "Don't have an account?"
-          : "Already have an account?";
-
-
-      $("switchButton").textContent =
-        authMode === "login"
-          ? "Create account"
-          : "Login";
-
-
-      $("authDescription").textContent =
-        authMode === "login"
-          ? "ကိုယ့် Music Library ကို ဘယ် device မှာမဆို ပြန်အသုံးပြုနိုင်ဖို့ Login ဝင်ပါ။"
-          : "Account အသစ်ဖန်တီးပြီး ကိုယ့်သီချင်းတွေကို Cloud မှာ သိမ်းထားပါ။";
-
-
-      $("authError").classList.remove("show");
-
-    }
-
-
-    async function handleAuth(event) {
-
-      event.preventDefault();
-
-
-      const email =
-        $("authEmail")
-          .value
-          .trim()
-          .toLowerCase();
-
-
-      const password =
-        $("authPassword")
-          .value;
-
-
-      $("authError").classList.remove("show");
-
-      $("authLoading").classList.add("show");
-
-      $("authSubmit").disabled = true;
-
-
-      try {
-
-        if (authMode === "register") {
-
-          const result =
-            await createUserWithEmailAndPassword(
-              auth,
-              email,
-              password
-            );
-
-
-          await setDoc(
-            doc(
-              db,
-              "users",
-              result.user.uid
-            ),
-            {
-              email: email,
-              createdAt: Date.now()
-            },
-            {
-              merge: true
-            }
-          );
-
-
-        } else {
-
-          await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
-
-        }
-
-
-        closeAuthModal();
-
-
-        $("authEmail").value = "";
-
-        $("authPassword").value = "";
-
-
-      } catch (error) {
-
-        console.error(error);
-
-
-        let message =
-          "Something went wrong. Please try again.";
-
-
-        if (
-          error.code ===
-          "auth/email-already-in-use"
-        ) {
-
-          message =
-            "ဒီ Email နဲ့ account ရှိပြီးသားပါ။ Login ဝင်ကြည့်ပါ။";
-
-        } else if (
-          error.code ===
-          "auth/invalid-email"
-        ) {
-
-          message =
-            "Email address မှန်ကန်စွာ ထည့်ပါ။";
-
-        } else if (
-          error.code ===
-          "auth/weak-password"
-        ) {
-
-          message =
-            "Password အနည်းဆုံး 6 characters ရှိရပါမယ်။";
-
-        } else if (
-          error.code ===
-          "auth/invalid-credential"
-        ) {
-
-          message =
-            "Email သို့မဟုတ် Password မှားနေပါတယ်။";
-
-        }
-
-
-        $("authError").textContent =
-          message;
-
-        $("authError").classList.add("show");
-
-      } finally {
-
-        $("authLoading").classList.remove("show");
-
-        $("authSubmit").disabled = false;
-
-      }
-
-    }
-
-
-    async function logoutUser() {
-
-      try {
-
-        await signOut(auth);
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert("Logout failed.");
-
-      }
-
-    }
-
-
-    /* =========================
-       AUTH STATE
-    ========================= */
-
-    onAuthStateChanged(
-      auth,
-      async user => {
-
-        currentUser = user;
-
-
-        if (user) {
-
-          $("roomStatus").textContent =
-            "Room online";
-
-          $("userEmail").textContent =
-            user.email || "";
-
-          $("authButton").style.display =
-            "none";
-
-          $("logoutButton").style.display =
-            "block";
-
-          $("sessionText").textContent =
-            "PRIVATE SESSION";
-
-
-          await loadUserData();
-
-
-        } else {
-
-          $("roomStatus").textContent =
-            "Login required";
-
-          $("userEmail").textContent =
-            "";
-
-          $("authButton").style.display =
-            "block";
-
-          $("logoutButton").style.display =
-            "none";
-
-          $("sessionText").textContent =
-            "GUEST";
-
-
-          songs = [];
-
-          favorites = [];
-
-          queue = [];
-
-          activeId = null;
-
-
-          clearPlayer();
-
-          renderSongs();
-
-          renderQueue();
-
-        }
-
-      }
-    );
-
-
-    /* =========================
-       FIRESTORE PATHS
-    ========================= */
-
-    function songsCollection() {
-
-      return collection(
-        db,
-        "users",
-        currentUser.uid,
-        "songs"
-      );
-
-    }
-
-
-    function settingsDocument() {
-
-      return doc(
-        db,
-        "users",
-        currentUser.uid,
-        "settings",
-        "player"
-      );
-
-    }
-
-
-    /* =========================
-       LOAD USER DATA
-    ========================= */
-
-    async function loadUserData() {
-
-      if (!currentUser) return;
-
-
-      try {
-
-        const snapshot =
-          await getDocs(
-            songsCollection()
-          );
-
-
-        songs =
-          snapshot.docs.map(
-            item => ({
-              id: item.id,
-              ...item.data()
-            })
-          );
-
-
-        songs.sort(
-          (a, b) =>
-            (b.createdAt || 0) -
-            (a.createdAt || 0)
-        );
-
-
-        const settingsSnapshot =
-          await getDoc(
-            settingsDocument()
-          );
-
-
-        if (settingsSnapshot.exists()) {
-
-          const data =
-            settingsSnapshot.data();
-
-
-          favorites =
-            Array.isArray(data.favorites)
-              ? data.favorites
-              : [];
-
-
-          queue =
-            Array.isArray(data.queue)
-              ? data.queue
-              : [];
-
-
-          activeId =
-            data.activeId || null;
-
-        } else {
-
-          favorites = [];
-
-          queue = [];
-
-          activeId =
-            songs[0]?.id || null;
-
-        }
-
-
-        queue =
-          queue.filter(
-            id => songs.some(
-              song => song.id === id
-            )
-          );
-
-
-        if (
-          !activeId ||
-          !songs.some(
-            song => song.id === activeId
-          )
-        ) {
-
-          activeId =
-            songs[0]?.id || null;
-
-        }
-
-
-        renderSongs();
-
-        renderQueue();
-
-
-        if (activeId) {
-
-          selectSong(
-            activeId,
-            false
-          );
-
-        } else {
-
-          clearPlayer();
-
-        }
-
-
-      } catch (error) {
-
-        console.error(
-          "Load data error:",
-          error
-        );
-
-        alert(
-          "Cloud data load မလုပ်နိုင်ပါ။ Firestore Rules ကို စစ်ပေးပါ။"
-        );
-
-      }
-
-    }
-
-
-    /* =========================
-       SAVE SETTINGS
-    ========================= */
-
-    async function saveSettings() {
-
-      if (!currentUser) return;
-
-
-      try {
-
-        await setDoc(
-          settingsDocument(),
-          {
-            favorites,
-            queue,
-            activeId,
-            updatedAt: Date.now()
-          },
-          {
-            merge: true
-          }
-        );
-
-      } catch (error) {
-
-        console.error(
-          "Save settings error:",
-          error
-        );
-
-      }
-
-    }
-
-
-    /* =========================
-       RENDER SONGS
-    ========================= */
-
-    function renderSongs() {
-
-      const search =
-        (
-          $("searchInput")?.value || ""
-        )
-          .toLowerCase()
-          .trim();
-
-
-      const list =
-        songs.filter(
-          song => {
-
-            const text =
-              `${song.title} ${song.artist}`
-                .toLowerCase();
-
-
-            const matchesSearch =
-              text.includes(search);
-
-
-            const matchesFilter =
-              filter === "all" ||
-              favorites.includes(song.id);
-
-
-            return (
-              matchesSearch &&
-              matchesFilter
-            );
-
-          }
-        );
-
-
-      $("songCount").textContent =
-        String(
-          songs.length
-        ).padStart(2, "0");
-
-
-      if (!currentUser) {
-
-        $("songs").innerHTML = `
-          <p class="notice">
-            Login ဝင်ပြီးမှ ကိုယ့် Library ကို အသုံးပြုနိုင်ပါတယ်။
-          </p>
-        `;
-
-        return;
-
-      }
-
-
-      $("songs").innerHTML =
-        list.length
-
-          ? list.map(
-              song => `
-
-                <article
-                  class="song ${
-                    song.id === activeId
-                      ? "active"
-                      : ""
-                  }"
-                >
-
-                  <button
-                    class="song-main"
-                    onclick="selectSong('${escapeHtml(song.id)}')"
-                  >
-
-                    ${youtubeThumb(song)}
-
-                    <span>
-
-                      <b>
-                        ${escapeHtml(song.title)}
-                      </b>
-
-                      <small>
-                        ${escapeHtml(song.artist)}
-                      </small>
-
-                    </span>
-
-                  </button>
-
-
-                  <button
-                    class="icon-btn"
-                    onclick="toggleFavorite('${escapeHtml(song.id)}')"
-                    title="Favorite"
-                  >
-                    ${
-                      favorites.includes(song.id)
-                        ? "♥"
-                        : "♡"
-                    }
-                  </button>
-
-
-                  <button
-                    class="icon-btn"
-                    onclick="addQueue('${escapeHtml(song.id)}')"
-                    title="Add to queue"
-                  >
-                    ＋
-                  </button>
-
-
-                  <button
-                    class="icon-btn delete-btn"
-                    onclick="deleteSong('${escapeHtml(song.id)}')"
-                    title="Delete"
-                  >
-                    ×
-                  </button>
-
-                </article>
-
-              `
-            ).join("")
-
-          : `
-            <p class="notice">
-              No songs found.
-            </p>
-          `;
-
-
-      renderQueue();
-
-    }
-
-
-    /* =========================
-       PLAYER
-    ========================= */
-
-    function selectSong(
-      id,
-      save = true
-    ) {
-
-      if (!currentUser) {
-
-        openAuthModal();
-
-        return;
-
-      }
-
-
-      const song =
-        getSong(id);
-
-
-      if (!song) return;
-
-
-      activeId =
-        id;
-
-
-      $("videoFrame").src =
-        `https://www.youtube-nocookie.com/embed/${encodeURIComponent(song.youtubeId)}?rel=0&modestbranding=1`;
-
-
-      $("nowTitle").textContent =
-        song.title;
-
-
-      $("nowArtist").textContent =
-        song.artist;
-
-
-      $("cover").src =
-        `https://img.youtube.com/vi/${encodeURIComponent(song.youtubeId)}/hqdefault.jpg`;
-
-
-      $("currentHeart").textContent =
-        favorites.includes(id)
-          ? "♥"
-          : "♡";
-
-
-      renderSongs();
-
-
-      if (save) {
-
-        saveSettings();
-
-      }
-
-    }
-
-
-    function clearPlayer() {
-
-      $("videoFrame").src = "";
-
-      $("nowTitle").textContent =
-        "No song selected";
-
-      $("nowArtist").textContent =
-        "Login and add a song to your library";
-
-      $("cover").src = "";
-
-      $("currentHeart").textContent =
-        "♡";
-
-    }
-
-
-    /* =========================
-       FAVORITES
-    ========================= */
-
-    async function toggleFavorite(id) {
-
-      if (!currentUser) {
-
-        openAuthModal();
-
-        return;
-
-      }
-
-
-      if (
-        favorites.includes(id)
-      ) {
-
-        favorites =
-          favorites.filter(
-            item => item !== id
-          );
-
-      } else {
-
-        favorites.push(id);
-
-      }
-
-
-      await saveSettings();
-
-      renderSongs();
-
-
-      if (activeId === id) {
-
-        $("currentHeart").textContent =
-          favorites.includes(id)
-            ? "♥"
-            : "♡";
-
-      }
-
-    }
-
-
-    async function toggleCurrentFavorite() {
-
-      if (!activeId) return;
-
-      await toggleFavorite(
-        activeId
-      );
-
-    }
-
-
-    function setFilter(value) {
-
-      filter = value;
-
-
-      $("allTab")
-        .classList.toggle(
-          "active",
-          value === "all"
-        );
-
-
-      $("favTab")
-        .classList.toggle(
-          "active",
-          value === "favorites"
-        );
-
-
-      renderSongs();
-
-    }
-
-
-    /* =========================
-       QUEUE
-    ========================= */
-
-    async function addQueue(id) {
-
-      if (!currentUser) {
-
-        openAuthModal();
-
-        return;
-
-      }
-
-
-      if (
-        !queue.includes(id)
-      ) {
-
-        queue.push(id);
-
-        await saveSettings();
-
-        renderQueue();
-
-      }
-
-    }
-
-
-    async function removeQueue(id) {
-
-      queue =
-        queue.filter(
-          item => item !== id
-        );
-
-
-      await saveSettings();
-
-      renderQueue();
-
-    }
-
-
-    async function clearQueue() {
-
-      queue = [];
-
-      await saveSettings();
-
-      renderQueue();
-
-    }
-
-
-    function renderQueue() {
-
-      const items =
-        queue
-          .map(id =>
-            songs.find(
-              song => song.id === id
-            )
-          )
-          .filter(Boolean);
-
-
-      $("queueCount").textContent =
-        String(
-          items.length
-        ).padStart(2, "0");
-
-
-      if (!items.length) {
-
-        $("queueList").innerHTML = `
-          <p class="notice">
-            Queue က အခုလွတ်နေပါတယ်။
-          </p>
-        `;
-
-        return;
-
-      }
-
-
-      $("queueList").innerHTML =
-        items.map(
-          (song, index) => `
-
-            <div
-              class="queue-row"
-              onclick="selectSong('${escapeHtml(song.id)}')"
-              style="cursor:pointer"
-            >
-
-              <small>
-                ${String(index + 1).padStart(2, "0")}
-              </small>
-
-              ${youtubeThumb(song)}
-
-              <div>
-
-                <b>
-                  ${escapeHtml(song.title)}
-                </b>
-
-                <small>
-                  ${escapeHtml(song.artist)}
-                </small>
-
-              </div>
-
-              <button
-                onclick="
-                  event.stopPropagation();
-                  removeQueue('${escapeHtml(song.id)}')
-                "
-              >
-                ×
-              </button>
-
-            </div>
-
-          `
-        ).join("");
-
-    }
-
-
-    /* =========================
-       ADD SONG MODAL
-    ========================= */
-
-    function openSongModal() {
-
-      if (!currentUser) {
-
-        openAuthModal();
-
-        return;
-
-      }
-
-
-      $("songModal")
-        .classList.add("open");
-
-
-      document.body
-        .classList.add("modal-open");
-
-
-      $("newTitle").focus();
-
-    }
-
-
-    function closeSongModal() {
-
-      $("songModal")
-        .classList.remove("open");
-
-
-      document.body
-        .classList.remove("modal-open");
-
-
-      $("newTitle").value = "";
-
-      $("newArtist").value = "";
-
-      $("newUrl").value = "";
-
-      $("titleStatus").textContent = "";
-
-      $("titleNotice").textContent =
-        "✓ YouTube link ထည့်ပြီး ခဏစောင့်ပါ — title နဲ့ artist ကို ဖြည့်ပေးပါမယ်";
-
-      $("songError")
-        .classList.remove("show");
-
-
-      $("songError").textContent = "";
-
-      clearTimeout(
-        titleFetchTimer
-      );
-
-    }
-
-
-    /* =========================
-       YOUTUBE TITLE FETCH
-    ========================= */
-
-    function queueTitleFetch() {
-
-      clearTimeout(
-        titleFetchTimer
-      );
-
-
-      const url =
-        $("newUrl")
-          .value
-          .trim();
-
-
-      const id =
-        youtubeIdFromUrl(url);
-
-
-      if (!id) {
-
-        $("titleStatus")
-          .textContent = "";
-
-        $("titleNotice")
-          .textContent =
-          "✓ YouTube link ထည့်ပြီး ခဏစောင့်ပါ — title နဲ့ artist ကို ဖြည့်ပေးပါမယ်";
-
-        return;
-
-      }
-
-
-      $("titleStatus")
-        .textContent =
-        "Fetching...";
-
-
-      $("titleNotice")
-        .textContent =
-        "YouTube ကနေ title နဲ့ artist ကို ရယူနေပါတယ်...";
-
-
-      titleFetchTimer =
-        setTimeout(
-          async () => {
-
-            try {
-
-              const response =
-                await fetch(
-                  `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`
-                );
-
-
-              if (!response.ok) {
-
-                throw new Error(
-                  "YouTube oEmbed failed"
-                );
-
-              }
-
-
-              const data =
-                await response.json();
-
-
-              $("newTitle").value =
-                data.title || "";
-
-
-              if (
-                !$("newArtist")
-                  .value
-                  .trim()
-              ) {
-
-                $("newArtist").value =
-                  data.author_name || "";
-
-              }
-
-
-              $("titleStatus")
-                .textContent =
-                "✓ Auto-filled";
-
-
-              $("titleNotice")
-                .textContent =
-                "✓ Title နဲ့ artist ကို အလိုအလျောက် ဖြည့်ပြီးပါပြီ";
-
-
-            } catch (error) {
-
-              console.error(error);
-
-
-              $("titleStatus")
-                .textContent = "";
-
-
-              $("titleNotice")
-                .textContent =
-                "Title ကို အလိုအလျောက် မရယူနိုင်ပါ။ ကိုယ်တိုင်ဖြည့်နိုင်ပါတယ်။";
-
-            }
-
-          },
-          450
-        );
-
-    }
-
-
-    /* =========================
-       ADD SONG TO FIRESTORE
-    ========================= */
-
-    async function addSong(event) {
-
-      event.preventDefault();
-
-
-      if (!currentUser) {
-
-        openAuthModal();
-
-        return;
-
-      }
-
-
-      const url =
-        $("newUrl")
-          .value
-          .trim();
-
-
-      const youtubeId =
-        youtubeIdFromUrl(url);
-
-
-      if (!youtubeId) {
-
-        showSongError(
-          "မှန်ကန်တဲ့ YouTube link ထည့်ပေးပါ။"
-        );
-
-        return;
-
-      }
-
-
-      const title =
-        $("newTitle")
-          .value
-          .trim();
-
-
-      const artist =
-        $("newArtist")
-          .value
-          .trim() ||
-        "Unknown artist";
-
-
-      if (!title) {
-
-        showSongError(
-          "Song title ထည့်ပေးပါ။"
-        );
-
-        return;
-
-      }
-
-
-      $("saveSongButton")
-        .disabled = true;
-
-
-      try {
-
-        const result =
-          await addDoc(
-            songsCollection(),
-            {
-              title,
-              artist,
-              youtubeId,
-              createdAt: Date.now()
-            }
-          );
-
-
-        const song = {
-
-          id: result.id,
-
-          title,
-
-          artist,
-
-          youtubeId,
-
-          createdAt: Date.now()
-
-        };
-
-
-        songs.unshift(song);
-
-
-        activeId =
-          song.id;
-
-
-        await saveSettings();
-
-
-        renderSongs();
-
-        renderQueue();
-
-        selectSong(
-          song.id,
-          false
-        );
-
+        activeId = docRef.id;
 
         closeSongModal();
 
+        selectSong(activeId);
 
-      } catch (error) {
+    }catch(error){
 
-        console.error(error);
-
-
-        showSongError(
-          "Song သိမ်းလို့မရပါ။ Firestore Rules ကို စစ်ပေးပါ။"
+        alert(
+            "Song save error: " +
+            error.message
         );
 
-      } finally {
-
-        $("saveSongButton")
-          .disabled = false;
-
-      }
-
     }
 
-
-    function showSongError(
-      message
-    ) {
-
-      $("songError")
-        .textContent =
-        message;
-
-      $("songError")
-        .classList.add("show");
-
-    }
+}
 
 
-    /* =========================
-       DELETE SONG
-    ========================= */
+/* =====================================================
+   DELETE SONG
+===================================================== */
 
-    async function deleteSong(id) {
+async function deleteSong(id){
 
-      if (!currentUser) return;
+    if(!currentUser) return;
 
+    const song =
+        songs.find(s => s.id === id);
 
-      const song =
-        getSong(id);
+    if(!song) return;
 
-
-      if (!song) return;
-
-
-      const ok =
+    const ok =
         confirm(
-          `"${song.title}" ကို Library ကနေ ဖျက်မှာသေချာပါသလား?`
+            `"${song.title}" ကို ဖျက်မှာသေချာပါသလား?`
         );
 
+    if(!ok) return;
 
-      if (!ok) return;
+    try{
 
-
-      try {
-
-        await deleteDoc(
-          doc(
-            db,
-            "users",
-            currentUser.uid,
-            "songs",
-            id
-          )
-        );
-
+        await userSongsRef()
+        .doc(id)
+        .delete();
 
         songs =
-          songs.filter(
-            song => song.id !== id
-          );
-
+            songs.filter(s => s.id !== id);
 
         favorites =
-          favorites.filter(
-            item => item !== id
-          );
-
+            favorites.filter(x => x !== id);
 
         queue =
-          queue.filter(
-            item => item !== id
-          );
+            queue.filter(x => x !== id);
 
+        if(activeId === id){
 
-        if (activeId === id) {
+            activeId =
+                songs.length
+                ? songs[0].id
+                : null;
 
-          activeId =
-            songs[0]?.id || null;
+            if(activeId){
+
+                selectSong(activeId);
+
+            }else{
+
+                document
+                .getElementById("videoFrame")
+                .src = "";
+
+                document
+                .getElementById("nowTitle")
+                .textContent =
+                    "No song selected";
+
+                document
+                .getElementById("nowArtist")
+                .textContent =
+                    "Add a song to start listening";
+
+                document
+                .getElementById("cover")
+                .removeAttribute("src");
+
+            }
 
         }
-
-
-        await saveSettings();
-
 
         renderSongs();
 
-        renderQueue();
+    }catch(error){
 
-
-        if (activeId) {
-
-          selectSong(
-            activeId,
-            false
-          );
-
-        } else {
-
-          clearPlayer();
-
-        }
-
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert(
-          "Song ဖျက်လို့မရပါ။"
-        );
-
-      }
+        alert(error.message);
 
     }
 
+}
 
-    /* =========================
-       PLAYLIST DEMO
-    ========================= */
 
-    async function savePlaylist() {
+/* =====================================================
+   SETTINGS
+===================================================== */
 
-      if (!currentUser) {
+function openSettings(){
 
-        openAuthModal();
+    if(!currentUser){
+
+        openAuth();
 
         return;
 
-      }
+    }
+
+    document
+    .getElementById("settingsOverlay")
+    .classList
+    .add("open");
+
+}
 
 
-      try {
+function closeSettings(){
 
-        await setDoc(
-          doc(
-            db,
-            "users",
-            currentUser.uid,
-            "settings",
-            "playlist"
-          ),
-          {
-            name: "Friday night set",
-            songs: songs
-              .slice(0, 3)
-              .map(song => song.id),
-            updatedAt: Date.now()
-          },
-          {
-            merge: true
-          }
-        );
+    document
+    .getElementById("settingsOverlay")
+    .classList
+    .remove("open");
+
+}
 
 
-        $("playlistCount")
-          .textContent =
-          String(
-            Math.min(
-              songs.length,
-              3
-            )
-          ).padStart(2, "0");
+function closeSettingsOutside(event){
 
+    if(
+        event.target.id ===
+        "settingsOverlay"
+    ){
 
-        alert(
-          "Playlist ကို Cloud မှာ သိမ်းပြီးပါပြီ!"
-        );
-
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert(
-          "Playlist သိမ်းလို့မရပါ။"
-        );
-
-      }
+        closeSettings();
 
     }
 
-
-    /* =========================
-       MODAL OUTSIDE CLICK
-    ========================= */
-
-    $("authModal")
-      .addEventListener(
-        "click",
-        event => {
-
-          if (
-            event.target ===
-            $("authModal")
-          ) {
-
-            closeAuthModal();
-
-          }
-
-        }
-      );
+}
 
 
-    $("songModal")
-      .addEventListener(
-        "click",
-        event => {
+/* =====================================================
+   THEME
+===================================================== */
 
-          if (
-            event.target ===
-            $("songModal")
-          ) {
+async function setTheme(theme){
 
-            closeSongModal();
+    applyTheme(theme);
 
-          }
+    if(!currentUser) return;
 
-        }
-      );
+    await userSettingsRef()
+    .set({
+
+        theme,
+
+        updatedAt:
+            firebase.firestore.FieldValue.serverTimestamp()
+
+    },{merge:true});
+
+}
 
 
-    /* =========================
-       ESC KEY
-    ========================= */
+function applyTheme(theme){
 
-    document.addEventListener(
-      "keydown",
-      event => {
-
-        if (
-          event.key === "Escape"
-        ) {
-
-          closeAuthModal();
-
-          closeSongModal();
-
-        }
-
-      }
+    document.body.classList.remove(
+        "theme-black",
+        "theme-purple",
+        "theme-blue",
+        "theme-red"
     );
 
+    if(theme !== "forest"){
 
-    /* =========================
-       EXPOSE FUNCTIONS
-       FOR HTML ONCLICK
-    ========================= */
+        document.body
+        .classList
+        .add("theme-" + theme);
 
-    window.openAuthModal =
-      openAuthModal;
+    }
 
-    window.closeAuthModal =
-      closeAuthModal;
+    document
+    .querySelectorAll(".theme-btn")
+    .forEach(button => {
 
-    window.switchAuthMode =
-      switchAuthMode;
+        button.classList.toggle(
+            "active",
+            button.dataset.theme === theme
+        );
 
-    window.handleAuth =
-      handleAuth;
+    });
 
-    window.logoutUser =
-      logoutUser;
-
-    window.openSongModal =
-      openSongModal;
-
-    window.closeSongModal =
-      closeSongModal;
-
-    window.addSong =
-      addSong;
-
-    window.queueTitleFetch =
-      queueTitleFetch;
-
-    window.renderSongs =
-      renderSongs;
-
-    window.selectSong =
-      selectSong;
-
-    window.toggleFavorite =
-      toggleFavorite;
-
-    window.toggleCurrentFavorite =
-      toggleCurrentFavorite;
-
-    window.setFilter =
-      setFilter;
-
-    window.addQueue =
-      addQueue;
-
-    window.removeQueue =
-      removeQueue;
-
-    window.clearQueue =
-      clearQueue;
-
-    window.deleteSong =
-      deleteSong;
-
-    window.savePlaylist =
-      savePlaylist;
+}
 
 
-    /* =========================
-       INITIAL UI
-    ========================= */
+async function setAccent(color){
 
-    renderSongs();
+    applyAccent(color);
 
-    renderQueue();
+    if(!currentUser) return;
 
-  </script>
+    await userSettingsRef()
+    .set({
+
+        accent:color,
+
+        updatedAt:
+            firebase.firestore.FieldValue.serverTimestamp()
+
+    },{merge:true});
+
+}
+
+
+function applyAccent(color){
+
+    document
+    .documentElement
+    .style
+    .setProperty(
+        "--accent",
+        color
+    );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+async function logout(){
+
+    const ok =
+        confirm(
+            "Account ကနေ Logout ထွက်မှာသေချာပါသလား?"
+        );
+
+    if(!ok) return;
+
+    await auth.signOut();
+
+    closeSettings();
+
+}
+
+
+/* =====================================================
+   CLOSE MODALS BY BACKGROUND
+===================================================== */
+
+document
+.getElementById("songModal")
+.addEventListener("click",function(e){
+
+    if(e.target === this){
+
+        closeSongModal();
+
+    }
+
+});
+
+
+/* =====================================================
+   DEFAULT THEME
+===================================================== */
+
+applyTheme("forest");
+
+
+</script>
 
 </body>
-
 </html>
