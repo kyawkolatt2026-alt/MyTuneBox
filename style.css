@@ -1,1 +1,569 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
+body {
+    font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+    background:
+        #070b14;
+
+    color: #ffffff;
+
+    min-height: 100vh;
+}
+
+
+/* =========================
+   COMMON
+========================= */
+
+.hidden {
+    display: none !important;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+
+/* =========================
+   AUTH SCREEN
+========================= */
+
+.auth-screen {
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            #172554,
+            transparent 40%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            #312e81,
+            transparent 40%
+        ),
+        #070b14;
+}
+
+
+.auth-box {
+    width: 100%;
+
+    max-width: 430px;
+
+    padding: 38px;
+
+    border-radius: 24px;
+
+    background:
+        rgba(15, 23, 42, 0.88);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,0.45);
+
+    backdrop-filter:
+        blur(20px);
+
+    text-align: center;
+}
+
+
+.logo {
+    width: 70px;
+
+    height: 70px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 20px;
+
+    font-size: 34px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #2563eb
+        );
+
+    box-shadow:
+        0 12px 30px
+        rgba(99,102,241,0.35);
+}
+
+
+.auth-box h1 {
+    font-size: 30px;
+
+    margin-bottom: 8px;
+}
+
+
+.subtitle {
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    margin-bottom: 30px;
+}
+
+
+.auth-box h2 {
+    font-size: 23px;
+
+    margin-bottom: 8px;
+}
+
+
+.form-subtitle {
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    margin-bottom: 20px;
+}
+
+
+.auth-box input {
+    width: 100%;
+
+    height: 52px;
+
+    margin-bottom: 13px;
+
+    padding:
+        0 16px;
+
+    border-radius: 13px;
+
+    border:
+        1px solid #263246;
+
+    outline: none;
+
+    background:
+        #0b1220;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+
+.auth-box input:focus {
+    border-color:
+        #6366f1;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(99,102,241,0.12);
+}
+
+
+.primary-btn {
+    width: 100%;
+
+    min-height: 52px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #2563eb
+        );
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+    box-shadow:
+        0 10px 25px
+        rgba(79,70,229,0.25);
+}
+
+
+.primary-btn:hover {
+    transform:
+        translateY(-1px);
+
+    filter:
+        brightness(1.08);
+}
+
+
+.primary-btn:active {
+    transform:
+        translateY(0);
+}
+
+
+.switch-text {
+    margin-top: 20px;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+}
+
+
+.link-btn {
+    background: none;
+
+    border: none;
+
+    color: #818cf8;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.auth-message {
+    margin-top: 18px;
+
+    min-height: 20px;
+
+    font-size: 13px;
+
+    color: #fca5a5;
+}
+
+
+/* =========================
+   APP
+========================= */
+
+.app-screen {
+    min-height: 100vh;
+
+    background:
+        #070b14;
+}
+
+
+.topbar {
+    height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        0 28px;
+
+    border-bottom:
+        1px solid #172033;
+
+    background:
+        rgba(7,11,20,0.92);
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 20;
+
+    backdrop-filter:
+        blur(15px);
+}
+
+
+.brand {
+    font-size: 21px;
+
+    font-weight: 800;
+}
+
+
+.user-area {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+
+#userName {
+    color: #cbd5e1;
+
+    font-size: 14px;
+}
+
+
+.logout-btn {
+    border:
+        1px solid #293548;
+
+    background:
+        #111827;
+
+    color: #e2e8f0;
+
+    padding:
+        9px 15px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+
+.main-content {
+    max-width: 1150px;
+
+    margin: auto;
+
+    padding: 35px 22px 70px;
+}
+
+
+.welcome-card {
+    min-height: 210px;
+
+    border-radius: 25px;
+
+    padding: 35px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1e1b4b,
+            #172554,
+            #111827
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.07);
+}
+
+
+.small-label {
+    color: #a5b4fc;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+.welcome-card h1 {
+    margin-top: 10px;
+
+    font-size:
+        clamp(28px, 5vw, 43px);
+}
+
+
+.welcome-card p {
+    margin-top: 10px;
+
+    color: #94a3b8;
+}
+
+
+.music-icon {
+    font-size: 85px;
+
+    opacity: 0.8;
+}
+
+
+.dashboard {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-top: 25px;
+}
+
+
+.dashboard-card {
+    padding: 25px;
+
+    border-radius: 18px;
+
+    background:
+        #0d1422;
+
+    border:
+        1px solid #1b2638;
+}
+
+
+.card-icon {
+    font-size: 25px;
+
+    margin-bottom: 13px;
+}
+
+
+.dashboard-card h3 {
+    color: #cbd5e1;
+
+    font-size: 15px;
+}
+
+
+.dashboard-card p {
+    margin-top: 8px;
+
+    font-size: 27px;
+
+    font-weight: 800;
+}
+
+
+.empty-section {
+    margin-top: 25px;
+
+    min-height: 330px;
+
+    border:
+        1px dashed #293548;
+
+    border-radius: 22px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    padding: 30px;
+}
+
+
+.empty-icon {
+    font-size: 50px;
+
+    margin-bottom: 15px;
+}
+
+
+.empty-section h2 {
+    font-size: 22px;
+}
+
+
+.empty-section p {
+    color: #64748b;
+
+    max-width: 400px;
+
+    margin:
+        10px 0 22px;
+
+    line-height: 1.6;
+}
+
+
+.empty-section .primary-btn {
+    max-width: 250px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 650px) {
+
+    .auth-box {
+        padding: 28px 20px;
+
+        border-radius: 20px;
+    }
+
+    .topbar {
+        padding:
+            0 16px;
+    }
+
+    .brand {
+        font-size: 18px;
+    }
+
+    #userName {
+        display: none;
+    }
+
+    .main-content {
+        padding:
+            20px 15px 50px;
+    }
+
+    .welcome-card {
+        padding: 25px;
+
+        min-height: 190px;
+    }
+
+    .music-icon {
+        font-size: 55px;
+    }
+
+    .dashboard {
+        grid-template-columns:
+            1fr;
+    }
+}
