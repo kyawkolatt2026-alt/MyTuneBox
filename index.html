@@ -1,2289 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>MyTuneBox — YouTube Video Library</title>
+    <meta charset="UTF-8">
 
-<style>
-:root{
-  --bg:#08090d;
-  --panel:#11141b;
-  --panel2:#181c25;
-  --border:#272c38;
-  --text:#f7f8fb;
-  --muted:#8d95a6;
-  --accent:#8b5cf6;
-  --danger:#ff4d73;
-}
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+    <title>MyTuneBox</title>
 
-html{
-  scroll-behavior:smooth;
-}
+    <link rel="stylesheet" href="style.css">
 
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
-}
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-button,input,select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.app{
-  min-height:100vh;
-  padding-bottom:40px;
-}
-
-/* ================= HEADER ================= */
-
-.header{
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:rgba(8,9,13,.94);
-  backdrop-filter:blur(18px);
-  border-bottom:1px solid var(--border);
-}
-
-.header-inner{
-  max-width:1250px;
-  margin:auto;
-  min-height:70px;
-  padding:11px 20px;
-  display:flex;
-  align-items:center;
-  gap:18px;
-}
-
-.logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:20px;
-  font-weight:800;
-  white-space:nowrap;
-}
-
-.logo-icon{
-  width:40px;
-  height:40px;
-  border-radius:13px;
-  display:grid;
-  place-items:center;
-  background:var(--accent);
-  box-shadow:0 10px 28px rgba(139,92,246,.28);
-}
-
-.search{
-  flex:1;
-  position:relative;
-}
-
-.search input{
-  width:100%;
-  height:44px;
-  padding:0 45px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  outline:none;
-  background:var(--panel);
-  color:var(--text);
-}
-
-.search input:focus{
-  border-color:var(--accent);
-}
-
-.search-icon{
-  position:absolute;
-  left:16px;
-  top:12px;
-  color:var(--muted);
-}
-
-.header-actions{
-  display:flex;
-  gap:8px;
-}
-
-.icon-btn{
-  width:43px;
-  height:43px;
-  border-radius:13px;
-  border:1px solid var(--border);
-  background:var(--panel);
-  color:var(--text);
-}
-
-/* ================= MAIN ================= */
-
-.main{
-  max-width:1250px;
-  margin:auto;
-  padding:25px 20px;
-}
-
-/* ================= VIDEO PLAYER ================= */
-
-.video-section{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:22px;
-  overflow:hidden;
-  margin-bottom:28px;
-}
-
-.video-wrapper{
-  width:100%;
-  aspect-ratio:16/9;
-  background:#000;
-}
-
-.video-wrapper iframe{
-  width:100%;
-  height:100%;
-  border:0;
-  display:block;
-}
-
-.video-info{
-  padding:18px 20px;
-}
-
-.video-title{
-  font-size:22px;
-  font-weight:800;
-  line-height:1.35;
-}
-
-.video-artist{
-  color:var(--muted);
-  margin-top:6px;
-}
-
-.video-actions{
-  display:flex;
-  gap:8px;
-  margin-top:16px;
-}
-
-.action{
-  border:1px solid var(--border);
-  background:var(--panel2);
-  color:var(--text);
-  padding:10px 15px;
-  border-radius:11px;
-}
-
-.action.active{
-  color:var(--danger);
-  border-color:var(--danger);
-}
-
-/* ================= HERO ================= */
-
-.hero{
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:30px;
-  margin-bottom:25px;
-  background:
-    radial-gradient(
-      circle at 85% 15%,
-      rgba(139,92,246,.25),
-      transparent 36%
-    ),
-    linear-gradient(135deg,#121621,#0c0f16);
-}
-
-.hero h1{
-  font-size:36px;
-  line-height:1.1;
-}
-
-.hero p{
-  color:var(--muted);
-  margin-top:10px;
-  margin-bottom:20px;
-}
-
-.hero-buttons{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.primary{
-  border:0;
-  background:var(--accent);
-  color:#fff;
-  padding:12px 18px;
-  border-radius:12px;
-  font-weight:700;
-}
-
-.secondary{
-  border:1px solid var(--border);
-  background:var(--panel2);
-  color:var(--text);
-  padding:12px 18px;
-  border-radius:12px;
-}
-
-/* ================= NAV ================= */
-
-.nav{
-  display:flex;
-  gap:8px;
-  overflow:auto;
-  margin-bottom:22px;
-}
-
-.nav button{
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  padding:10px 16px;
-  border-radius:11px;
-  white-space:nowrap;
-}
-
-.nav button.active{
-  background:var(--accent);
-  color:#fff;
-}
-
-/* ================= SECTION ================= */
-
-.section-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:16px;
-}
-
-.section-head h2{
-  font-size:22px;
-}
-
-.count{
-  color:var(--muted);
-  font-size:13px;
-  margin-left:6px;
-}
-
-.sort{
-  background:var(--panel);
-  border:1px solid var(--border);
-  color:var(--text);
-  padding:9px 12px;
-  border-radius:10px;
-}
-
-/* ================= GRID ================= */
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:18px;
-}
-
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:18px;
-  overflow:hidden;
-  transition:.2s;
-}
-
-.card:hover{
-  transform:translateY(-3px);
-  border-color:var(--accent);
-}
-
-.thumb{
-  position:relative;
-  aspect-ratio:16/9;
-  background:#151923;
-  overflow:hidden;
-}
-
-.thumb img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-.play{
-  position:absolute;
-  right:12px;
-  bottom:12px;
-  width:44px;
-  height:44px;
-  border:0;
-  border-radius:50%;
-  background:var(--accent);
-  color:white;
-  box-shadow:0 7px 20px rgba(0,0,0,.35);
-}
-
-.card-body{
-  padding:14px;
-}
-
-.card-title{
-  font-weight:700;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.card-artist{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:5px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.card-bottom{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-top:12px;
-}
-
-.youtube-label{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.favorite{
-  border:0;
-  background:none;
-  color:var(--muted);
-  font-size:21px;
-}
-
-.favorite.active{
-  color:var(--danger);
-}
-
-/* ================= EMPTY ================= */
-
-.empty{
-  border:1px dashed var(--border);
-  border-radius:18px;
-  padding:70px 20px;
-  text-align:center;
-  color:var(--muted);
-}
-
-.empty-icon{
-  font-size:48px;
-  margin-bottom:12px;
-}
-
-/* ================= MODAL ================= */
-
-.modal-bg{
-  position:fixed;
-  inset:0;
-  z-index:300;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:rgba(0,0,0,.75);
-}
-
-.modal-bg.show{
-  display:flex;
-}
-
-.modal{
-  width:100%;
-  max-width:520px;
-  max-height:90vh;
-  overflow:auto;
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:23px;
-}
-
-.modal-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
-}
-
-.close{
-  width:37px;
-  height:37px;
-  border:0;
-  border-radius:10px;
-  background:var(--panel2);
-  color:var(--text);
-}
-
-.field{
-  margin-bottom:16px;
-}
-
-.field label{
-  display:block;
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:7px;
-}
-
-.field input,
-.field select{
-  width:100%;
-  height:45px;
-  border:1px solid var(--border);
-  border-radius:11px;
-  background:var(--bg);
-  color:var(--text);
-  padding:0 12px;
-  outline:none;
-}
-
-.field input:focus{
-  border-color:var(--accent);
-}
-
-.help{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.5;
-  margin-top:8px;
-}
-
-/* SETTINGS */
-
-.setting{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  padding:16px 0;
-  border-bottom:1px solid var(--border);
-}
-
-.setting small{
-  display:block;
-  color:var(--muted);
-  margin-top:4px;
-}
-
-.colors{
-  display:flex;
-  gap:8px;
-}
-
-.color{
-  width:27px;
-  height:27px;
-  border-radius:50%;
-  border:3px solid transparent;
-}
-
-.color.active{
-  border-color:white;
-}
-
-/* ================= TOAST ================= */
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:25px;
-  z-index:500;
-  transform:translate(-50%,20px);
-  background:#202532;
-  color:white;
-  border:1px solid var(--border);
-  padding:11px 17px;
-  border-radius:12px;
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-}
-
-.toast.show{
-  opacity:1;
-  transform:translate(-50%,0);
-}
-
-/* ================= MOBILE ================= */
-
-@media(max-width:950px){
-  .grid{
-    grid-template-columns:repeat(3,1fr);
-  }
-}
-
-@media(max-width:700px){
-
-  .header-inner{
-    flex-wrap:wrap;
-    padding:11px 13px;
-  }
-
-  .logo{
-    order:1;
-  }
-
-  .header-actions{
-    order:2;
-    margin-left:auto;
-  }
-
-  .search{
-    order:3;
-    flex-basis:100%;
-  }
-
-  .main{
-    padding:18px 13px;
-  }
-
-  .hero{
-    padding:25px;
-  }
-
-  .hero h1{
-    font-size:29px;
-  }
-
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
-  }
-
-  .video-title{
-    font-size:18px;
-  }
-}
-
-@media(max-width:420px){
-
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .card-body{
-    padding:10px;
-  }
-
-  .card-title{
-    font-size:14px;
-  }
-
-  .card-artist{
-    font-size:11px;
-  }
-}
-</style>
 </head>
 
 <body>
 
-<div class="app">
-
-<!-- ================= HEADER ================= -->
-
-<header class="header">
-  <div class="header-inner">
-
-    <div class="logo">
-      <div class="logo-icon">▶</div>
-      <span>MyTuneBox</span>
-    </div>
-
-    <div class="search">
-      <span class="search-icon">⌕</span>
-      <input
-        id="search"
-        type="search"
-        placeholder="Search videos or artists..."
-        autocomplete="off">
-    </div>
-
-    <div class="header-actions">
-      <button class="icon-btn" id="addBtn">＋</button>
-      <button class="icon-btn" id="settingsBtn">⚙</button>
-    </div>
-
-  </div>
-</header>
-
-
-<main class="main">
-
-<!-- ================= VIDEO PLAYER ================= -->
-
-<section class="video-section" id="videoSection">
-
-  <div class="video-wrapper">
-
-    <iframe
-      id="videoPlayer"
-      src=""
-      title="YouTube video player"
-      allow="
-        accelerometer;
-        autoplay;
-        clipboard-write;
-        encrypted-media;
-        gyroscope;
-        picture-in-picture;
-        web-share"
-      allowfullscreen>
-    </iframe>
-
-  </div>
-
-  <div class="video-info">
-
-    <div class="video-title" id="currentTitle">
-      Select a video
-    </div>
-
-    <div class="video-artist" id="currentArtist">
-      Choose a video from your library
-    </div>
-
-    <div class="video-actions">
-
-      <button class="action" id="prevBtn">
-        ⏮ Previous
-      </button>
-
-      <button class="action" id="nextBtn">
-        Next ⏭
-      </button>
-
-      <button class="action" id="favoriteCurrent">
-        ♡ Favorite
-      </button>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- ================= HERO ================= -->
-
-<section class="hero">
-
-  <h1>
-    Your Videos.<br>
-    Your Collection.
-  </h1>
-
-  <p>
-    Save your favorite YouTube videos and watch them anytime.
-  </p>
-
-  <div class="hero-buttons">
-
-    <button class="primary" id="addHeroBtn">
-      ＋ Add YouTube Video
-    </button>
-
-    <button class="secondary" id="shuffleBtn">
-      🔀 Random Video
-    </button>
-
-  </div>
-
-</section>
-
-
-<!-- ================= NAV ================= -->
-
-<nav class="nav">
-
-  <button class="active" data-view="all">
-    All Videos
-  </button>
-
-  <button data-view="favorites">
-    ♥ Favorites
-  </button>
-
-  <button data-view="recent">
-    ✨ Recently Added
-  </button>
-
-</nav>
-
-
-<!-- ================= COLLECTION ================= -->
-
-<section>
-
-  <div class="section-head">
-
-    <h2>
-      My Collection
-      <span class="count" id="count">00</span>
-    </h2>
-
-    <select class="sort" id="sort">
-
-      <option value="newest">
-        Newest
-      </option>
-
-      <option value="oldest">
-        Oldest
-      </option>
-
-      <option value="title">
-        Title
-      </option>
-
-      <option value="artist">
-        Artist
-      </option>
-
-    </select>
-
-  </div>
-
-  <div id="collection"></div>
-
-</section>
-
-</main>
-</div>
-
-
-<!-- ================= ADD MODAL ================= -->
-
-<div class="modal-bg" id="addModal">
-
-  <div class="modal">
-
-    <div class="modal-head">
-
-      <h2>Add YouTube Video</h2>
-
-      <button
-        class="close"
-        data-close="addModal">
-        ✕
-      </button>
-
-    </div>
-
-
-    <div class="field">
-
-      <label>Video Title</label>
-
-      <input
-        id="title"
-        placeholder="Example: Perfect">
-
-    </div>
-
-
-    <div class="field">
-
-      <label>Artist / Channel</label>
-
-      <input
-        id="artist"
-        placeholder="Example: Ed Sheeran">
-
-    </div>
-
-
-    <div class="field">
-
-      <label>YouTube Link</label>
-
-      <input
-        id="youtubeUrl"
-        placeholder="https://www.youtube.com/watch?v=...">
-
-      <div class="help">
-        YouTube watch link, youtu.be link,
-        shorts link စတာတွေ ထည့်နိုင်ပါတယ်။
-      </div>
-
-    </div>
-
-
-    <button
-      class="primary"
-      id="saveVideo"
-      style="width:100%">
-
-      Add Video
-
-    </button>
-
-  </div>
-</div>
-
-
-<!-- ================= SETTINGS ================= -->
-
-<div class="modal-bg" id="settingsModal">
-
-  <div class="modal">
-
-    <div class="modal-head">
-
-      <h2>Settings</h2>
-
-      <button
-        class="close"
-        data-close="settingsModal">
-        ✕
-      </button>
-
-    </div>
-
-
-    <div class="setting">
-
-      <div>
-
-        <b>Theme</b>
-
-        <small>
-          Change appearance
-        </small>
-
-      </div>
-
-      <select
-        id="theme"
-        style="
-          background:var(--bg);
-          color:var(--text);
-          border:1px solid var(--border);
-          padding:8px;
-          border-radius:9px">
-
-        <option value="dark">
-          Dark
-        </option>
-
-        <option value="light">
-          Light
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <div class="setting">
-
-      <div>
-
-        <b>Accent Color</b>
-
-        <small>
-          Customize interface color
-        </small>
-
-      </div>
-
-      <div class="colors">
-
-        <button
-          class="color"
-          data-color="#8b5cf6"
-          style="background:#8b5cf6">
-        </button>
-
-        <button
-          class="color"
-          data-color="#06b6d4"
-          style="background:#06b6d4">
-        </button>
-
-        <button
-          class="color"
-          data-color="#22c55e"
-          style="background:#22c55e">
-        </button>
-
-        <button
-          class="color"
-          data-color="#f97316"
-          style="background:#f97316">
-        </button>
-
-        <button
-          class="color"
-          data-color="#ec4899"
-          style="background:#ec4899">
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="setting">
-
-      <div>
-
-        <b>Library</b>
-
-        <small>
-          Delete saved videos
-        </small>
-
-      </div>
-
-      <button
-        class="secondary"
-        id="reset">
-        Reset
-      </button>
-
-    </div>
-
-  </div>
-</div>
-
-
-<div class="toast" id="toast"></div>
-
-
-<script>
-
-/* =====================================================
-   MyTuneBox
-   YouTube Video Library
-===================================================== */
-
-const STORAGE_KEY =
-  "mytunebox_video_v1";
-
-
-let state =
-JSON.parse(
-  localStorage.getItem(STORAGE_KEY)
-) || {
-
-  videos: [],
-
-  favorites: [],
-
-  currentId: null,
-
-  search: "",
-
-  view: "all",
-
-  sort: "newest",
-
-  theme: "dark",
-
-  accent: "#8b5cf6"
-
-};
-
-
-function save(){
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(state)
-  );
-
-}
-
-
-/* ================= ELEMENTS ================= */
-
-const search =
-  document.getElementById("search");
-
-const collection =
-  document.getElementById("collection");
-
-const count =
-  document.getElementById("count");
-
-const sort =
-  document.getElementById("sort");
-
-const player =
-  document.getElementById("videoPlayer");
-
-const currentTitle =
-  document.getElementById("currentTitle");
-
-const currentArtist =
-  document.getElementById("currentArtist");
-
-const favoriteCurrent =
-  document.getElementById("favoriteCurrent");
-
-
-/* ================= MODAL ================= */
-
-function openModal(id){
-
-  document
-    .getElementById(id)
-    .classList.add("show");
-
-}
-
-
-function closeModal(id){
-
-  document
-    .getElementById(id)
-    .classList.remove("show");
-
-}
-
-
-document.querySelectorAll(
-  "[data-close]"
-).forEach(btn => {
-
-  btn.addEventListener(
-    "click",
-    () => closeModal(
-      btn.dataset.close
-    )
-  );
-
-});
-
-
-document.getElementById(
-  "addBtn"
-).onclick = () =>
-  openModal("addModal");
-
-
-document.getElementById(
-  "addHeroBtn"
-).onclick = () =>
-  openModal("addModal");
-
-
-document.getElementById(
-  "settingsBtn"
-).onclick = () =>
-  openModal("settingsModal");
-
-
-/* ================= YOUTUBE ID ================= */
-
-function getYouTubeId(url){
-
-  try{
-
-    const u =
-      new URL(url);
-
-    if(
-      u.hostname.includes(
-        "youtube.com"
-      )
-    ){
-
-      if(
-        u.searchParams.get("v")
-      ){
-
-        return u.searchParams.get("v");
-
-      }
-
-      if(
-        u.pathname.startsWith(
-          "/shorts/"
-        )
-      ){
-
-        return u.pathname
-          .split("/")[2];
-
-      }
-
-      if(
-        u.pathname.startsWith(
-          "/embed/"
-        )
-      ){
-
-        return u.pathname
-          .split("/")[2];
-
-      }
-
-    }
-
-
-    if(
-      u.hostname ===
-      "youtu.be"
-    ){
-
-      return u.pathname
-        .split("/")[1];
-
-    }
-
-  }catch(e){}
-
-  return null;
-
-}
-
-
-/* ================= ESCAPE ================= */
-
-function esc(value){
-
-  return String(value || "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
-/* ================= TOAST ================= */
-
-let toastTimer;
-
-function toast(message){
-
-  const box =
-    document.getElementById(
-      "toast"
-    );
-
-  box.textContent =
-    message;
-
-  box.classList.add("show");
-
-  clearTimeout(toastTimer);
-
-  toastTimer =
-    setTimeout(
-      () =>
-        box.classList.remove(
-          "show"
-        ),
-      2200
-    );
-
-}
-
-
-/* ================= FILTER ================= */
-
-function getVideos(){
-
-  let videos =
-    [...state.videos];
-
-
-  if(
-    state.view ===
-    "favorites"
-  ){
-
-    videos =
-      videos.filter(video =>
-        state.favorites
-          .includes(video.id)
-      );
-
-  }
-
-
-  if(
-    state.view ===
-    "recent"
-  ){
-
-    videos.sort(
-      (a,b) =>
-        b.created - a.created
-    );
-
-    videos =
-      videos.slice(0,10);
-
-  }
-
-
-  const q =
-    state.search
-      .trim()
-      .toLowerCase();
-
-
-  if(q){
-
-    videos =
-      videos.filter(video =>
-
-        video.title
-          .toLowerCase()
-          .includes(q)
-
-        ||
-
-        video.artist
-          .toLowerCase()
-          .includes(q)
-
-      );
-
-  }
-
-
-  if(
-    state.sort ===
-    "newest"
-  ){
-
-    videos.sort(
-      (a,b) =>
-        b.created - a.created
-    );
-
-  }
-
-
-  if(
-    state.sort ===
-    "oldest"
-  ){
-
-    videos.sort(
-      (a,b) =>
-        a.created - b.created
-    );
-
-  }
-
-
-  if(
-    state.sort ===
-    "title"
-  ){
-
-    videos.sort(
-      (a,b) =>
-        a.title.localeCompare(
-          b.title
-        )
-    );
-
-  }
-
-
-  if(
-    state.sort ===
-    "artist"
-  ){
-
-    videos.sort(
-      (a,b) =>
-        a.artist.localeCompare(
-          b.artist
-        )
-    );
-
-  }
-
-
-  return videos;
-
-}
-
-
-/* ================= RENDER ================= */
-
-function render(){
-
-  const videos =
-    getVideos();
-
-
-  count.textContent =
-    String(videos.length)
-      .padStart(2,"0");
-
-
-  search.value =
-    state.search;
-
-
-  sort.value =
-    state.sort;
-
-
-  collection.innerHTML = "";
-
-
-  if(!videos.length){
-
-    collection.innerHTML = `
-
-      <div class="empty">
-
-        <div class="empty-icon">
-          🎬
-        </div>
-
-        <h3>
-          No videos found
-        </h3>
-
-        <p style="margin-top:8px">
-          Add a YouTube video or search again.
-        </p>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  const grid =
-    document.createElement(
-      "div"
-    );
-
-  grid.className =
-    "grid";
-
-
-  videos.forEach(video => {
-
-    const card =
-      document.createElement(
-        "div"
-      );
-
-    card.className =
-      "card";
-
-
-    const isFavorite =
-      state.favorites
-        .includes(video.id);
-
-
-    const isCurrent =
-      state.currentId ===
-      video.id;
-
-
-    card.innerHTML = `
-
-      <div class="thumb">
-
-        <img
-          src="https://img.youtube.com/vi/${esc(video.videoId)}/hqdefault.jpg"
-          alt="${esc(video.title)}">
-
-        <button
-          class="play"
-          data-play="${esc(video.id)}">
-
-          ${
-            isCurrent
-              ? "▶"
-              : "▶"
-          }
-
-        </button>
-
-      </div>
-
-
-      <div class="card-body">
-
-        <div class="card-title">
-          ${esc(video.title)}
-        </div>
-
-        <div class="card-artist">
-          ${esc(video.artist)}
-        </div>
-
-        <div class="card-bottom">
-
-          <span class="youtube-label">
-            ▶ YouTube
-          </span>
-
-          <button
-            class="favorite ${
-              isFavorite
-                ? "active"
-                : ""
-            }"
-            data-favorite="${esc(video.id)}">
-
-            ${
-              isFavorite
-                ? "♥"
-                : "♡"
-            }
-
-          </button>
+    <!-- =========================
+         LOGIN / REGISTER SCREEN
+    ========================== -->
+
+    <div id="authScreen" class="auth-screen">
+
+        <div class="auth-box">
+
+            <div class="logo">
+                🎵
+            </div>
+
+            <h1>MyTuneBox</h1>
+
+            <p class="subtitle">
+                Your personal music & video library
+            </p>
+
+
+            <!-- LOGIN -->
+
+            <div id="loginForm">
+
+                <h2>Welcome Back</h2>
+
+                <p class="form-subtitle">
+                    Login to continue
+                </p>
+
+                <input
+                    id="loginEmail"
+                    type="email"
+                    placeholder="Email address"
+                >
+
+                <input
+                    id="loginPassword"
+                    type="password"
+                    placeholder="Password"
+                >
+
+                <button
+                    id="loginBtn"
+                    class="primary-btn"
+                >
+                    Login
+                </button>
+
+                <p class="switch-text">
+                    Don't have an account?
+                    <button
+                        id="showRegister"
+                        class="link-btn"
+                    >
+                        Register
+                    </button>
+                </p>
+
+            </div>
+
+
+            <!-- REGISTER -->
+
+            <div
+                id="registerForm"
+                class="hidden"
+            >
+
+                <h2>Create Account</h2>
+
+                <p class="form-subtitle">
+                    Create your MyTuneBox account
+                </p>
+
+                <input
+                    id="registerName"
+                    type="text"
+                    placeholder="Display name"
+                >
+
+                <input
+                    id="registerEmail"
+                    type="email"
+                    placeholder="Email address"
+                >
+
+                <input
+                    id="registerPassword"
+                    type="password"
+                    placeholder="Password"
+                >
+
+                <input
+                    id="registerPassword2"
+                    type="password"
+                    placeholder="Confirm password"
+                >
+
+                <button
+                    id="registerBtn"
+                    class="primary-btn"
+                >
+                    Create Account
+                </button>
+
+                <p class="switch-text">
+                    Already have an account?
+                    <button
+                        id="showLogin"
+                        class="link-btn"
+                    >
+                        Login
+                    </button>
+                </p>
+
+            </div>
+
+
+            <div
+                id="authMessage"
+                class="auth-message"
+            ></div>
 
         </div>
 
-      </div>
+    </div>
 
-    `;
 
+    <!-- =========================
+         MAIN APPLICATION
+    ========================== -->
 
-    grid.appendChild(card);
+    <div
+        id="appScreen"
+        class="app-screen hidden"
+    >
 
-  });
+        <header class="topbar">
 
+            <div class="brand">
+                🎵 MyTuneBox
+            </div>
 
-  collection.appendChild(grid);
+            <div class="user-area">
 
-}
+                <span id="userName">
+                    User
+                </span>
 
+                <button
+                    id="logoutBtn"
+                    class="logout-btn"
+                >
+                    Logout
+                </button>
 
-/* ================= SEARCH ================= */
+            </div>
 
-search.addEventListener(
-  "input",
-  function(){
+        </header>
 
-    state.search =
-      this.value;
 
-    render();
+        <main class="main-content">
 
-    requestAnimationFrame(() => {
+            <div class="welcome-card">
 
-      search.focus();
+                <div>
 
-      try{
+                    <span class="small-label">
+                        MYTUNEBOX
+                    </span>
 
-        search.setSelectionRange(
-          search.value.length,
-          search.value.length
-        );
+                    <h1>
+                        Welcome back,
+                        <span id="welcomeName">
+                            User
+                        </span>
+                    </h1>
 
-      }catch(e){}
+                    <p>
+                        Your music and video library is ready.
+                    </p>
 
-    });
+                </div>
 
-  }
-);
+                <div class="music-icon">
+                    🎧
+                </div>
 
+            </div>
 
-/* ================= SORT ================= */
 
-sort.addEventListener(
-  "change",
-  function(){
+            <section class="dashboard">
 
-    state.sort =
-      this.value;
+                <div class="dashboard-card">
 
-    save();
+                    <div class="card-icon">
+                        🎬
+                    </div>
 
-    render();
+                    <h3>Videos</h3>
 
-  }
-);
+                    <p id="videoCount">
+                        0
+                    </p>
 
+                </div>
 
-/* ================= NAV ================= */
 
-document.querySelectorAll(
-  ".nav button"
-).forEach(btn => {
+                <div class="dashboard-card">
 
-  btn.addEventListener(
-    "click",
-    function(){
+                    <div class="card-icon">
+                        ❤️
+                    </div>
 
-      document.querySelectorAll(
-        ".nav button"
-      ).forEach(x =>
-        x.classList.remove(
-          "active"
-        )
-      );
+                    <h3>Favorites</h3>
 
-      this.classList.add(
-        "active"
-      );
+                    <p>
+                        0
+                    </p>
 
-      state.view =
-        this.dataset.view;
+                </div>
 
-      render();
 
-    }
-  );
+                <div class="dashboard-card">
 
-});
+                    <div class="card-icon">
+                        📁
+                    </div>
 
+                    <h3>Playlists</h3>
 
-/* ================= PLAY ================= */
+                    <p>
+                        0
+                    </p>
 
-function playVideo(id){
+                </div>
 
-  const video =
-    state.videos.find(
-      x => x.id === id
-    );
+            </section>
 
 
-  if(!video)
-    return;
+            <section class="empty-section">
 
+                <div class="empty-icon">
+                    🎵
+                </div>
 
-  state.currentId =
-    id;
+                <h2>
+                    Your library is empty
+                </h2>
 
+                <p>
+                    Add YouTube videos to start building
+                    your personal library.
+                </p>
 
-  /*
-    YouTube Embed
-  */
+                <button
+                    class="primary-btn"
+                    id="startBtn"
+                >
+                    Add Your First Video
+                </button>
 
-  player.src =
-    "https://www.youtube.com/embed/"
-    +
-    encodeURIComponent(
-      video.videoId
-    )
-    +
-    "?autoplay=1&rel=0";
+            </section>
 
+        </main>
 
-  currentTitle.textContent =
-    video.title;
+    </div>
 
 
-  currentArtist.textContent =
-    video.artist;
+    <!-- CONFIG FIRST -->
 
+    <script src="config.js"></script>
 
-  updateFavoriteButton();
+    <!-- APP -->
 
-
-  save();
-
-  render();
-
-
-  /*
-    Scroll to player
-  */
-
-  document
-    .getElementById(
-      "videoSection"
-    )
-    .scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-    });
-
-}
-
-
-/* ================= CARD CLICK ================= */
-
-collection.addEventListener(
-  "click",
-  function(event){
-
-    const play =
-      event.target.closest(
-        "[data-play]"
-      );
-
-
-    if(play){
-
-      playVideo(
-        play.dataset.play
-      );
-
-      return;
-
-    }
-
-
-    const fav =
-      event.target.closest(
-        "[data-favorite]"
-      );
-
-
-    if(fav){
-
-      toggleFavorite(
-        fav.dataset.favorite
-      );
-
-    }
-
-  }
-);
-
-
-/* ================= FAVORITE ================= */
-
-function toggleFavorite(id){
-
-  if(
-    state.favorites
-      .includes(id)
-  ){
-
-    state.favorites =
-      state.favorites.filter(
-        x => x !== id
-      );
-
-    toast(
-      "Removed from Favorites"
-    );
-
-  }else{
-
-    state.favorites.push(id);
-
-    toast(
-      "Added to Favorites ♥"
-    );
-
-  }
-
-
-  save();
-
-  render();
-
-  updateFavoriteButton();
-
-}
-
-
-favoriteCurrent.addEventListener(
-  "click",
-  function(){
-
-    if(!state.currentId){
-
-      toast(
-        "Select a video first"
-      );
-
-      return;
-
-    }
-
-
-    toggleFavorite(
-      state.currentId
-    );
-
-  }
-);
-
-
-function updateFavoriteButton(){
-
-  if(!state.currentId){
-
-    favoriteCurrent.textContent =
-      "♡ Favorite";
-
-    favoriteCurrent.classList.remove(
-      "active"
-    );
-
-    return;
-
-  }
-
-
-  const active =
-    state.favorites
-      .includes(
-        state.currentId
-      );
-
-
-  favoriteCurrent.textContent =
-    active
-      ? "♥ Favorited"
-      : "♡ Favorite";
-
-
-  favoriteCurrent.classList.toggle(
-    "active",
-    active
-  );
-
-}
-
-
-/* ================= NEXT ================= */
-
-function nextVideo(){
-
-  const videos =
-    getVideos();
-
-
-  if(!videos.length)
-    return;
-
-
-  let index =
-    videos.findIndex(
-      x =>
-        x.id ===
-        state.currentId
-    );
-
-
-  index++;
-
-
-  if(
-    index >=
-    videos.length
-  ){
-
-    index = 0;
-
-  }
-
-
-  playVideo(
-    videos[index].id
-  );
-
-}
-
-
-document.getElementById(
-  "nextBtn"
-).onclick =
-  nextVideo;
-
-
-/* ================= PREVIOUS ================= */
-
-function previousVideo(){
-
-  const videos =
-    getVideos();
-
-
-  if(!videos.length)
-    return;
-
-
-  let index =
-    videos.findIndex(
-      x =>
-        x.id ===
-        state.currentId
-    );
-
-
-  index--;
-
-
-  if(index < 0){
-
-    index =
-      videos.length - 1;
-
-  }
-
-
-  playVideo(
-    videos[index].id
-  );
-
-}
-
-
-document.getElementById(
-  "prevBtn"
-).onclick =
-  previousVideo;
-
-
-/* ================= ADD VIDEO ================= */
-
-document.getElementById(
-  "saveVideo"
-).addEventListener(
-  "click",
-  function(){
-
-    const title =
-      document.getElementById(
-        "title"
-      ).value.trim();
-
-
-    const artist =
-      document.getElementById(
-        "artist"
-      ).value.trim();
-
-
-    const url =
-      document.getElementById(
-        "youtubeUrl"
-      ).value.trim();
-
-
-    if(!title){
-
-      toast(
-        "Video Title ထည့်ပါ"
-      );
-
-      return;
-
-    }
-
-
-    const videoId =
-      getYouTubeId(url);
-
-
-    if(!videoId){
-
-      toast(
-        "မှန်ကန်တဲ့ YouTube Link ထည့်ပါ"
-      );
-
-      return;
-
-    }
-
-
-    const video = {
-
-      id:
-        Date.now().toString(),
-
-      title,
-
-      artist:
-        artist ||
-        "Unknown Channel",
-
-      videoId,
-
-      youtubeUrl:
-        url,
-
-      created:
-        Date.now()
-
-    };
-
-
-    state.videos.unshift(
-      video
-    );
-
-
-    state.view =
-      "all";
-
-
-    state.search =
-      "";
-
-
-    save();
-
-
-    document.getElementById(
-      "title"
-    ).value = "";
-
-
-    document.getElementById(
-      "artist"
-    ).value = "";
-
-
-    document.getElementById(
-      "youtubeUrl"
-    ).value = "";
-
-
-    closeModal(
-      "addModal"
-    );
-
-
-    document.querySelectorAll(
-      ".nav button"
-    ).forEach(btn =>
-      btn.classList.remove(
-        "active"
-      )
-    );
-
-
-    document.querySelector(
-      '[data-view="all"]'
-    ).classList.add(
-      "active"
-    );
-
-
-    render();
-
-
-    toast(
-      "YouTube Video added 🎬"
-    );
-
-  }
-);
-
-
-/* ================= SHUFFLE ================= */
-
-document.getElementById(
-  "shuffleBtn"
-).onclick =
-function(){
-
-  const videos =
-    getVideos();
-
-
-  if(!videos.length){
-
-    toast(
-      "No videos available"
-    );
-
-    return;
-
-  }
-
-
-  const random =
-    videos[
-      Math.floor(
-        Math.random() *
-        videos.length
-      )
-    ];
-
-
-  playVideo(
-    random.id
-  );
-
-};
-
-
-/* ================= SETTINGS ================= */
-
-document.getElementById(
-  "theme"
-).addEventListener(
-  "change",
-  function(){
-
-    state.theme =
-      this.value;
-
-    applyTheme();
-
-    save();
-
-  }
-);
-
-
-document.querySelectorAll(
-  ".color"
-).forEach(btn => {
-
-  btn.addEventListener(
-    "click",
-    function(){
-
-      state.accent =
-        this.dataset.color;
-
-      applyTheme();
-
-      save();
-
-    }
-  );
-
-});
-
-
-function applyTheme(){
-
-  document.documentElement
-    .style.setProperty(
-      "--accent",
-      state.accent
-    );
-
-
-  document.getElementById(
-    "theme"
-  ).value =
-    state.theme;
-
-
-  document.querySelectorAll(
-    ".color"
-  ).forEach(btn => {
-
-    btn.classList.toggle(
-      "active",
-      btn.dataset.color ===
-      state.accent
-    );
-
-  });
-
-
-  if(
-    state.theme ===
-    "light"
-  ){
-
-    document.documentElement
-      .style.setProperty(
-        "--bg",
-        "#f4f5f8"
-      );
-
-    document.documentElement
-      .style.setProperty(
-        "--panel",
-        "#ffffff"
-      );
-
-    document.documentElement
-      .style.setProperty(
-        "--panel2",
-        "#f0f1f5"
-      );
-
-    document.documentElement
-      .style.setProperty(
-        "--border",
-        "#e1e5ec"
-      );
-
-    document.documentElement
-      .style.setProperty(
-        "--text",
-        "#111827"
-      );
-
-    document.documentElement
-      .style.setProperty(
-        "--muted",
-        "#667085"
-      );
-
-  }else{
-
-    document.documentElement
-      .style.setProperty(
-        "--bg",
-        "#08090d"
-      );
-
-    document.documentElement
-      .style.setProperty(
-        "--panel",
-        "#11141b"
-      );
-
-    document.documentElement
-      .style.setProperty(
-        "--panel2",
-        "#181c25"
-      );
-
-    document.documentElement
-      .style.setProperty(
-        "--border",
-        "#272c38"
-      );
-
-    document.documentElement
-      .style.setProperty(
-        "--text",
-        "#f7f8fb"
-      );
-
-    document.documentElement
-      .style.setProperty(
-        "--muted",
-        "#8d95a6"
-      );
-
-  }
-
-}
-
-
-/* ================= RESET ================= */
-
-document.getElementById(
-  "reset"
-).onclick =
-function(){
-
-  if(
-    !confirm(
-      "သိမ်းထားတဲ့ YouTube Videos အားလုံးဖျက်မလား?"
-    )
-  ){
-
-    return;
-
-  }
-
-
-  state.videos = [];
-
-  state.favorites = [];
-
-  state.currentId = null;
-
-
-  player.src = "";
-
-  currentTitle.textContent =
-    "Select a video";
-
-  currentArtist.textContent =
-    "Choose a video from your library";
-
-
-  save();
-
-  render();
-
-  updateFavoriteButton();
-
-
-  toast(
-    "Library reset"
-  );
-
-};
-
-
-/* ================= ESCAPE ================= */
-
-document.addEventListener(
-  "keydown",
-  function(event){
-
-    if(
-      event.key === "/" &&
-      document.activeElement.tagName !==
-      "INPUT"
-    ){
-
-      event.preventDefault();
-
-      search.focus();
-
-    }
-
-
-    if(
-      event.key === "Escape"
-    ){
-
-      document.querySelectorAll(
-        ".modal-bg"
-      ).forEach(modal =>
-        modal.classList.remove(
-          "show"
-        )
-      );
-
-    }
-
-  }
-);
-
-
-/* ================= START ================= */
-
-applyTheme();
-
-updateFavoriteButton();
-
-render();
-
-</script>
+    <script src="app.js"></script>
 
 </body>
+
 </html>
