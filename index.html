@@ -1,34 +1,63 @@
 <!doctype html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>MyTuneBox — Music Room</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
+
 <style>
 
+/* =====================================================
+   ROOT
+===================================================== */
+
 :root{
+
     --bg:#07100e;
+
     --card:#0d1915;
+
     --card2:#101f19;
+
     --text:#f4f7f1;
+
     --muted:#84968b;
+
     --line:rgba(190,225,198,.13);
+
     --accent:#baff4a;
+
     --accent2:#8dff70;
+
     --danger:#ff7185;
+
 }
+
+
+/* =====================================================
+   GLOBAL
+===================================================== */
 
 *{
     box-sizing:border-box;
@@ -39,16 +68,21 @@ html{
 }
 
 body{
+
     margin:0;
+
     background:
+
         radial-gradient(
             circle at -5% 18%,
             rgba(75,143,128,.18),
             transparent 30%
         ),
+
         var(--bg);
 
     color:var(--text);
+
     font-family:
         "Noto Sans Myanmar",
         "DM Sans",
@@ -56,12 +90,14 @@ body{
 }
 
 button,
-input{
+input,
+select{
     font:inherit;
 }
 
 button{
     cursor:pointer;
+
     transition:.18s ease;
 }
 
@@ -69,64 +105,103 @@ button:active{
     transform:scale(.97);
 }
 
+button:disabled{
+    opacity:.55;
+
+    cursor:not-allowed;
+}
+
 a{
     color:inherit;
+
     text-decoration:none;
 }
 
-/* =========================
+h1,
+h2,
+h3,
+p{
+    margin:0;
+}
+
+
+/* =====================================================
    TOP BAR
-========================= */
+===================================================== */
 
 .topbar{
+
     height:74px;
+
     position:sticky;
+
     top:0;
+
     z-index:50;
 
     border-bottom:1px solid var(--line);
 
     background:rgba(7,16,14,.84);
+
     backdrop-filter:blur(18px);
 }
 
 .topbar-inner,
 .content{
-    width:min(1440px,calc(100% - 64px));
+
+    width:min(
+        1440px,
+        calc(100% - 64px)
+    );
+
     margin:auto;
 }
 
 .topbar-inner{
+
     height:100%;
+
     display:flex;
+
     align-items:center;
+
     gap:30px;
 }
 
 .brand{
+
     display:flex;
+
     align-items:center;
+
     gap:10px;
 
     font:600 17px "Space Grotesk";
+
     min-width:200px;
 }
 
 .brand-mark{
+
     display:grid;
+
     place-items:center;
 
     width:34px;
+
     height:34px;
 
     border:1px solid rgba(186,255,74,.5);
+
     border-radius:10px;
 
     color:var(--accent);
 }
 
 .brand em{
+
     font:8px "DM Sans";
+
     font-style:normal;
 
     letter-spacing:.13em;
@@ -141,7 +216,9 @@ a{
 }
 
 .nav{
+
     display:flex;
+
     gap:28px;
 
     margin-right:auto;
@@ -152,6 +229,7 @@ a{
 }
 
 .nav a{
+
     position:relative;
 
     color:#81928a;
@@ -165,11 +243,13 @@ a{
 }
 
 .nav a.active:after{
+
     content:"";
 
     position:absolute;
 
     left:0;
+
     right:0;
 
     bottom:-29px;
@@ -178,24 +258,32 @@ a{
 
     background:var(--accent);
 
-    box-shadow:0 0 14px rgba(186,255,74,.7);
+    box-shadow:
+        0 0 14px rgba(186,255,74,.7);
 }
 
 .actions{
+
     display:flex;
+
     align-items:center;
+
     gap:14px;
 }
 
 .status{
+
     color:#8a9d92;
+
     font-size:11px;
 }
 
 .status i{
+
     display:inline-block;
 
     width:6px;
+
     height:6px;
 
     margin-right:7px;
@@ -204,11 +292,14 @@ a{
 
     background:var(--accent);
 
-    box-shadow:0 0 11px var(--accent);
+    box-shadow:
+        0 0 11px var(--accent);
 }
 
 .login{
+
     border:0;
+
     border-radius:8px;
 
     padding:9px 13px;
@@ -218,10 +309,12 @@ a{
     color:#101a14;
 
     font-size:11px;
+
     font-weight:700;
 }
 
 .account-btn{
+
     display:none;
 
     border:1px solid var(--line);
@@ -238,6 +331,7 @@ a{
 }
 
 .menu{
+
     display:none;
 
     border:0;
@@ -249,18 +343,22 @@ a{
     font-size:20px;
 }
 
-/* =========================
+
+/* =====================================================
    CONTENT
-========================= */
+===================================================== */
 
 .content{
+
     padding:50px 0 70px;
 }
 
 .hero{
+
     display:flex;
 
     justify-content:space-between;
+
     align-items:end;
 
     gap:40px;
@@ -270,7 +368,9 @@ a{
 
 .eyebrow,
 .kicker{
+
     display:flex;
+
     align-items:center;
 
     gap:8px;
@@ -285,37 +385,39 @@ a{
 }
 
 .eyebrow{
+
     margin-bottom:14px;
 
     color:#a2bd8e;
 }
 
 .eyebrow span{
+
     width:25px;
+
     height:1px;
 
     background:var(--accent);
 }
 
-h1,
-h2,
-h3,
-p{
-    margin:0;
-}
-
 h1{
-    font:500 clamp(39px,5vw,62px)/.98 "Space Grotesk";
+
+    font:
+        500 clamp(39px,5vw,62px)/.98
+        "Space Grotesk";
 
     letter-spacing:-.06em;
 }
 
 h1 strong{
+
     color:var(--accent);
+
     font-weight:500;
 }
 
 .hero p{
+
     max-width:635px;
 
     margin-top:18px;
@@ -328,6 +430,7 @@ h1 strong{
 }
 
 .tip{
+
     max-width:300px;
 
     display:flex;
@@ -349,14 +452,17 @@ h1 strong{
     color:#e5f6d3;
 }
 
-/* =========================
+
+/* =====================================================
    GRID
-========================= */
+===================================================== */
 
 .grid{
+
     display:grid;
 
-    grid-template-columns:350px minmax(0,1fr);
+    grid-template-columns:
+        350px minmax(0,1fr);
 
     gap:22px;
 
@@ -364,25 +470,30 @@ h1 strong{
 }
 
 .card{
+
     border:1px solid var(--line);
 
     border-radius:14px;
 
     background:
+
         linear-gradient(
             145deg,
             rgba(18,35,28,.88),
             rgba(8,17,14,.94)
         );
 
-    box-shadow:0 18px 55px rgba(0,0,0,.17);
+    box-shadow:
+        0 18px 55px rgba(0,0,0,.17);
 }
 
-/* =========================
+
+/* =====================================================
    LIBRARY
-========================= */
+===================================================== */
 
 .library{
+
     padding:22px 17px;
 
     min-height:625px;
@@ -390,6 +501,7 @@ h1 strong{
 
 .title-row,
 .section-head{
+
     display:flex;
 
     align-items:flex-start;
@@ -402,15 +514,21 @@ h1 strong{
 }
 
 h2{
+
     margin-top:8px;
 
-    font:500 24px "Space Grotesk";
+    font:
+        500 24px
+        "Space Grotesk";
 
     letter-spacing:-.04em;
 }
 
 h2 small{
-    font:14px "DM Sans";
+
+    font:
+        14px
+        "DM Sans";
 
     color:#75897d;
 
@@ -418,7 +536,9 @@ h2 small{
 }
 
 .add-icon{
+
     width:34px;
+
     height:34px;
 
     border:1px solid rgba(186,255,74,.2);
@@ -433,6 +553,7 @@ h2 small{
 }
 
 .search{
+
     display:flex;
 
     gap:9px;
@@ -451,10 +572,13 @@ h2 small{
 }
 
 .search input{
+
     width:100%;
+
     height:100%;
 
     border:0;
+
     outline:0;
 
     background:transparent;
@@ -469,6 +593,7 @@ h2 small{
 }
 
 .tabs{
+
     display:flex;
 
     gap:6px;
@@ -477,6 +602,7 @@ h2 small{
 }
 
 .tabs button{
+
     border:0;
 
     border-radius:6px;
@@ -491,12 +617,14 @@ h2 small{
 }
 
 .tabs button.active{
+
     color:#d5e8d4;
 
     background:#1a3328;
 }
 
 .songs{
+
     display:flex;
 
     flex-direction:column;
@@ -505,6 +633,7 @@ h2 small{
 }
 
 .song{
+
     display:flex;
 
     align-items:center;
@@ -519,12 +648,14 @@ h2 small{
 }
 
 .song.active{
+
     background:rgba(186,255,74,.07);
 
     border-color:rgba(186,255,74,.17);
 }
 
 .song-main{
+
     display:flex;
 
     align-items:center;
@@ -547,6 +678,7 @@ h2 small{
 }
 
 .thumb{
+
     display:inline-block;
 
     position:relative;
@@ -554,6 +686,7 @@ h2 small{
     flex:none;
 
     width:43px;
+
     height:43px;
 
     overflow:hidden;
@@ -564,13 +697,16 @@ h2 small{
 }
 
 .thumb img{
+
     width:100%;
+
     height:100%;
 
     object-fit:cover;
 }
 
 .song-main span:last-child{
+
     display:flex;
 
     min-width:0;
@@ -581,6 +717,7 @@ h2 small{
 }
 
 .song-main b{
+
     white-space:nowrap;
 
     overflow:hidden;
@@ -591,12 +728,14 @@ h2 small{
 }
 
 .song-main small{
+
     color:#778b80;
 
     font-size:10px;
 }
 
 .icon-btn{
+
     border:0;
 
     background:transparent;
@@ -615,6 +754,7 @@ h2 small{
 }
 
 .add-link{
+
     display:flex;
 
     align-items:center;
@@ -632,21 +772,24 @@ h2 small{
     font-size:11px;
 }
 
-/* =========================
+
+/* =====================================================
    PLAYER
-========================= */
+===================================================== */
 
 .player{
     min-width:0;
 }
 
 .section-head{
+
     align-items:end;
 
     padding:0 3px 17px;
 }
 
 .section-head h2{
+
     display:flex;
 
     align-items:center;
@@ -655,6 +798,7 @@ h2 small{
 }
 
 .live{
+
     display:inline-flex;
 
     align-items:center;
@@ -675,7 +819,9 @@ h2 small{
 }
 
 .live i{
+
     width:5px;
+
     height:5px;
 
     border-radius:50%;
@@ -688,6 +834,7 @@ h2 small{
 }
 
 .player-bar{
+
     display:flex;
 
     justify-content:space-between;
@@ -704,6 +851,7 @@ h2 small{
 }
 
 .video{
+
     position:relative;
 
     min-height:380px;
@@ -712,20 +860,24 @@ h2 small{
 }
 
 .video iframe{
+
     position:absolute;
 
     inset:0;
 
     width:100%;
+
     height:100%;
 
     border:0;
 }
 
 .source{
+
     position:absolute;
 
     top:12px;
+
     left:13px;
 
     padding:6px 8px;
@@ -740,6 +892,7 @@ h2 small{
 }
 
 .track{
+
     display:flex;
 
     align-items:center;
@@ -750,16 +903,21 @@ h2 small{
 }
 
 .track .thumb{
+
     width:46px;
+
     height:46px;
 }
 
 .track-info{
+
     min-width:0;
+
     flex:1;
 }
 
 .track-info label{
+
     color:#778e80;
 
     font-size:8px;
@@ -768,6 +926,7 @@ h2 small{
 }
 
 .track-info h3{
+
     margin-top:5px;
 
     white-space:nowrap;
@@ -776,10 +935,13 @@ h2 small{
 
     text-overflow:ellipsis;
 
-    font:500 18px "Space Grotesk";
+    font:
+        500 18px
+        "Space Grotesk";
 }
 
 .track-info p{
+
     margin-top:4px;
 
     color:#82958b;
@@ -788,6 +950,7 @@ h2 small{
 }
 
 .heart{
+
     border:0;
 
     background:transparent;
@@ -798,6 +961,7 @@ h2 small{
 }
 
 .embed-note{
+
     padding:12px 20px 15px;
 
     border-top:1px solid var(--line);
@@ -807,11 +971,13 @@ h2 small{
     font-size:10px;
 }
 
-/* =========================
+
+/* =====================================================
    BELOW
-========================= */
+===================================================== */
 
 .below{
+
     display:grid;
 
     grid-template-columns:1fr 1fr;
@@ -823,14 +989,17 @@ h2 small{
 
 .queue,
 .playlist{
+
     padding:21px 18px;
 }
 
 .queue-list{
+
     margin-top:15px;
 }
 
 .queue-row{
+
     display:flex;
 
     align-items:center;
@@ -847,17 +1016,22 @@ h2 small{
 }
 
 .queue-row .thumb{
+
     width:36px;
+
     height:36px;
 }
 
 .queue-row div{
+
     min-width:0;
+
     flex:1;
 }
 
 .queue-row b,
 .queue-row small{
+
     display:block;
 
     white-space:nowrap;
@@ -872,12 +1046,14 @@ h2 small{
 }
 
 .queue-row small{
+
     color:#778b80;
 
     font-size:10px;
 }
 
 .queue-row button{
+
     border:0;
 
     background:transparent;
@@ -886,6 +1062,7 @@ h2 small{
 }
 
 .playlist{
+
     display:flex;
 
     align-items:center;
@@ -894,11 +1071,13 @@ h2 small{
 }
 
 .playlist-art{
+
     display:grid;
 
     place-items:center;
 
     width:70px;
+
     height:70px;
 
     border-radius:10px;
@@ -915,6 +1094,7 @@ h2 small{
 }
 
 .playlist p{
+
     margin-top:5px;
 
     color:#7c9184;
@@ -923,6 +1103,7 @@ h2 small{
 }
 
 .save{
+
     margin-left:auto;
 
     white-space:nowrap;
@@ -940,11 +1121,13 @@ h2 small{
     font-size:10px;
 }
 
-/* =========================
+
+/* =====================================================
    MODALS
-========================= */
+===================================================== */
 
 .modal{
+
     position:fixed;
 
     inset:0;
@@ -967,6 +1150,7 @@ h2 small{
 }
 
 .modal-box{
+
     width:min(500px,100%);
 
     max-height:90vh;
@@ -983,12 +1167,14 @@ h2 small{
 }
 
 .modal-head{
+
     display:flex;
 
     justify-content:space-between;
 }
 
 .modal-head button{
+
     border:0;
 
     background:transparent;
@@ -1003,6 +1189,7 @@ h2 small{
 }
 
 .modal-box p{
+
     margin-top:6px;
 
     color:#8b9d92;
@@ -1011,6 +1198,7 @@ h2 small{
 }
 
 .form{
+
     display:flex;
 
     flex-direction:column;
@@ -1021,6 +1209,7 @@ h2 small{
 }
 
 .form label{
+
     display:flex;
 
     flex-direction:column;
@@ -1034,6 +1223,7 @@ h2 small{
 
 .form input,
 .form select{
+
     height:40px;
 
     border:1px solid rgba(190,225,198,.16);
@@ -1052,6 +1242,7 @@ h2 small{
 }
 
 .form-foot{
+
     display:flex;
 
     justify-content:flex-end;
@@ -1062,6 +1253,7 @@ h2 small{
 }
 
 .form-foot button{
+
     height:36px;
 
     border:0;
@@ -1074,12 +1266,14 @@ h2 small{
 }
 
 .cancel{
+
     background:transparent;
 
     color:#99aa9f;
 }
 
 .submit{
+
     background:var(--accent);
 
     color:#122016;
@@ -1088,16 +1282,19 @@ h2 small{
 }
 
 .notice{
+
     color:#91a995;
 
     font-size:10px;
 }
 
-/* =========================
+
+/* =====================================================
    AUTH
-========================= */
+===================================================== */
 
 .auth-screen{
+
     position:fixed;
 
     inset:0;
@@ -1113,11 +1310,13 @@ h2 small{
     padding:20px;
 
     background:
+
         radial-gradient(
             circle at 50% 20%,
             rgba(186,255,74,.09),
             transparent 35%
         ),
+
         #050b08;
 }
 
@@ -1126,6 +1325,7 @@ h2 small{
 }
 
 .auth-box{
+
     width:min(420px,100%);
 
     padding:30px;
@@ -1136,14 +1336,18 @@ h2 small{
 
     background:rgba(13,25,21,.95);
 
-    box-shadow:0 30px 100px rgba(0,0,0,.5);
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.5);
 }
 
 .auth-logo{
+
     width:50px;
+
     height:50px;
 
     display:grid;
+
     place-items:center;
 
     border:1px solid rgba(186,255,74,.4);
@@ -1156,6 +1360,7 @@ h2 small{
 }
 
 .auth-box h1{
+
     font-size:32px;
 
     letter-spacing:-.05em;
@@ -1166,6 +1371,7 @@ h2 small{
 }
 
 .auth-sub{
+
     margin-top:9px;
 
     color:#81958a;
@@ -1176,6 +1382,7 @@ h2 small{
 }
 
 .auth-form{
+
     margin-top:24px;
 
     display:flex;
@@ -1186,6 +1393,7 @@ h2 small{
 }
 
 .auth-form label{
+
     display:flex;
 
     flex-direction:column;
@@ -1198,6 +1406,7 @@ h2 small{
 }
 
 .auth-form input{
+
     height:42px;
 
     border:1px solid var(--line);
@@ -1213,27 +1422,16 @@ h2 small{
     padding:0 12px;
 }
 
-.forgot{
-    align-self:flex-end;
+.auth-form input:focus{
 
-    margin-top:-2px;
+    border-color:rgba(186,255,74,.45);
 
-    border:0;
-
-    background:transparent;
-
-    color:var(--accent);
-
-    font-size:10px;
-
-    padding:0;
-}
-
-.forgot:hover{
-    text-decoration:underline;
+    box-shadow:
+        0 0 0 3px rgba(186,255,74,.05);
 }
 
 .auth-submit{
+
     height:42px;
 
     margin-top:5px;
@@ -1249,30 +1447,95 @@ h2 small{
     font-weight:700;
 }
 
-.auth-submit:disabled{
-    opacity:.6;
+.auth-switch{
 
-    cursor:not-allowed;
+    margin-top:17px;
+
+    text-align:center;
+
+    color:#7d9185;
+
+    font-size:10px;
+}
+
+.auth-switch button{
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--accent);
+}
+
+.auth-error{
+
+    display:none;
+
+    padding:9px;
+
+    border-radius:7px;
+
+    background:rgba(255,113,133,.08);
+
+    color:#ff9dab;
+
+    font-size:10px;
+
+    line-height:1.5;
+}
+
+.auth-error.show{
+    display:block;
+}
+
+.auth-error.success{
+
+    background:rgba(186,255,74,.08);
+
+    color:#caff8d;
+}
+
+.forgot{
+
+    align-self:flex-end;
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--accent);
+
+    font-size:9px;
+
+    padding:0;
+
+    margin-top:2px;
+}
+
+.forgot:hover{
+    text-decoration:underline;
 }
 
 .auth-divider{
+
     display:flex;
 
     align-items:center;
 
     gap:10px;
 
-    margin:3px 0;
+    margin:17px 0;
 
-    color:#65786d;
+    color:#63766c;
 
     font-size:9px;
 
-    letter-spacing:.08em;
+    letter-spacing:.1em;
 }
 
 .auth-divider::before,
 .auth-divider::after{
+
     content:"";
 
     flex:1;
@@ -1283,6 +1546,7 @@ h2 small{
 }
 
 .google-btn{
+
     width:100%;
 
     height:42px;
@@ -1295,13 +1559,13 @@ h2 small{
 
     gap:9px;
 
-    border:1px solid rgba(190,225,198,.16);
+    border:1px solid var(--line);
 
     border-radius:8px;
 
-    background:#fff;
+    background:#111d18;
 
-    color:#202124;
+    color:#eef8ef;
 
     font-size:11px;
 
@@ -1309,81 +1573,43 @@ h2 small{
 }
 
 .google-btn:hover{
-    background:#f1f3f4;
-}
 
-.google-btn:disabled{
-    opacity:.6;
+    background:#17271f;
 
-    cursor:not-allowed;
+    border-color:
+        rgba(186,255,74,.25);
 }
 
 .google-icon{
+
     display:grid;
 
     place-items:center;
 
-    width:19px;
-    height:19px;
+    width:22px;
+
+    height:22px;
 
     border-radius:50%;
 
-    font-family:Arial,sans-serif;
+    background:white;
 
-    font-size:15px;
+    color:#4285f4;
+
+    font-family:Arial,sans-serif;
 
     font-weight:700;
 
-    color:#4285f4;
+    font-size:14px;
 }
 
-.auth-switch{
-    margin-top:17px;
 
-    text-align:center;
-
-    color:#7d9185;
-
-    font-size:10px;
-}
-
-.auth-switch button{
-    border:0;
-
-    background:transparent;
-
-    color:var(--accent);
-}
-
-.auth-error{
-    display:none;
-
-    padding:9px;
-
-    border-radius:7px;
-
-    background:rgba(255,113,133,.08);
-
-    color:#ff9dab;
-
-    font-size:10px;
-}
-
-.auth-error.show{
-    display:block;
-}
-
-.auth-error.success{
-    background:rgba(186,255,74,.08);
-
-    color:#caff8d;
-}
-
-/* =========================
+/* =====================================================
    SETTINGS
-========================= */
+===================================================== */
 
 .settings-overlay{
+
     position:fixed;
 
     inset:0;
@@ -1404,6 +1630,7 @@ h2 small{
 }
 
 .settings-panel{
+
     width:min(400px,100%);
 
     height:100%;
@@ -1416,10 +1643,12 @@ h2 small{
 
     border-left:1px solid var(--line);
 
-    box-shadow:-20px 0 60px rgba(0,0,0,.4);
+    box-shadow:
+        -20px 0 60px rgba(0,0,0,.4);
 }
 
 .settings-head{
+
     display:flex;
 
     align-items:center;
@@ -1428,6 +1657,7 @@ h2 small{
 }
 
 .settings-head button{
+
     border:0;
 
     background:transparent;
@@ -1442,6 +1672,7 @@ h2 small{
 }
 
 .setting-title{
+
     color:#8ea398;
 
     font-size:9px;
@@ -1452,6 +1683,7 @@ h2 small{
 }
 
 .setting-item{
+
     display:flex;
 
     align-items:center;
@@ -1470,12 +1702,14 @@ h2 small{
 }
 
 .setting-item b{
+
     display:block;
 
     font-size:12px;
 }
 
 .setting-item small{
+
     display:block;
 
     margin-top:4px;
@@ -1486,6 +1720,7 @@ h2 small{
 }
 
 .theme-grid{
+
     display:grid;
 
     grid-template-columns:repeat(2,1fr);
@@ -1496,6 +1731,7 @@ h2 small{
 }
 
 .theme-btn{
+
     padding:13px;
 
     border:1px solid var(--line);
@@ -1512,12 +1748,15 @@ h2 small{
 }
 
 .theme-btn.active{
+
     border-color:var(--accent);
 
-    box-shadow:0 0 0 1px var(--accent);
+    box-shadow:
+        0 0 0 1px var(--accent);
 }
 
 .color-row{
+
     display:flex;
 
     gap:8px;
@@ -1528,7 +1767,9 @@ h2 small{
 }
 
 .color-btn{
+
     width:30px;
+
     height:30px;
 
     border-radius:50%;
@@ -1537,12 +1778,15 @@ h2 small{
 }
 
 .color-btn.active{
+
     border-color:white;
 
-    box-shadow:0 0 0 2px rgba(255,255,255,.15);
+    box-shadow:
+        0 0 0 2px rgba(255,255,255,.15);
 }
 
 .user-card{
+
     margin-top:15px;
 
     padding:13px;
@@ -1555,6 +1799,7 @@ h2 small{
 }
 
 .user-card b{
+
     display:block;
 
     font-size:11px;
@@ -1563,12 +1808,14 @@ h2 small{
 }
 
 .user-card small{
+
     color:#72877b;
 
     font-size:9px;
 }
 
 .logout{
+
     width:100%;
 
     margin-top:22px;
@@ -1586,11 +1833,13 @@ h2 small{
     font-size:11px;
 }
 
-/* =========================
+
+/* =====================================================
    EMPTY
-========================= */
+===================================================== */
 
 .empty{
+
     padding:25px 5px;
 
     color:#71867a;
@@ -1600,49 +1849,73 @@ h2 small{
     font-size:10px;
 }
 
-/* =========================
+
+/* =====================================================
    THEMES
-========================= */
+===================================================== */
 
 body.theme-black{
+
     --bg:#030405;
+
     --card:#090a0b;
+
     --card2:#101112;
 }
 
 body.theme-purple{
+
     --bg:#0c0712;
+
     --card:#160d20;
+
     --card2:#21132d;
+
     --accent:#c084ff;
+
     --accent2:#e0a8ff;
 }
 
 body.theme-blue{
+
     --bg:#061019;
+
     --card:#0b1823;
+
     --card2:#102434;
+
     --accent:#64d8ff;
+
     --accent2:#7ce7ff;
 }
 
 body.theme-red{
+
     --bg:#120708;
+
     --card:#1d0c0e;
+
     --card2:#281113;
+
     --accent:#ff7b87;
+
     --accent2:#ff9ba4;
 }
 
-/* =========================
+
+/* =====================================================
    RESPONSIVE
-========================= */
+===================================================== */
 
 @media(max-width:980px){
 
     .topbar-inner,
     .content{
-        width:min(calc(100% - 36px),760px);
+
+        width:min(
+            calc(100% - 36px),
+            760px
+        );
     }
 
     .grid{
@@ -1658,6 +1931,7 @@ body.theme-red{
     }
 
     .hero{
+
         align-items:flex-start;
 
         flex-direction:column;
@@ -1666,7 +1940,9 @@ body.theme-red{
     .below{
         grid-template-columns:1fr;
     }
+
 }
+
 
 @media(max-width:640px){
 
@@ -1692,6 +1968,7 @@ body.theme-red{
     }
 
     .nav{
+
         position:absolute;
 
         display:none;
@@ -1699,6 +1976,7 @@ body.theme-red{
         top:64px;
 
         left:14px;
+
         right:14px;
 
         height:auto;
@@ -1735,6 +2013,7 @@ body.theme-red{
     }
 
     .playlist{
+
         align-items:flex-start;
 
         flex-wrap:wrap;
@@ -1747,18 +2026,58 @@ body.theme-red{
     .settings-panel{
         width:100%;
     }
+
+}
+
+
+/* =====================================================
+   VERY SMALL SCREEN
+===================================================== */
+
+@media(max-width:420px){
+
+    .auth-box{
+        padding:23px;
+    }
+
+    .hero h1{
+        font-size:40px;
+    }
+
+    .player-bar span:last-child{
+        display:none;
+    }
+
+    .song{
+        gap:2px;
+    }
+
+    .song-main{
+        gap:7px;
+    }
+
+    .song .icon-btn{
+        padding:5px;
+    }
+
 }
 
 </style>
+
 </head>
+
 
 <body>
 
-<!-- =========================
-     AUTH SCREEN
-========================= -->
 
-<div class="auth-screen" id="authScreen">
+<!-- =====================================================
+     AUTH SCREEN
+===================================================== -->
+
+<div
+    class="auth-screen"
+    id="authScreen"
+>
 
     <div class="auth-box">
 
@@ -1772,24 +2091,32 @@ body.theme-red{
 
         <p class="auth-sub">
             Your personal music room.<br>
-            Login ဝင်ပြီး ကိုယ့်သီချင်းတွေကို ဘယ် device မှာမဆို
-            ပြန်အသုံးပြုနိုင်ပါတယ်။
+            Login ဝင်ပြီး ကိုယ့်သီချင်းတွေကို ဘယ် device မှာမဆို ပြန်အသုံးပြုနိုင်ပါတယ်။
         </p>
 
-        <form class="auth-form" id="authForm">
+
+        <form
+            class="auth-form"
+            id="authForm"
+        >
 
             <label>
+
                 Email
 
                 <input
                     id="authEmail"
                     type="email"
                     required
+                    autocomplete="email"
                     placeholder="you@example.com"
                 >
+
             </label>
 
+
             <label>
+
                 Password
 
                 <input
@@ -1797,6 +2124,7 @@ body.theme-red{
                     type="password"
                     required
                     minlength="6"
+                    autocomplete="current-password"
                     placeholder="••••••••"
                 >
 
@@ -1810,10 +2138,12 @@ body.theme-red{
 
             </label>
 
+
             <div
                 class="auth-error"
                 id="authError"
             ></div>
+
 
             <button
                 type="submit"
@@ -1823,24 +2153,29 @@ body.theme-red{
                 Login
             </button>
 
-            <div class="auth-divider">
-                <span>OR</span>
-            </div>
-
-            <button
-                type="button"
-                class="google-btn"
-                id="googleLoginButton"
-                onclick="googleLogin()"
-            >
-                <span class="google-icon">
-                    G
-                </span>
-
-                Continue with Google
-            </button>
-
         </form>
+
+
+        <div class="auth-divider">
+            <span>OR</span>
+        </div>
+
+
+        <button
+            type="button"
+            class="google-btn"
+            id="googleLoginButton"
+            onclick="googleLogin()"
+        >
+
+            <span class="google-icon">
+                G
+            </span>
+
+            Continue with Google
+
+        </button>
+
 
         <div class="auth-switch">
 
@@ -1850,11 +2185,10 @@ body.theme-red{
 
             <button
                 type="button"
+                id="authSwitchButton"
                 onclick="toggleAuthMode()"
             >
-                <span id="authSwitchButton">
-                    Create account
-                </span>
+                Create account
             </button>
 
         </div>
@@ -1864,9 +2198,9 @@ body.theme-red{
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      TOP BAR
-========================= -->
+===================================================== -->
 
 <header class="topbar">
 
@@ -1890,6 +2224,7 @@ body.theme-red{
             </em>
 
         </a>
+
 
         <nav
             class="nav"
@@ -1917,12 +2252,17 @@ body.theme-red{
 
         </nav>
 
+
         <div class="actions">
 
             <span class="status">
+
                 <i></i>
+
                 Room online
+
             </span>
+
 
             <button
                 class="account-btn"
@@ -1932,6 +2272,7 @@ body.theme-red{
                 Account
             </button>
 
+
             <button
                 class="login"
                 id="loginButton"
@@ -1939,6 +2280,7 @@ body.theme-red{
             >
                 Log in
             </button>
+
 
             <button
                 class="menu"
@@ -1959,45 +2301,62 @@ body.theme-red{
 </header>
 
 
-<!-- =========================
+<!-- =====================================================
      MAIN
-========================= -->
+===================================================== -->
 
 <main
     class="content"
     id="top"
 >
 
+
+    <!-- HERO -->
+
     <section class="hero">
 
         <div>
 
             <div class="eyebrow">
+
                 <span></span>
+
                 YOUR PERSONAL MUSIC ROOM
+
             </div>
 
+
             <h1>
+
                 Play your songs.<br>
+
                 <strong>Your way.</strong>
+
             </h1>
 
+
             <p>
+
                 YouTube link တွေကို ကိုယ့်ရဲ့ music room ထဲသိမ်းထားပြီး
                 queue, playlist, favorites နဲ့ ကိုယ်တိုင်စီမံပါ။
                 Account တစ်ခုနဲ့ device အားလုံးမှာ ပြန်သုံးနိုင်ပါတယ်။
+
             </p>
 
         </div>
+
 
         <div class="tip">
 
             ✦
 
             <span>
+
                 <b>New</b> —
+
                 Random Song ကိုနှိပ်ပြီး Library ထဲက
                 သီချင်းတစ်ပုဒ်ကို ကျပန်းရွေးဖွင့်နိုင်ပါပြီ။
+
             </span>
 
         </div>
@@ -2008,6 +2367,7 @@ body.theme-red{
     <!-- MAIN GRID -->
 
     <section class="grid">
+
 
         <!-- LIBRARY -->
 
@@ -2025,14 +2385,17 @@ body.theme-red{
                     </div>
 
                     <h2>
+
                         Saved songs
 
                         <small id="songCount">
                             00
                         </small>
+
                     </h2>
 
                 </div>
+
 
                 <button
                     class="add-icon"
@@ -2068,6 +2431,7 @@ body.theme-red{
                 >
                     All songs
                 </button>
+
 
                 <button
                     id="favTab"
@@ -2115,13 +2479,17 @@ body.theme-red{
                         Music player
 
                         <span class="live">
+
                             <i></i>
+
                             LIVE
+
                         </span>
 
                     </h2>
 
                 </div>
+
 
                 <button
                     class="icon-btn"
@@ -2134,6 +2502,7 @@ body.theme-red{
 
 
             <div class="card player-card">
+
 
                 <div class="player-bar">
 
@@ -2156,6 +2525,7 @@ body.theme-red{
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen
                     ></iframe>
+
 
                     <span class="source">
                         ▶ YouTube source
@@ -2222,6 +2592,7 @@ body.theme-red{
 
     <section class="below">
 
+
         <!-- QUEUE -->
 
         <section
@@ -2238,14 +2609,17 @@ body.theme-red{
                     </div>
 
                     <h2>
+
                         Queue
 
                         <small id="queueCount">
                             00
                         </small>
+
                     </h2>
 
                 </div>
+
 
                 <div>
 
@@ -2257,6 +2631,7 @@ body.theme-red{
                         🔀
                     </button>
 
+
                     <button
                         class="icon-btn"
                         onclick="randomSong()"
@@ -2264,6 +2639,7 @@ body.theme-red{
                     >
                         🎲
                     </button>
+
 
                     <button
                         class="icon-btn"
@@ -2285,7 +2661,7 @@ body.theme-red{
         </section>
 
 
-        <!-- PLAYLIST -->
+        <!-- QUICK PLAYLIST -->
 
         <section
             class="card playlist"
@@ -2302,6 +2678,7 @@ body.theme-red{
 
             </div>
 
+
             <div>
 
                 <div class="kicker">
@@ -2313,11 +2690,14 @@ body.theme-red{
                 </h2>
 
                 <p>
+
                     မင်းအကြိုက်ဆုံးသီချင်းတွေကို
                     တစ်နေရာတည်းမှာ စုထားပါ
+
                 </p>
 
             </div>
+
 
             <button
                 class="save"
@@ -2333,9 +2713,9 @@ body.theme-red{
 </main>
 
 
-<!-- =========================
+<!-- =====================================================
      ADD SONG MODAL
-========================= -->
+===================================================== -->
 
 <div
     class="modal"
@@ -2357,13 +2737,18 @@ body.theme-red{
                 </h2>
 
                 <p>
-                    YouTube link ထည့်ပြီး title နဲ့ artist ကို
-                    အလိုအလျောက်ဖြည့်ပါမယ်။
+
+                    YouTube link ထည့်ပြီး
+                    title နဲ့ artist ကို အလိုအလျောက်ဖြည့်ပါမယ်။
+
                 </p>
 
             </div>
 
-            <button onclick="closeSongModal()">
+
+            <button
+                onclick="closeSongModal()"
+            >
                 ×
             </button>
 
@@ -2374,6 +2759,7 @@ body.theme-red{
             class="form"
             onsubmit="addSong(event)"
         >
+
 
             <label>
 
@@ -2432,6 +2818,7 @@ body.theme-red{
                     Cancel
                 </button>
 
+
                 <button
                     type="submit"
                     class="submit"
@@ -2448,9 +2835,9 @@ body.theme-red{
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      SETTINGS
-========================= -->
+===================================================== -->
 
 <div
     class="settings-overlay"
@@ -2459,6 +2846,7 @@ body.theme-red{
 >
 
     <aside class="settings-panel">
+
 
         <div class="settings-head">
 
@@ -2473,6 +2861,7 @@ body.theme-red{
                 </h2>
 
             </div>
+
 
             <button onclick="closeSettings()">
                 ×
@@ -2494,7 +2883,7 @@ body.theme-red{
         </div>
 
 
-        <!-- THEME -->
+        <!-- APPEARANCE -->
 
         <div class="setting-section">
 
@@ -2522,6 +2911,7 @@ body.theme-red{
 
             <div class="theme-grid">
 
+
                 <button
                     class="theme-btn active"
                     data-theme="forest"
@@ -2529,6 +2919,7 @@ body.theme-red{
                 >
                     🌲 Forest
                 </button>
+
 
                 <button
                     class="theme-btn"
@@ -2538,6 +2929,7 @@ body.theme-red{
                     🖤 Pure Black
                 </button>
 
+
                 <button
                     class="theme-btn"
                     data-theme="purple"
@@ -2546,6 +2938,7 @@ body.theme-red{
                     💜 Purple
                 </button>
 
+
                 <button
                     class="theme-btn"
                     data-theme="blue"
@@ -2553,6 +2946,7 @@ body.theme-red{
                 >
                     💙 Ocean
                 </button>
+
 
                 <button
                     class="theme-btn"
@@ -2584,11 +2978,13 @@ body.theme-red{
                     onclick="setAccent('#baff4a')"
                 ></button>
 
+
                 <button
                     class="color-btn"
                     style="background:#64d8ff"
                     onclick="setAccent('#64d8ff')"
                 ></button>
+
 
                 <button
                     class="color-btn"
@@ -2596,11 +2992,13 @@ body.theme-red{
                     onclick="setAccent('#c084ff')"
                 ></button>
 
+
                 <button
                     class="color-btn"
                     style="background:#ff7b87"
                     onclick="setAccent('#ff7b87')"
                 ></button>
+
 
                 <button
                     class="color-btn"
@@ -2613,7 +3011,7 @@ body.theme-red{
         </div>
 
 
-        <!-- PLAYER SETTINGS -->
+        <!-- MUSIC -->
 
         <div class="setting-section">
 
@@ -2635,6 +3033,7 @@ body.theme-red{
                     </small>
 
                 </div>
+
 
                 <button
                     class="save"
@@ -2659,6 +3058,7 @@ body.theme-red{
                     </small>
 
                 </div>
+
 
                 <button
                     class="save"
@@ -2717,11 +3117,15 @@ const firebaseConfig = {
    INITIALIZE FIREBASE
 ===================================================== */
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(
+    firebaseConfig
+);
 
-const auth = firebase.auth();
+const auth =
+    firebase.auth();
 
-const db = firebase.firestore();
+const db =
+    firebase.firestore();
 
 
 /* =====================================================
@@ -2751,30 +3155,63 @@ let titleFetchTimer = null;
 
 function toggleAuthMode(){
 
-    isRegisterMode = !isRegisterMode;
+    isRegisterMode =
+        !isRegisterMode;
 
-    document
-    .getElementById("authSubmit")
-    .textContent =
-        isRegisterMode
-        ? "Create account"
-        : "Login";
 
-    document
-    .getElementById("authSwitchText")
-    .textContent =
-        isRegisterMode
-        ? "Account ရှိပြီးသားလား?"
-        : "Account မရှိသေးဘူးလား?";
+    const submit =
+        document.getElementById(
+            "authSubmit"
+        );
 
-    document
-    .getElementById("authSwitchButton")
-    .textContent =
-        isRegisterMode
-        ? "Login"
-        : "Create account";
+    const switchText =
+        document.getElementById(
+            "authSwitchText"
+        );
+
+    const switchButton =
+        document.getElementById(
+            "authSwitchButton"
+        );
+
+    const password =
+        document.getElementById(
+            "authPassword"
+        );
+
 
     hideAuthError();
+
+
+    if(isRegisterMode){
+
+        submit.textContent =
+            "Create account";
+
+        switchText.textContent =
+            "Account ရှိပြီးသားလား?";
+
+        switchButton.textContent =
+            "Login";
+
+        password.autocomplete =
+            "new-password";
+
+    }else{
+
+        submit.textContent =
+            "Login";
+
+        switchText.textContent =
+            "Account မရှိသေးဘူးလား?";
+
+        switchButton.textContent =
+            "Create account";
+
+        password.autocomplete =
+            "current-password";
+
+    }
 
 }
 
@@ -2785,54 +3222,86 @@ function toggleAuthMode(){
 
 function openAuth(){
 
-    document
-    .getElementById("authScreen")
-    .classList
-    .add("show");
+    const screen =
+        document.getElementById(
+            "authScreen"
+        );
+
+    if(screen){
+
+        screen.classList.add(
+            "show"
+        );
+
+    }
 
 }
 
 
 function closeAuth(){
 
-    document
-    .getElementById("authScreen")
-    .classList
-    .remove("show");
+    const screen =
+        document.getElementById(
+            "authScreen"
+        );
+
+    if(screen){
+
+        screen.classList.remove(
+            "show"
+        );
+
+    }
 
 }
 
+
+/* =====================================================
+   AUTH MESSAGE
+===================================================== */
 
 function showAuthError(message){
 
     const box =
-        document.getElementById("authError");
+        document.getElementById(
+            "authError"
+        );
 
-    box.textContent = message;
+    if(!box) return;
 
-    box.classList.remove("success");
+    box.textContent =
+        message;
 
-    box.classList.add("show");
+    box.classList.remove(
+        "success"
+    );
+
+    box.classList.add(
+        "show"
+    );
 
 }
 
 
-function showAuthMessage(
-    message,
-    success = false
-){
+function showAuthSuccess(message){
 
     const box =
-        document.getElementById("authError");
+        document.getElementById(
+            "authError"
+        );
 
-    box.textContent = message;
+    if(!box) return;
 
-    box.classList.toggle(
-        "success",
-        success
+    box.textContent =
+        message;
+
+    box.classList.add(
+        "success"
     );
 
-    box.classList.add("show");
+    box.classList.add(
+        "show"
+    );
 
 }
 
@@ -2840,7 +3309,13 @@ function showAuthMessage(
 function hideAuthError(){
 
     const box =
-        document.getElementById("authError");
+        document.getElementById(
+            "authError"
+        );
+
+    if(!box) return;
+
+    box.textContent = "";
 
     box.classList.remove(
         "show",
@@ -2851,87 +3326,103 @@ function hideAuthError(){
 
 
 /* =====================================================
-   FORGOT PASSWORD
+   FIREBASE AUTH ERROR
 ===================================================== */
 
-async function forgotPassword(){
+function getAuthErrorMessage(error){
 
-    hideAuthError();
-
-    const email =
-        document
-        .getElementById("authEmail")
-        .value
-        .trim();
-
-    if(!email){
-
-        showAuthError(
-            "အရင် Email ထည့်ပေးပါ။"
-        );
-
-        document
-        .getElementById("authEmail")
-        .focus();
-
-        return;
-
-    }
+    console.error(
+        "Firebase Auth Error:",
+        error
+    );
 
 
-    try{
+    switch(error.code){
 
-        await auth.sendPasswordResetEmail(
-            email
-        );
+        case "auth/invalid-email":
 
-        showAuthMessage(
-            "Password reset email ပို့ပြီးပါပြီ။ Inbox / Spam folder ကိုစစ်ပါ။",
-            true
-        );
-
-    }catch(error){
-
-        console.error(
-            "Password Reset Error:",
-            error
-        );
-
-        let message =
-            "Password reset မလုပ်နိုင်ပါ။";
+            return "Email မှန်ကန်စွာထည့်ပေးပါ။";
 
 
-        if(
-            error.code ===
-            "auth/invalid-email"
-        ){
+        case "auth/user-not-found":
 
-            message =
-                "Email မှန်ကန်စွာထည့်ပါ။";
+            return "ဒီ Email နဲ့ account မတွေ့ပါ။";
 
-        }
 
-        else if(
-            error.code ===
-            "auth/user-not-found"
-        ){
+        case "auth/wrong-password":
 
-            message =
-                "ဒီ Email နဲ့ account မတွေ့ပါ။";
+            return "Password မှားနေပါတယ်။";
 
-        }
 
-        else if(
-            error.code ===
-            "auth/too-many-requests"
-        ){
+        case "auth/invalid-credential":
 
-            message =
-                "Request များလွန်းပါတယ်။ ခဏစောင့်ပြီး ထပ်လုပ်ပါ။";
+            return "Email သို့မဟုတ် Password မှားနေပါတယ်။";
 
-        }
 
-        showAuthError(message);
+        case "auth/invalid-login-credentials":
+
+            return "Email သို့မဟုတ် Password မှားနေပါတယ်။";
+
+
+        case "auth/email-already-in-use":
+
+            return "ဒီ Email နဲ့ account ရှိပြီးသားပါ။";
+
+
+        case "auth/weak-password":
+
+            return "Password အနည်းဆုံး 6 လုံးရှိရပါမယ်။";
+
+
+        case "auth/user-disabled":
+
+            return "ဒီ account ကို ပိတ်ထားပါတယ်။";
+
+
+        case "auth/too-many-requests":
+
+            return "Login request များလွန်းပါတယ်။ ခဏစောင့်ပြီး ထပ်ကြိုးစားပါ။";
+
+
+        case "auth/network-request-failed":
+
+            return "Internet connection ကို စစ်ပြီး ထပ်ကြိုးစားပါ။";
+
+
+        case "auth/operation-not-allowed":
+
+            return "Firebase Authentication မှာ ဒီ Login method ကို Enable လုပ်ထားခြင်းမရှိပါ။";
+
+
+        case "auth/popup-closed-by-user":
+
+            return "Google Login window ပိတ်သွားပါတယ်။";
+
+
+        case "auth/popup-blocked":
+
+            return "Browser က Google Login popup ကို block လုပ်ထားပါတယ်။";
+
+
+        case "auth/cancelled-popup-request":
+
+            return "Google Login request ကို cancel လုပ်ထားပါတယ်။";
+
+
+        case "auth/unauthorized-domain":
+
+            return "ဒီ website domain ကို Firebase Authentication → Settings → Authorized domains ထဲမှာ ထည့်ပေးပါ။";
+
+
+        case "auth/account-exists-with-different-credential":
+
+            return "ဒီ Email နဲ့ account ရှိပြီးသားဖြစ်ပေမယ့် အခြား Login method ကို အသုံးပြုထားပါတယ်။";
+
+
+        default:
+
+            return error.message ||
+                "Login မအောင်မြင်ပါ။";
 
     }
 
@@ -2939,130 +3430,7 @@ async function forgotPassword(){
 
 
 /* =====================================================
-   GOOGLE LOGIN
-===================================================== */
-
-async function googleLogin(){
-
-    hideAuthError();
-
-    const button =
-        document.getElementById(
-            "googleLoginButton"
-        );
-
-    button.disabled = true;
-
-    button.innerHTML =
-        "Connecting to Google...";
-
-
-    try{
-
-        const provider =
-            new firebase.auth.GoogleAuthProvider();
-
-        provider.setCustomParameters({
-
-            prompt:"select_account"
-
-        });
-
-
-        await auth.signInWithPopup(
-            provider
-        );
-
-
-    }catch(error){
-
-        console.error(
-            "Google Login Error:",
-            error
-        );
-
-        let message =
-            "Google Login မအောင်မြင်ပါ။";
-
-
-        if(
-            error.code ===
-            "auth/popup-closed-by-user"
-        ){
-
-            message =
-                "Google Login window ပိတ်သွားပါတယ်။";
-
-        }
-
-        else if(
-            error.code ===
-            "auth/popup-blocked"
-        ){
-
-            message =
-                "Browser က Google Login popup ကို block လုပ်ထားပါတယ်။";
-
-        }
-
-        else if(
-            error.code ===
-            "auth/cancelled-popup-request"
-        ){
-
-            message =
-                "Google Login request ကို cancel လုပ်ထားပါတယ်။";
-
-        }
-
-        else if(
-            error.code ===
-            "auth/unauthorized-domain"
-        ){
-
-            message =
-                "ဒီ website domain ကို Firebase Authentication → Settings → Authorized domains ထဲထည့်ပေးပါ။";
-
-        }
-
-        else if(
-            error.code ===
-            "auth/operation-not-allowed"
-        ){
-
-            message =
-                "Firebase မှာ Google Provider ကို Enable လုပ်ထားတာ သေချာစစ်ပါ။";
-
-        }
-
-        else if(
-            error.code ===
-            "auth/account-exists-with-different-credential"
-        ){
-
-            message =
-                "ဒီ Email နဲ့ account ရှိပြီးသားဖြစ်ပေမယ့် အခြား Login method ကိုအသုံးပြုထားပါတယ်။";
-
-        }
-
-
-        showAuthError(message);
-
-    }
-
-
-    button.disabled = false;
-
-    button.innerHTML = `
-        <span class="google-icon">G</span>
-        Continue with Google
-    `;
-
-}
-
-
-/* =====================================================
-   LOGIN / REGISTER
+   EMAIL LOGIN / REGISTER
 ===================================================== */
 
 document
@@ -3073,31 +3441,73 @@ document
 
         e.preventDefault();
 
+
         hideAuthError();
 
 
         const email =
             document
-            .getElementById("authEmail")
+            .getElementById(
+                "authEmail"
+            )
             .value
             .trim();
 
 
         const password =
             document
-            .getElementById("authPassword")
+            .getElementById(
+                "authPassword"
+            )
             .value;
 
 
         const button =
             document
-            .getElementById("authSubmit");
+            .getElementById(
+                "authSubmit"
+            );
+
+
+        if(!email){
+
+            showAuthError(
+                "Email ထည့်ပေးပါ။"
+            );
+
+            return;
+
+        }
+
+
+        if(!password){
+
+            showAuthError(
+                "Password ထည့်ပေးပါ။"
+            );
+
+            return;
+
+        }
+
+
+        if(password.length < 6){
+
+            showAuthError(
+                "Password အနည်းဆုံး 6 လုံးရှိရပါမယ်။"
+            );
+
+            return;
+
+        }
 
 
         button.disabled = true;
 
         button.textContent =
-            "Please wait...";
+            isRegisterMode
+            ? "Creating..."
+            : "Logging in...";
 
 
         try{
@@ -3120,104 +3530,157 @@ document
 
             }
 
-
         }catch(error){
 
-            console.error(
-                "Auth Error:",
-                error
+            showAuthError(
+                getAuthErrorMessage(
+                    error
+                )
             );
 
+        }finally{
 
-            let message =
-                error.message;
+            button.disabled = false;
 
-
-            if(
-                error.code ===
-                "auth/invalid-credential"
-            ){
-
-                message =
-                    "Email သို့မဟုတ် Password မှားနေပါတယ်။";
-
-            }
-
-            if(
-                error.code ===
-                "auth/invalid-login-credentials"
-            ){
-
-                message =
-                    "Email သို့မဟုတ် Password မှားနေပါတယ်။";
-
-            }
-
-            if(
-                error.code ===
-                "auth/email-already-in-use"
-            ){
-
-                message =
-                    "ဒီ Email နဲ့ account ရှိပြီးသားပါ။";
-
-            }
-
-            if(
-                error.code ===
-                "auth/weak-password"
-            ){
-
-                message =
-                    "Password အနည်းဆုံး 6 လုံးရှိရပါမယ်။";
-
-            }
-
-            if(
-                error.code ===
-                "auth/invalid-email"
-            ){
-
-                message =
-                    "Email မှန်ကန်စွာထည့်ပါ။";
-
-            }
-
-            if(
-                error.code ===
-                "auth/user-disabled"
-            ){
-
-                message =
-                    "ဒီ account ကို ပိတ်ထားပါတယ်။";
-
-            }
-
-            if(
-                error.code ===
-                "auth/too-many-requests"
-            ){
-
-                message =
-                    "Login request များလွန်းပါတယ်။ ခဏစောင့်ပြီး ထပ်ကြိုးစားပါ။";
-
-            }
-
-
-            showAuthError(message);
+            button.textContent =
+                isRegisterMode
+                ? "Create account"
+                : "Login";
 
         }
 
+    }
+);
+
+
+/* =====================================================
+   FORGOT PASSWORD
+===================================================== */
+
+async function forgotPassword(){
+
+    hideAuthError();
+
+
+    const email =
+        document
+        .getElementById(
+            "authEmail"
+        )
+        .value
+        .trim();
+
+
+    if(!email){
+
+        showAuthError(
+            "Password reset လုပ်ဖို့ Email အရင်ထည့်ပေးပါ။"
+        );
+
+        document
+        .getElementById(
+            "authEmail"
+        )
+        .focus();
+
+        return;
+
+    }
+
+
+    try{
+
+        await auth
+        .sendPasswordResetEmail(
+            email
+        );
+
+
+        showAuthSuccess(
+            "Password reset email ပို့ပြီးပါပြီ။ Inbox / Spam folder ကို စစ်ပါ။"
+        );
+
+    }catch(error){
+
+        showAuthError(
+            getAuthErrorMessage(
+                error
+            )
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   GOOGLE LOGIN
+===================================================== */
+
+async function googleLogin(){
+
+    hideAuthError();
+
+
+    const button =
+        document.getElementById(
+            "googleLoginButton"
+        );
+
+
+    button.disabled = true;
+
+    button.innerHTML =
+        "Connecting to Google...";
+
+
+    try{
+
+        const provider =
+            new firebase
+            .auth
+            .GoogleAuthProvider();
+
+
+        provider.setCustomParameters({
+
+            prompt:
+                "select_account"
+
+        });
+
+
+        await auth
+        .signInWithPopup(
+            provider
+        );
+
+
+    }catch(error){
+
+        showAuthError(
+            getAuthErrorMessage(
+                error
+            )
+        );
+
+    }finally{
 
         button.disabled = false;
 
-        button.textContent =
-            isRegisterMode
-            ? "Create account"
-            : "Login";
+        button.innerHTML = `
+
+            <span class="google-icon">
+                G
+            </span>
+
+            Continue with Google
+
+        `;
 
     }
-);
+
+}
 
 
 /* =====================================================
@@ -3227,7 +3690,8 @@ document
 auth.onAuthStateChanged(
     async user => {
 
-        currentUser = user;
+        currentUser =
+            user;
 
 
         if(user){
@@ -3236,17 +3700,25 @@ auth.onAuthStateChanged(
 
 
             document
-            .getElementById("loginButton")
-            .style.display = "none";
+            .getElementById(
+                "loginButton"
+            )
+            .style.display =
+                "none";
 
 
             document
-            .getElementById("accountButton")
-            .style.display = "block";
+            .getElementById(
+                "accountButton"
+            )
+            .style.display =
+                "block";
 
 
             document
-            .getElementById("userEmail")
+            .getElementById(
+                "userEmail"
+            )
             .textContent =
                 user.email ||
                 user.displayName ||
@@ -3259,17 +3731,25 @@ auth.onAuthStateChanged(
         }else{
 
             document
-            .getElementById("loginButton")
-            .style.display = "block";
+            .getElementById(
+                "loginButton"
+            )
+            .style.display =
+                "block";
 
 
             document
-            .getElementById("accountButton")
-            .style.display = "none";
+            .getElementById(
+                "accountButton"
+            )
+            .style.display =
+                "none";
 
 
             document
-            .getElementById("userEmail")
+            .getElementById(
+                "userEmail"
+            )
             .textContent =
                 "Not logged in";
 
@@ -3284,25 +3764,35 @@ auth.onAuthStateChanged(
 
 
             document
-            .getElementById("videoFrame")
+            .getElementById(
+                "videoFrame"
+            )
             .src = "";
 
 
             document
-            .getElementById("nowTitle")
+            .getElementById(
+                "nowTitle"
+            )
             .textContent =
                 "No song selected";
 
 
             document
-            .getElementById("nowArtist")
+            .getElementById(
+                "nowArtist"
+            )
             .textContent =
                 "Select a song from your library";
 
 
             document
-            .getElementById("cover")
-            .removeAttribute("src");
+            .getElementById(
+                "cover"
+            )
+            .removeAttribute(
+                "src"
+            );
 
 
             renderSongs();
@@ -3321,9 +3811,20 @@ auth.onAuthStateChanged(
 
 function userSongsRef(){
 
+    if(!currentUser){
+
+        throw new Error(
+            "User is not logged in."
+        );
+
+    }
+
+
     return db
         .collection("users")
-        .doc(currentUser.uid)
+        .doc(
+            currentUser.uid
+        )
         .collection("songs");
 
 }
@@ -3331,9 +3832,20 @@ function userSongsRef(){
 
 function userSettingsRef(){
 
+    if(!currentUser){
+
+        throw new Error(
+            "User is not logged in."
+        );
+
+    }
+
+
     return db
         .collection("users")
-        .doc(currentUser.uid)
+        .doc(
+            currentUser.uid
+        )
         .collection("settings")
         .doc("main");
 
@@ -3353,7 +3865,8 @@ async function loadUserData(){
     try{
 
         const snapshot =
-            await userSongsRef().get();
+            await userSongsRef()
+            .get();
 
 
         songs =
@@ -3375,12 +3888,14 @@ async function loadUserData(){
                     song.favorite === true
             )
             .map(
-                song => song.id
+                song =>
+                    song.id
             );
 
 
         const settings =
-            await userSettingsRef().get();
+            await userSettingsRef()
+            .get();
 
 
         if(settings.exists){
@@ -3414,7 +3929,9 @@ async function loadUserData(){
             activeId =
                 songs[0].id;
 
-            selectSong(activeId);
+            selectSong(
+                activeId
+            );
 
         }else{
 
@@ -3426,12 +3943,13 @@ async function loadUserData(){
     }catch(error){
 
         console.error(
-            "Data Load Error:",
+            "Data loading error:",
             error
         );
 
+
         alert(
-            "Data loading error: " +
+            "Data loading error:\n" +
             error.message
         );
 
@@ -3454,11 +3972,16 @@ function getYoutubeId(value){
             );
 
 
+        const host =
+            u.hostname
+            .toLowerCase();
+
+
         if(
-            !u.hostname.includes(
+            !host.includes(
                 "youtube.com"
             ) &&
-            !u.hostname.includes(
+            !host.includes(
                 "youtu.be"
             )
         ){
@@ -3469,7 +3992,7 @@ function getYoutubeId(value){
 
 
         if(
-            u.hostname.includes(
+            host.includes(
                 "youtu.be"
             )
         ){
@@ -3482,8 +4005,9 @@ function getYoutubeId(value){
 
 
         return (
-            u.searchParams.get("v") ||
-            ""
+            u.searchParams.get(
+                "v"
+            ) || ""
         );
 
 
@@ -3503,14 +4027,17 @@ function getYoutubeId(value){
 function thumb(song){
 
     return `
+
         <span class="thumb">
 
             <img
                 src="https://img.youtube.com/vi/${song.youtubeId}/hqdefault.jpg"
                 alt=""
+                loading="lazy"
             >
 
         </span>
+
     `;
 
 }
@@ -3522,27 +4049,34 @@ function thumb(song){
 
 function escapeHtml(value){
 
-    return String(value || "")
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
+    return String(
+        value || ""
+    )
+
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
 
 }
 
@@ -3561,7 +4095,9 @@ function renderSongs(){
 
     const q =
         input
-        ? input.value.toLowerCase()
+        ? input.value
+            .toLowerCase()
+            .trim()
         : "";
 
 
@@ -3569,11 +4105,19 @@ function renderSongs(){
         songs.filter(
             song => {
 
+                const title =
+                    song.title || "";
+
+
+                const artist =
+                    song.artist || "";
+
+
                 const match =
                     (
-                        song.title +
+                        title +
                         " " +
-                        song.artist
+                        artist
                     )
                     .toLowerCase()
                     .includes(q);
@@ -3586,32 +4130,41 @@ function renderSongs(){
                     );
 
 
-                return match && fav;
+                return (
+                    match &&
+                    fav
+                );
 
             }
         );
 
 
     document
-    .getElementById("songCount")
+    .getElementById(
+        "songCount"
+    )
     .textContent =
         String(
             songs.length
-        ).padStart(
+        )
+        .padStart(
             2,
             "0"
         );
 
 
     document
-    .getElementById("songs")
+    .getElementById(
+        "songs"
+    )
     .innerHTML =
 
         list.length
 
         ?
 
-        list.map(
+        list
+        .map(
             song => `
 
                 <article
@@ -3622,6 +4175,7 @@ function renderSongs(){
                     }"
                 >
 
+
                     <button
                         class="song-main"
                         onclick="selectSong('${song.id}')"
@@ -3629,11 +4183,15 @@ function renderSongs(){
 
                         ${thumb(song)}
 
+
                         <span>
 
                             <b>
-                                ${escapeHtml(song.title)}
+                                ${escapeHtml(
+                                    song.title
+                                )}
                             </b>
+
 
                             <small>
                                 ${escapeHtml(
@@ -3652,11 +4210,15 @@ function renderSongs(){
                         onclick="toggleFavorite('${song.id}')"
                         title="Favorite"
                     >
+
                         ${
-                            favorites.includes(song.id)
+                            favorites.includes(
+                                song.id
+                            )
                             ? "♥"
                             : "♡"
                         }
+
                     </button>
 
 
@@ -3680,11 +4242,13 @@ function renderSongs(){
                 </article>
 
             `
-        ).join("")
+        )
+        .join("")
 
         :
 
         `
+
             <div class="empty">
 
                 ${
@@ -3694,6 +4258,7 @@ function renderSongs(){
                 }
 
             </div>
+
         `;
 
 
@@ -3718,36 +4283,48 @@ function selectSong(id){
         return;
 
 
-    activeId = id;
+    activeId =
+        id;
 
 
     document
-    .getElementById("videoFrame")
+    .getElementById(
+        "videoFrame"
+    )
     .src =
         `https://www.youtube-nocookie.com/embed/${song.youtubeId}?rel=0&modestbranding=1`;
 
 
     document
-    .getElementById("nowTitle")
+    .getElementById(
+        "nowTitle"
+    )
     .textContent =
-        song.title;
+        song.title ||
+        "Unknown title";
 
 
     document
-    .getElementById("nowArtist")
+    .getElementById(
+        "nowArtist"
+    )
     .textContent =
         song.artist ||
         "Unknown artist";
 
 
     document
-    .getElementById("cover")
+    .getElementById(
+        "cover"
+    )
     .src =
         `https://img.youtube.com/vi/${song.youtubeId}/hqdefault.jpg`;
 
 
     document
-    .getElementById("currentHeart")
+    .getElementById(
+        "currentHeart"
+    )
     .textContent =
         favorites.includes(id)
         ? "♥"
@@ -3789,10 +4366,12 @@ async function toggleFavorite(id){
         .doc(id)
         .update({
 
-            favorite:newValue,
+            favorite:
+                newValue,
 
             updatedAt:
-                firebase.firestore
+                firebase
+                .firestore
                 .FieldValue
                 .serverTimestamp()
 
@@ -3837,6 +4416,7 @@ async function toggleFavorite(id){
     }catch(error){
 
         alert(
+            "Favorite error:\n" +
             error.message
         );
 
@@ -3864,11 +4444,14 @@ function toggleCurrentFavorite(){
 
 function setFilter(value){
 
-    filter = value;
+    filter =
+        value;
 
 
     document
-    .getElementById("allTab")
+    .getElementById(
+        "allTab"
+    )
     .classList
     .toggle(
         "active",
@@ -3877,7 +4460,9 @@ function setFilter(value){
 
 
     document
-    .getElementById("favTab")
+    .getElementById(
+        "favTab"
+    )
     .classList
     .toggle(
         "active",
@@ -3907,7 +4492,9 @@ function addQueue(id){
     }
 
 
-    if(!queue.includes(id)){
+    if(
+        !queue.includes(id)
+    ){
 
         queue.push(id);
 
@@ -3932,25 +4519,31 @@ function renderQueue(){
 
 
     document
-    .getElementById("queueCount")
+    .getElementById(
+        "queueCount"
+    )
     .textContent =
         String(
             items.length
-        ).padStart(
+        )
+        .padStart(
             2,
             "0"
         );
 
 
     document
-    .getElementById("queueList")
+    .getElementById(
+        "queueList"
+    )
     .innerHTML =
 
         items.length
 
         ?
 
-        items.map(
+        items
+        .map(
             (song,index) => `
 
                 <div
@@ -3967,7 +4560,9 @@ function renderQueue(){
                         )}
                     </small>
 
+
                     ${thumb(song)}
+
 
                     <div>
 
@@ -3977,6 +4572,7 @@ function renderQueue(){
                             )}
                         </b>
 
+
                         <small>
                             ${escapeHtml(
                                 song.artist ||
@@ -3985,6 +4581,7 @@ function renderQueue(){
                         </small>
 
                     </div>
+
 
                     <button
                         onclick="
@@ -3998,14 +4595,17 @@ function renderQueue(){
                 </div>
 
             `
-        ).join("")
+        )
+        .join("")
 
         :
 
         `
+
             <p class="notice">
                 Queue က အခုလွတ်နေပါတယ်
             </p>
+
         `;
 
 }
@@ -4131,4 +4731,788 @@ function openSongModal(){
     }
 
 
-   
+    document
+    .getElementById(
+        "songModal"
+    )
+    .classList
+    .add("open");
+
+
+    document
+    .getElementById(
+        "newTitle"
+    )
+    .focus();
+
+}
+
+
+function closeSongModal(){
+
+    document
+    .getElementById(
+        "songModal"
+    )
+    .classList
+    .remove("open");
+
+
+    document
+    .getElementById(
+        "newTitle"
+    )
+    .value = "";
+
+
+    document
+    .getElementById(
+        "newArtist"
+    )
+    .value = "";
+
+
+    document
+    .getElementById(
+        "newUrl"
+    )
+    .value = "";
+
+
+    document
+    .getElementById(
+        "titleNotice"
+    )
+    .textContent =
+        "✓ YouTube link ထည့်ပြီး ခဏစောင့်ပါ";
+
+}
+
+
+function queueTitleFetch(){
+
+    clearTimeout(
+        titleFetchTimer
+    );
+
+
+    const url =
+        document
+        .getElementById(
+            "newUrl"
+        )
+        .value
+        .trim();
+
+
+    const id =
+        getYoutubeId(
+            url
+        );
+
+
+    if(
+        !/^[a-zA-Z0-9_-]{11}$/
+        .test(id)
+    ){
+
+        return;
+
+    }
+
+
+    document
+    .getElementById(
+        "titleNotice"
+    )
+    .textContent =
+        "YouTube title ရယူနေပါတယ်...";
+
+
+    titleFetchTimer =
+        setTimeout(
+            async () => {
+
+                try{
+
+                    const response =
+                        await fetch(
+                            `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`
+                        );
+
+
+                    if(!response.ok)
+                        throw new Error();
+
+
+                    const data =
+                        await response.json();
+
+
+                    document
+                    .getElementById(
+                        "newTitle"
+                    )
+                    .value =
+                        data.title ||
+                        "";
+
+
+                    const artistInput =
+                        document
+                        .getElementById(
+                            "newArtist"
+                        );
+
+
+                    if(
+                        !artistInput.value
+                    ){
+
+                        artistInput.value =
+                            data.author_name ||
+                            "";
+
+                    }
+
+
+                    document
+                    .getElementById(
+                        "titleNotice"
+                    )
+                    .textContent =
+                        "✓ Title နဲ့ artist အလိုအလျောက် ဖြည့်ပြီးပါပြီ";
+
+
+                }catch{
+
+                    document
+                    .getElementById(
+                        "titleNotice"
+                    )
+                    .textContent =
+                        "Title ကို ကိုယ်တိုင်ဖြည့်နိုင်ပါတယ်။";
+
+                }
+
+            },
+            500
+        );
+
+}
+
+
+/* =====================================================
+   ADD SONG
+===================================================== */
+
+async function addSong(e){
+
+    e.preventDefault();
+
+
+    if(!currentUser){
+
+        openAuth();
+
+        return;
+
+    }
+
+
+    const title =
+        document
+        .getElementById(
+            "newTitle"
+        )
+        .value
+        .trim();
+
+
+    const artist =
+        document
+        .getElementById(
+            "newArtist"
+        )
+        .value
+        .trim() ||
+        "Unknown artist";
+
+
+    const url =
+        document
+        .getElementById(
+            "newUrl"
+        )
+        .value
+        .trim();
+
+
+    const youtubeId =
+        getYoutubeId(
+            url
+        );
+
+
+    if(
+        !/^[a-zA-Z0-9_-]{11}$/
+        .test(youtubeId)
+    ){
+
+        alert(
+            "မှန်ကန်တဲ့ YouTube link ထည့်ပေးပါ။"
+        );
+
+        return;
+
+    }
+
+
+    if(!title){
+
+        alert(
+            "Song title ထည့်ပေးပါ။"
+        );
+
+        return;
+
+    }
+
+
+    const docRef =
+        userSongsRef()
+        .doc();
+
+
+    const song = {
+
+        title,
+
+        artist,
+
+        youtubeId,
+
+        favorite:false,
+
+        createdAt:
+            firebase
+            .firestore
+            .FieldValue
+            .serverTimestamp(),
+
+        updatedAt:
+            firebase
+            .firestore
+            .FieldValue
+            .serverTimestamp()
+
+    };
+
+
+    try{
+
+        await docRef.set(
+            song
+        );
+
+
+        songs.unshift({
+
+            id:
+                docRef.id,
+
+            title,
+
+            artist,
+
+            youtubeId,
+
+            favorite:false,
+
+            createdAt:null,
+
+            updatedAt:null
+
+        });
+
+
+        activeId =
+            docRef.id;
+
+
+        closeSongModal();
+
+
+        selectSong(
+            activeId
+        );
+
+
+    }catch(error){
+
+        alert(
+            "Song save error:\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   DELETE SONG
+===================================================== */
+
+async function deleteSong(id){
+
+    if(!currentUser)
+        return;
+
+
+    const song =
+        songs.find(
+            s => s.id === id
+        );
+
+
+    if(!song)
+        return;
+
+
+    const ok =
+        confirm(
+            `"${song.title}" ကို ဖျက်မှာသေချာပါသလား?`
+        );
+
+
+    if(!ok)
+        return;
+
+
+    try{
+
+        await userSongsRef()
+        .doc(id)
+        .delete();
+
+
+        songs =
+            songs.filter(
+                s => s.id !== id
+            );
+
+
+        favorites =
+            favorites.filter(
+                x => x !== id
+            );
+
+
+        queue =
+            queue.filter(
+                x => x !== id
+            );
+
+
+        if(activeId === id){
+
+            activeId =
+                songs.length
+                ? songs[0].id
+                : null;
+
+
+            if(activeId){
+
+                selectSong(
+                    activeId
+                );
+
+            }else{
+
+                document
+                .getElementById(
+                    "videoFrame"
+                )
+                .src = "";
+
+
+                document
+                .getElementById(
+                    "nowTitle"
+                )
+                .textContent =
+                    "No song selected";
+
+
+                document
+                .getElementById(
+                    "nowArtist"
+                )
+                .textContent =
+                    "Add a song to start listening";
+
+
+                document
+                .getElementById(
+                    "cover"
+                )
+                .removeAttribute(
+                    "src"
+                );
+
+
+                document
+                .getElementById(
+                    "currentHeart"
+                )
+                .textContent =
+                    "♡";
+
+            }
+
+        }
+
+
+        renderSongs();
+
+
+    }catch(error){
+
+        alert(
+            "Delete error:\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+function openSettings(){
+
+    if(!currentUser){
+
+        openAuth();
+
+        return;
+
+    }
+
+
+    document
+    .getElementById(
+        "settingsOverlay"
+    )
+    .classList
+    .add("open");
+
+}
+
+
+function closeSettings(){
+
+    document
+    .getElementById(
+        "settingsOverlay"
+    )
+    .classList
+    .remove("open");
+
+}
+
+
+function closeSettingsOutside(event){
+
+    if(
+        event.target.id ===
+        "settingsOverlay"
+    ){
+
+        closeSettings();
+
+    }
+
+}
+
+
+/* =====================================================
+   THEME
+===================================================== */
+
+async function setTheme(theme){
+
+    applyTheme(
+        theme
+    );
+
+
+    if(!currentUser)
+        return;
+
+
+    try{
+
+        await userSettingsRef()
+        .set({
+
+            theme,
+
+            updatedAt:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp()
+
+        },{
+            merge:true
+        });
+
+
+    }catch(error){
+
+        console.error(
+            "Theme save error:",
+            error
+        );
+
+    }
+
+}
+
+
+function applyTheme(theme){
+
+    document.body
+    .classList
+    .remove(
+
+        "theme-black",
+
+        "theme-purple",
+
+        "theme-blue",
+
+        "theme-red"
+
+    );
+
+
+    if(
+        theme &&
+        theme !== "forest"
+    ){
+
+        document.body
+        .classList
+        .add(
+            "theme-" +
+            theme
+        );
+
+    }
+
+
+    document
+    .querySelectorAll(
+        ".theme-btn"
+    )
+    .forEach(
+        button => {
+
+            button
+            .classList
+            .toggle(
+
+                "active",
+
+                button.dataset.theme ===
+                theme
+
+            );
+
+        }
+    );
+
+}
+
+
+async function setAccent(color){
+
+    applyAccent(
+        color
+    );
+
+
+    if(!currentUser)
+        return;
+
+
+    try{
+
+        await userSettingsRef()
+        .set({
+
+            accent:color,
+
+            updatedAt:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp()
+
+        },{
+            merge:true
+        });
+
+
+    }catch(error){
+
+        console.error(
+            "Accent save error:",
+            error
+        );
+
+    }
+
+}
+
+
+function applyAccent(color){
+
+    document
+    .documentElement
+    .style
+    .setProperty(
+        "--accent",
+        color
+    );
+
+
+    document
+    .querySelectorAll(
+        ".color-btn"
+    )
+    .forEach(
+        button => {
+
+            const buttonColor =
+                button.style
+                .backgroundColor;
+
+
+            button
+            .classList
+            .toggle(
+                "active",
+                buttonColor === color
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+async function logout(){
+
+    const ok =
+        confirm(
+            "Account ကနေ Logout ထွက်မှာသေချာပါသလား?"
+        );
+
+
+    if(!ok)
+        return;
+
+
+    try{
+
+        await auth.signOut();
+
+        closeSettings();
+
+    }catch(error){
+
+        alert(
+            "Logout error:\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CLOSE SONG MODAL
+===================================================== */
+
+document
+.getElementById(
+    "songModal"
+)
+.addEventListener(
+    "click",
+    function(e){
+
+        if(e.target === this){
+
+            closeSongModal();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ESC KEY
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key !== "Escape")
+            return;
+
+
+        closeSongModal();
+
+        closeSettings();
+
+    }
+);
+
+
+/* =====================================================
+   DEFAULT THEME
+===================================================== */
+
+applyTheme(
+    "forest"
+);
+
+
+/* =====================================================
+   INITIAL RENDER
+===================================================== */
+
+renderSongs();
+
+</script>
+
+
+</body>
+
+</html>
